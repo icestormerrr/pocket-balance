@@ -1,5 +1,6 @@
 import {RouterProvider} from "@tanstack/react-router";
-import {router} from "./router.tsx";
+import {router} from "./router/router.tsx";
+import './styles/globals.css';
 
 function App() {
   return (
