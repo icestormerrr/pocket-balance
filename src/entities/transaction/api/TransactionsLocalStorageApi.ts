@@ -1,3 +1,4 @@
+import {DateComparator, DateConverter} from "@/shared/lib/datetime";
 import type {Transaction} from "../model/Transaction.ts";
 import type {ITransactionsApi} from "./ITransactionsApi.ts";
 
@@ -17,17 +18,27 @@ export class TransactionsLocalStorageApi implements ITransactionsApi {
     const raw = load();
 
     return raw.filter(tx => {
-      const date = new Date(tx.date);
+      const date = DateConverter.ISOToDate(tx.date);
 
-      let isBetweenDates = true;
+      if (filter.startDate && filter.endDate) {
+        // console.log(date, DateConverter.ISOToDate(filter.endDate));
+        return DateComparator.isBetweenOrEqual(
+          date,
+          DateConverter.ISOToDate(filter.startDate),
+          DateConverter.ISOToDate(filter.endDate),
+          "day"
+        );
+      }
+
       if (filter.startDate) {
-        isBetweenDates &&= date >= new Date(filter.startDate);
-      }
-      if (filter.endDate) {
-        isBetweenDates &&= date <= new Date(filter.endDate);
+        return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.startDate), "day");
       }
 
-      return isBetweenDates;
+      if (filter.endDate) {
+        return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.endDate), "day");
+      }
+
+      return true;
     });
   }
 

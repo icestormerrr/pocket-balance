@@ -7,6 +7,7 @@ import {Input, NumericInput} from "@/shared/ui/input.tsx";
 import {SelectInput} from "@/shared/ui/select.tsx";
 import {SegmentInput} from "@/shared/ui/tabs.tsx";
 
+import {DateConverter} from "@/shared/lib/datetime";
 import {Calendar} from "@/shared/ui/calendar.tsx";
 import type {TransactionsFormState} from "../../../model/schema.ts";
 
@@ -78,9 +79,9 @@ export const TransactionFormFields = () => {
               <Calendar
                 style={{width: "100%"}}
                 mode="single"
-                selected={field.value ? new Date(field.value) : undefined}
+                selected={field.value ? DateConverter.ISOToDate(field.value) : undefined}
                 onSelect={date => {
-                  field.onChange(date?.toUTCString());
+                  field.onChange(DateConverter.dateToISO(date));
                 }}
                 className="rounded-lg border"
               />

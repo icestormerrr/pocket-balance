@@ -1,6 +1,7 @@
 import {useTransactionsYears} from "@/entities/transaction";
-import {months} from "@/shared/lib/datetime";
+import {DateConverter, DateCreator, months} from "@/shared/lib/datetime";
 import {BadgeGroup} from "@/shared/ui/badge";
+import {AnimatePresence, motion} from "framer-motion";
 import {useMemo} from "react";
 
 export type TransactionDateFilterType = {
@@ -24,36 +25,32 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
     const start = new Date(filter.startDate);
     const end = new Date(filter.endDate);
 
-    const year = start.getUTCFullYear();
-    const sameYear = year === end.getUTCFullYear();
-    const sameMonth = start.getUTCMonth() === end.getUTCMonth();
+    const year = start.getFullYear();
+    const sameYear = year === end.getFullYear();
+    const sameMonth = start.getMonth() === end.getMonth();
 
     return {
       selectedYear: sameYear ? year : undefined,
-      selectedMonth: sameYear && sameMonth ? start.getUTCMonth() : undefined,
+      selectedMonth: sameYear && sameMonth ? start.getMonth() : undefined,
     };
   }, [filter]);
 
   const handleYearChange = (year: number | null) => {
     if (year === null) {
-      // Сбросить фильтр, если год снят
       onFilterChange({});
       return;
     }
 
-    // Если выбран только год — фильтруем по всему году
-    const start = new Date(Date.UTC(year, 0, 1));
-    const end = new Date(Date.UTC(year, 11, 31, 23, 59, 59, 999));
+    const {startDate, endDate} = DateCreator.createPeriod(year);
 
     onFilterChange({
-      startDate: start.toISOString(),
-      endDate: end.toISOString(),
+      startDate: DateConverter.dateToISO(startDate),
+      endDate: DateConverter.dateToISO(endDate),
     });
   };
 
   const handleMonthChange = (month: number | null) => {
     if (selectedYear === undefined || month === null) {
-      // Если не выбран год или месяц снят — фильтруем только по году
       if (selectedYear !== undefined) {
         handleYearChange(selectedYear);
       } else {
@@ -62,13 +59,11 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
       return;
     }
 
-    // Если выбран и год, и месяц — фильтруем по месяцу
-    const start = new Date(Date.UTC(selectedYear, month, 1));
-    const end = new Date(Date.UTC(selectedYear, month + 1, 0, 23, 59, 59, 999)); // последний день месяца
+    const {startDate, endDate} = DateCreator.createPeriod(selectedYear, month);
 
     onFilterChange({
-      startDate: start.toISOString(),
-      endDate: end.toISOString(),
+      startDate: DateConverter.dateToISO(startDate),
+      endDate: DateConverter.dateToISO(endDate),
     });
   };
 
@@ -79,7 +74,25 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
         onChange={v => handleYearChange(v ?? null)}
         options={years?.map(y => ({label: y.toString(), value: y})) ?? []}
       />
-      <BadgeGroup value={selectedMonth} onChange={v => handleMonthChange(v ?? null)} options={months} />
+      <AnimatePresence initial={false}>
+        {selectedYear !== undefined && (
+          <motion.div
+            key="month-filter"
+            variants={{
+              initial: {opacity: 0, height: 0},
+              animate: {opacity: 1, height: "auto"},
+              exit: {opacity: 0, height: 0},
+            }}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{duration: 0.2}}
+            style={{overflow: "hidden"}}
+          >
+            <BadgeGroup value={selectedMonth} onChange={v => handleMonthChange(v ?? null)} options={months} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

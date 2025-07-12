@@ -8,7 +8,7 @@ import {AnimationWrapper} from "./components/AnimationWrapper/AnimationWrapper.t
 
 export const RootLayout = () => {
   return (
-    <div style={{paddingTop: 40}}>
+    <div className="pt-[40px] pb-20 box-border">
       <AnimationWrapper>
         <Outlet />
       </AnimationWrapper>
