@@ -28,14 +28,15 @@ export const useTransactionsSummary = ({startDate, endDate}: {startDate?: string
 export const useAmountGroupedByCategory = ({
   startDate,
   endDate,
+  categoryType,
 }: {
   startDate?: string;
   endDate?: string;
   categoryType?: CategoryType;
 }) => {
   return useQuery({
-    queryKey: ["transactionsAmount", startDate, endDate],
-    queryFn: () => transactionsService.getAmountGropedByCategories({startDate, endDate}),
+    queryKey: ["transactionsAmount", startDate, endDate, categoryType],
+    queryFn: () => transactionsService.getAmountGropedByCategories({startDate, endDate, categoryType}),
   });
 };
 

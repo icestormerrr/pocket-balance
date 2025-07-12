@@ -35,12 +35,14 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
   }, [filter]);
 
   const handleYearChange = (year: number | null) => {
-    if (!year) {
-      onFilterChange({startDate: undefined, endDate: undefined});
+    if (year === null) {
+      // Сбросить фильтр, если год снят
+      onFilterChange({});
       return;
     }
 
-    const start = new Date(Date.UTC(year, 0, 1, 0, 0, 0));
+    // Если выбран только год — фильтруем по всему году
+    const start = new Date(Date.UTC(year, 0, 1));
     const end = new Date(Date.UTC(year, 11, 31, 23, 59, 59, 999));
 
     onFilterChange({
@@ -50,10 +52,19 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
   };
 
   const handleMonthChange = (month: number | null) => {
-    if (selectedYear === undefined || month === null) return;
+    if (selectedYear === undefined || month === null) {
+      // Если не выбран год или месяц снят — фильтруем только по году
+      if (selectedYear !== undefined) {
+        handleYearChange(selectedYear);
+      } else {
+        onFilterChange({});
+      }
+      return;
+    }
 
-    const start = new Date(Date.UTC(selectedYear, month, 1, 0, 0, 0));
-    const end = new Date(Date.UTC(selectedYear, month + 1, 0, 23, 59, 59, 999));
+    // Если выбран и год, и месяц — фильтруем по месяцу
+    const start = new Date(Date.UTC(selectedYear, month, 1));
+    const end = new Date(Date.UTC(selectedYear, month + 1, 0, 23, 59, 59, 999)); // последний день месяца
 
     onFilterChange({
       startDate: start.toISOString(),

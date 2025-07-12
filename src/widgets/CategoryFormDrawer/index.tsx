@@ -59,15 +59,21 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
             </div>
 
             <div className={"mt-50 flex justify-between"}>
-              <div className="basis-[10%]">{id && <DeleteButton onSuccess={handleSuccessButtonClick} />}</div>
+              {id && (
+                <div className="basis-[10%]">
+                  <DeleteButton onSuccess={handleSuccessButtonClick} />
+                </div>
+              )}
 
-              <div className="basis-[85%]">
-                {id ? (
+              {id ? (
+                <div className="basis-[85%]">
                   <UpdateButton onSuccess={handleSuccessButtonClick} />
-                ) : (
+                </div>
+              ) : (
+                <div className="basis-[100%]">
                   <CreateButton onSuccess={handleSuccessButtonClick} />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </FormProvider>

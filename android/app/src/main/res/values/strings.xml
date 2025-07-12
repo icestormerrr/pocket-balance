@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">pocket-balance</string>
+    <string name="title_activity_main">pocket-balance</string>
+    <string name="package_name">com.pocketbalance.app</string>
+    <string name="custom_url_scheme">com.pocketbalance.app</string>
+</resources>

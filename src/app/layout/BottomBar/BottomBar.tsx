@@ -1,5 +1,5 @@
 import {cn} from "@/shared/lib/styling";
-import {LayoutList, PieChart, Settings, SlidersHorizontal} from "lucide-react";
+import {CircleEllipsis, LayoutList, PieChart, SlidersHorizontal} from "lucide-react";
 
 import {Link, useRouterState} from "@tanstack/react-router";
 import {CreateOperationButton} from "./components/CreateOperationButton.tsx";
@@ -9,7 +9,7 @@ const navItems = [
   {label: "Отчёт", icon: PieChart, link: "/reports"},
   {central: true},
   {label: "План", icon: SlidersHorizontal},
-  {label: "Настройки", icon: Settings, link: "settings"},
+  {label: "Настройки", icon: CircleEllipsis, link: "more"},
 ];
 
 export function BottomBar() {

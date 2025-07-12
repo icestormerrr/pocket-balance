@@ -1,16 +1,23 @@
 {
   "name": "pocket-balance",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc -b && vite build",
+    "dev:web": "vite --host",
+    "build:web": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview --host"
+    "preview": "vite preview --host",
+    "dev:android": "npx cap sync && npx cap run android",
+    "build:android": "npx cap android sync && npx cap build android"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.2",
+    "@capacitor/cli": "^7.4.2",
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/status-bar": "^7.0.1",
     "@hookform/resolvers": "^5.0.1",
+    "@ionic/react": "^8.6.4",
     "@radix-ui/react-alert-dialog": "^1.1.7",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-label": "^2.1.2",

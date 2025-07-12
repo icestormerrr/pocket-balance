@@ -1,25 +1,15 @@
-import {createRootRoute, createRoute, createRouter, Outlet} from "@tanstack/react-router";
+import {createRootRoute, createRoute, createRouter} from "@tanstack/react-router";
 
 import CategoriesPage from "@/pages/categories";
 import MainPage from "@/pages/main";
+import MorePage from "@/pages/more";
 import ReportsPage from "@/pages/reports";
-import SettingsPage from "@/pages/settings";
 import TransactionsPage from "@/pages/transactions";
-import {Toaster} from "@/shared/ui/sonner.tsx";
 
-import {AnimationWrapper} from "@/app/layout/AnimationWrapper/AnimationWrapper.tsx";
-import {BottomBar} from "../layout/BottomBar/BottomBar.tsx";
+import {RootLayout} from "@/app/layout/RootLayout.tsx";
 
 const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <AnimationWrapper>
-        <Outlet />
-      </AnimationWrapper>
-      <BottomBar />
-      <Toaster />
-    </>
-  ),
+  component: RootLayout,
 });
 
 const mainPage = createRoute({
@@ -48,8 +38,8 @@ const reportsRoute = createRoute({
 
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/settings",
-  component: SettingsPage,
+  path: "/more",
+  component: MorePage,
 });
 
 const routeTree = rootRoute.addChildren([mainPage, transactionsRoute, reportsRoute, categoriesRoute, settingsRoute]);
