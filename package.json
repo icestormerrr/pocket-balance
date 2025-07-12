@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --host"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -16,7 +16,7 @@
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-popover": "^1.1.6",
     "@radix-ui/react-scroll-area": "^1.2.4",
-    "@radix-ui/react-slot": "^1.2.0",
+    "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.4",
     "@reactuses/core": "^6.0.1",
     "@tanstack/react-query": "^4.40.1",
@@ -28,7 +28,7 @@
     "framer-motion": "^12.6.3",
     "lucide-react": "^0.483.0",
     "react": "^18.3.1",
-    "react-day-picker": "^8.10.1",
+    "react-day-picker": "^9.8.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.55.0",
     "recharts": "^2.15.2",
@@ -59,6 +59,7 @@
     "sass": "^1.86.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.3"
+    "vite": "^7.0.3",
+    "vite-plugin-pwa": "^1.0.1"
   }
 }

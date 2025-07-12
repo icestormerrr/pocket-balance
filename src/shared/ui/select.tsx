@@ -1,12 +1,10 @@
-"use client";
-
 import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {Input} from "@/shared/ui/input";
 import {ScrollArea} from "@/shared/ui/scroll-area";
 import {ChevronsUpDown} from "lucide-react";
-import {ReactNode, useEffect, useMemo, useState} from "react";
+import {type ReactNode, useEffect, useMemo, useState} from "react";
 
 export type Option = {
   label: string;

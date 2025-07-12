@@ -1,35 +1,50 @@
-"use client";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {X} from "lucide-react";
+import {type FC, memo, useEffect} from "react";
+import {FormProvider, useForm} from "react-hook-form";
 
+import {useCategory} from "@/entities/category";
 import {Button} from "@/shared/ui/button";
 import {Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle} from "@/shared/ui/drawer";
-import {Save, X} from "lucide-react";
-import {forwardRef, useImperativeHandle, useState} from "react";
-import {FormProvider} from "react-hook-form";
-import {useCategoryForm} from "./model/useCategoryForm";
-import {useCategoryFormHandlers} from "./model/useCategoryFormHandlers";
-import {CategoryFormFields} from "./ui/CategoryFormFields";
+import {type CategoryFormState, categorySchema} from "@/widgets/category-form-drawer/model/schema.ts";
 
-export type CategoryFormDrawerRef = {
-  openDrawer: (id?: string) => void;
-  closeDrawer: () => void;
+import {CategoryFormFields} from "./ui/components/CategoryFormFields/CategoryFormFields.tsx";
+import CreateButton from "./ui/components/CreateButton/CreateButton.tsx";
+import DeleteButton from "./ui/components/DeleteButton/DeleteButton.tsx";
+import UpdateButton from "./ui/components/UpdateButton/UpdateButton.tsx";
+
+type Props = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  categoryId: string | undefined;
 };
 
-const CategoryFormDrawer = forwardRef<CategoryFormDrawerRef>((_, ref) => {
-  const form = useCategoryForm();
-  const id = form.watch("id");
-  const {handleSave, handleDelete, handleInit} = useCategoryFormHandlers(form);
+const defaultValues: CategoryFormState = {type: "expense", id: "", name: "", color: ""};
 
-  const [open, setOpen] = useState(false);
-  useImperativeHandle(ref, () => ({
-    openDrawer: id => {
-      handleInit(id);
-      setOpen(true);
-    },
-    closeDrawer: () => setOpen(false),
-  }));
+const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) => {
+  const {refetch} = useCategory(categoryId);
+
+  const form = useForm<CategoryFormState>({
+    resolver: zodResolver(categorySchema),
+    mode: "onChange",
+    defaultValues,
+  });
+  const id = form.watch("id");
+
+  useEffect(() => {
+    if (!open) return;
+
+    refetch().then(query => {
+      if (query.data) {
+        form.reset(query.data);
+      } else {
+        form.reset(defaultValues);
+      }
+    });
+  }, [open]);
 
   return (
-    <Drawer open={open} onOpenChange={setOpen} repositionInputs={false}>
+    <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
       <DrawerContent className="h-[100vh] transition-all">
         <FormProvider {...form}>
           <div className="mx-auto w-full max-w-sm">
@@ -42,20 +57,9 @@ const CategoryFormDrawer = forwardRef<CategoryFormDrawerRef>((_, ref) => {
             </div>
 
             <DrawerFooter className={"mt-50"}>
-              <DrawerClose asChild>
-                <Button onClick={handleSave} disabled={!form.formState.isValid}>
-                  Сохранить
-                  <Save />
-                </Button>
-              </DrawerClose>
+              <DrawerClose asChild>{id ? <UpdateButton /> : <CreateButton />}</DrawerClose>
               <div className={"flex justify-between mt-2"}>
-                <DrawerClose asChild>
-                  {id && (
-                    <Button onClick={handleDelete} className={"bg-red-500 basis-[45%]"}>
-                      Удалить
-                    </Button>
-                  )}
-                </DrawerClose>
+                <DrawerClose asChild>{id && <DeleteButton />}</DrawerClose>
 
                 <DrawerClose asChild>
                   <Button variant="outline" className={"basis-[45%]"}>
@@ -71,5 +75,7 @@ const CategoryFormDrawer = forwardRef<CategoryFormDrawerRef>((_, ref) => {
     </Drawer>
   );
 });
+
+CategoryFormDrawer.displayName = "CategoryFormDrawer";
 
 export default CategoryFormDrawer;

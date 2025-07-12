@@ -7,4 +7,4 @@ export const categorySchema = z.object({
   type: z.enum(["income", "expense"], {required_error: "Выберите тип"}),
 });
 
-export type CategoryFormValues = z.infer<typeof categorySchema>;
+export type CategoryFormState = z.infer<typeof categorySchema>;

@@ -1,53 +1,57 @@
-import {
-    createRootRoute,
-    createRoute,
-    createRouter, Outlet,
-} from '@tanstack/react-router';
+import {createRootRoute, createRoute, createRouter, Outlet} from "@tanstack/react-router";
+
+import CategoriesPage from "@/pages/categories/page.tsx";
+import MainPage from "@/pages/main";
+import ReportsPage from "@/pages/reports/page.tsx";
+import SettingsPage from "@/pages/settings/page.tsx";
+import TransactionsPage from "@/pages/transactions/page.tsx";
+import {Toaster} from "@/shared/ui/sonner.tsx";
+
 import {AnimationProvider} from "../layout/AnimationProvider.tsx";
 import {BottomBar} from "../layout/bottom-bar/BottomBar.tsx";
-import {Toaster} from "../../shared/ui/sonner.tsx";
-import CategoriesPage from "../../pages/categories/page.tsx";
-import OperationsPage from "../../pages/operations/page.tsx";
-import ReportsPage from "../../pages/reports/page.tsx";
-import SettingsPage from "../../pages/settings/page.tsx";
 
 const rootRoute = createRootRoute({
-    component: () => <><AnimationProvider><Outlet /></AnimationProvider>
-        <BottomBar />
-        <Toaster /></>,
+  component: () => (
+    <>
+      <AnimationProvider>
+        <Outlet />
+      </AnimationProvider>
+      <BottomBar />
+      <Toaster />
+    </>
+  ),
 });
 
-const operationsRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/operations',
-    component: OperationsPage,
+const mainPage = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: MainPage,
+});
+
+const transactionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/transactions",
+  component: TransactionsPage,
 });
 
 const categoriesRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/categories',
-    component: CategoriesPage,
+  getParentRoute: () => rootRoute,
+  path: "/categories",
+  component: CategoriesPage,
 });
 
 const reportsRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/reports',
-    component: ReportsPage,
+  getParentRoute: () => rootRoute,
+  path: "/reports",
+  component: ReportsPage,
 });
 
 const settingsRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/settings',
-    component: SettingsPage,
+  getParentRoute: () => rootRoute,
+  path: "/settings",
+  component: SettingsPage,
 });
 
-const routeTree = rootRoute.addChildren([operationsRoute, categoriesRoute, reportsRoute, settingsRoute]);
+const routeTree = rootRoute.addChildren([mainPage, transactionsRoute, reportsRoute, categoriesRoute, settingsRoute]);
 
-
-export const router = createRouter({ routeTree });
-
-// declare module '@tanstack/react-router' {
-//     interface Register {
-//         router: typeof router;
-//     }
-// }
+export const router = createRouter({routeTree});

@@ -1,11 +1,11 @@
 import {cn} from "@/shared/lib/styling";
 import {LayoutList, PieChart, Settings, SlidersHorizontal} from "lucide-react";
 
-import {CreateOperationButton} from "./CreateOperationButton";
 import {Link, useRouterState} from "@tanstack/react-router";
+import {CreateOperationButton} from "./CreateOperationButton";
 
 const navItems = [
-  {label: "Операции", icon: LayoutList, link: "/operations"},
+  {label: "Операции", icon: LayoutList, link: "/transactions"},
   {label: "Отчёт", icon: PieChart, link: "/reports"},
   {central: true},
   {label: "План", icon: SlidersHorizontal},
@@ -13,7 +13,7 @@ const navItems = [
 ];
 
 export function BottomBar() {
-  const location = useRouterState({ select: (s) => s.location });
+  const location = useRouterState({select: s => s.location});
   const pathname = location.pathname;
 
   return (

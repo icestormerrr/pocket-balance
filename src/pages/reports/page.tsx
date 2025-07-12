@@ -1,24 +1,27 @@
-import {useAmountByCategoriesChart} from "@/pages/reports/_model/useAmountByCategoriesChart";
-import {CategoryAmountBarReport} from "@/pages/reports/_ui/CategoryAmountBarReport";
-import {CategoryAmountList} from "@/pages/reports/_ui/CategoryAmountList";
-import {CategoryAmountPieReport} from "@/pages/reports/_ui/CategoryAmountPieReport";
-import {CATEGORY_TYPE_OPTIONS, type CategoryType} from "@/entities/category";
-import {months} from "@/shared/lib/datetime";
-import {BadgeGroup} from "@/shared/ui/badge";
-import {SegmentInput, Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {ChartColumn, ChartPie} from "lucide-react";
-import {useState} from "react";
+import {useMemo, useState} from "react";
+
+import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
+import type {CategoryType} from "@/entities/category/model/Category.ts";
+import {useAmountGroupedByCategory} from "@/entities/transaction/adapter/hooks.ts";
+import {SegmentInput, Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
+import {type TransactionDateFilterType, TransactionsDateFilters} from "@/widgets/TransactionsDateFilters";
+
+import {CategoryAmountBarReport} from "./ui/CategoryAmountBarReport";
+import {CategoryAmountListReport} from "./ui/CategoryAmountListReport.tsx";
+import {CategoryAmountPieReport} from "./ui/CategoryAmountPieReport";
 
 export default function ReportsPage() {
-  const [selectedType, setSelectedType] = useState<string>("expense");
-  const [selectedYear, setSelectedYear] = useState<number>();
-  const [selectedMonth, setSelectedMonth] = useState<number>();
+  const [categoryFilter, setCategoryFilter] = useState<string>("expense");
+  const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>({});
 
-  const {chartData, chartConfig, years} = useAmountByCategoriesChart(
-    selectedType as CategoryType,
-    selectedYear,
-    selectedMonth
-  );
+  const {data} = useAmountGroupedByCategory({
+    startDate: dateFilter.startDate,
+    endDate: dateFilter.endDate,
+    categoryType: categoryFilter as CategoryType,
+  });
+
+  const chartData = useMemo(() => data?.map(item => ({...item, fill: item.categoryColor})), [data]);
 
   return (
     <div className={"p-4 max-h-[90vh] overflow-y-auto overscroll-contain"}>
@@ -32,27 +35,21 @@ export default function ReportsPage() {
               <ChartColumn />
             </TabsTrigger>
           </TabsList>
-          <SegmentInput value={selectedType} onChange={setSelectedType} options={CATEGORY_TYPE_OPTIONS} />
+          <SegmentInput value={categoryFilter} onChange={setCategoryFilter} options={CATEGORY_TYPE_OPTIONS} />
         </div>
 
-        <div className="flex flex-col gap-2 mt-5">
-          <BadgeGroup
-            value={selectedYear}
-            onChange={v => setSelectedYear(v ?? undefined)}
-            options={years.map(y => ({label: y.toString(), value: y}))}
-          />
-
-          <BadgeGroup value={selectedMonth} onChange={v => setSelectedMonth(v ?? undefined)} options={months} />
-        </div>
+        <TransactionsDateFilters filter={dateFilter} onFilterChange={setDateFilter} />
 
         <TabsContent value="pie">
-          <CategoryAmountPieReport chartConfig={chartConfig} chartData={chartData} />
+          <CategoryAmountPieReport chartData={chartData} />
         </TabsContent>
+
         <TabsContent value="bar">
-          <CategoryAmountBarReport chartConfig={chartConfig} chartData={chartData} />
+          <CategoryAmountBarReport chartData={chartData} />
         </TabsContent>
       </Tabs>
-      <CategoryAmountList chartData={chartData} />
+
+      <CategoryAmountListReport chartData={chartData} />
     </div>
   );
 }
