@@ -1,8 +1,9 @@
 import {useTransactionsSummary} from "@/entities/transaction";
 import {cn} from "@/shared/lib/styling.ts";
 import {Card, CardContent} from "@/shared/ui/card.tsx";
+import {memo} from "react";
 
-export function TransactionsStats() {
+export const TransactionsStats = memo(() => {
   const {data: summary} = useTransactionsSummary({});
 
   return (
@@ -31,4 +32,6 @@ export function TransactionsStats() {
       </Card>
     </div>
   );
-}
+});
+
+TransactionsStats.displayName = "TransactionsStats";

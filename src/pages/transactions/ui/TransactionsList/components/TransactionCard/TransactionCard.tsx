@@ -1,7 +1,8 @@
-import {Badge} from "@/shared/ui/badge.tsx";
-import {Card, CardContent} from "@/shared/ui/card.tsx";
 import {format} from "date-fns";
 import {memo} from "react";
+
+import {Badge} from "@/shared/ui/badge.tsx";
+import {Card, CardContent} from "@/shared/ui/card.tsx";
 
 type Props = {
   id: string;
@@ -11,7 +12,7 @@ type Props = {
   categoryName: string;
 };
 
-function TransactionCard({amount, date, comment, categoryName}: Props) {
+export const TransactionCard = memo(({amount, date, comment, categoryName}: Props) => {
   return (
     <Card className="w-full max-w-md rounded-xl shadow-sm">
       <CardContent className="space-y-2">
@@ -28,6 +29,6 @@ function TransactionCard({amount, date, comment, categoryName}: Props) {
       </CardContent>
     </Card>
   );
-}
+});
 
-export default memo(TransactionCard);
+TransactionCard.displayName = "TransactionCard";

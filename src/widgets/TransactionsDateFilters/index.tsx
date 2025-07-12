@@ -13,7 +13,7 @@ interface TransactionsFiltersProps {
   onFilterChange: (filter: TransactionDateFilterType) => void;
 }
 
-export function TransactionsDateFilters({filter, onFilterChange}: TransactionsFiltersProps) {
+const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersProps) => {
   const {data: years} = useTransactionsYears();
 
   const {selectedYear, selectedMonth} = useMemo(() => {
@@ -71,4 +71,6 @@ export function TransactionsDateFilters({filter, onFilterChange}: TransactionsFi
       <BadgeGroup value={selectedMonth} onChange={v => handleMonthChange(v ?? null)} options={months} />
     </div>
   );
-}
+};
+
+export default TransactionsDateFilters;

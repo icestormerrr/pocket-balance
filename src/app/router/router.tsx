@@ -1,21 +1,21 @@
 import {createRootRoute, createRoute, createRouter, Outlet} from "@tanstack/react-router";
 
-import CategoriesPage from "@/pages/categories/page.tsx";
+import CategoriesPage from "@/pages/categories";
 import MainPage from "@/pages/main";
-import ReportsPage from "@/pages/reports/page.tsx";
-import SettingsPage from "@/pages/settings/page.tsx";
-import TransactionsPage from "@/pages/transactions/page.tsx";
+import ReportsPage from "@/pages/reports";
+import SettingsPage from "@/pages/settings";
+import TransactionsPage from "@/pages/transactions";
 import {Toaster} from "@/shared/ui/sonner.tsx";
 
-import {AnimationProvider} from "../layout/AnimationProvider.tsx";
-import {BottomBar} from "../layout/bottom-bar/BottomBar.tsx";
+import {AnimationWrapper} from "@/app/layout/AnimationWrapper/AnimationWrapper.tsx";
+import {BottomBar} from "../layout/BottomBar/BottomBar.tsx";
 
 const rootRoute = createRootRoute({
   component: () => (
     <>
-      <AnimationProvider>
+      <AnimationWrapper>
         <Outlet />
-      </AnimationProvider>
+      </AnimationWrapper>
       <BottomBar />
       <Toaster />
     </>

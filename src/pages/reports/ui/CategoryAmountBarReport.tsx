@@ -18,7 +18,7 @@ const chartConfig: ChartConfig = {
   },
 };
 
-export function CategoryAmountBarReport({chartData}: Props) {
+export const CategoryAmountBarReport = ({chartData}: Props) => {
   return (
     <Card>
       <CardContent>
@@ -39,4 +39,4 @@ export function CategoryAmountBarReport({chartData}: Props) {
       </CardContent>
     </Card>
   );
-}
+};

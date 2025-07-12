@@ -2,9 +2,9 @@ import {type FC, useState} from "react";
 
 import type {Transaction} from "@/entities/transaction";
 import {ScrollArea} from "@/shared/ui/scroll-area.tsx";
-import TransactionFormDrawer from "@/widgets/transaction-form-drawer";
+import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 
-import TransactionCard from "./components/TransactionCard/TransactionCard.tsx";
+import {TransactionCard} from "./components/TransactionCard/TransactionCard.tsx";
 
 type Props = {
   transactions: (Transaction & {categoryName: string})[];

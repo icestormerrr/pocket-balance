@@ -18,7 +18,7 @@ const chartConfig: ChartConfig = {
   },
 };
 
-export function CategoryAmountPieReport({chartData}: Props) {
+export const CategoryAmountPieReport = ({chartData}: Props) => {
   return (
     <Card className="flex flex-col">
       <CardContent className="flex-1 pb-0">
@@ -31,4 +31,4 @@ export function CategoryAmountPieReport({chartData}: Props) {
       </CardContent>
     </Card>
   );
-}
+};
