@@ -1,6 +1,6 @@
-import type {CategoryType} from "@/entities/category/model/Category.ts";
+import type {CategoryType} from "@/entities/category/model/Category";
 
-import type {Transaction} from "../model/Transaction.ts";
+import type {Transaction} from "../model/Transaction";
 
 export interface ITransactionsService {
   getAll(filter: {

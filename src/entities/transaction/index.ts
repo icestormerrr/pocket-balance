@@ -6,8 +6,8 @@ import {
   useTransactionsSummary,
   useTransactionsYears,
   useUpdateTransaction,
-} from "./adapter/hooks.ts";
-import type {Transaction} from "./model/Transaction.ts";
+} from "./adapter/hooks";
+import type {Transaction} from "./model/Transaction";
 
 export {
   useCreateTransaction,

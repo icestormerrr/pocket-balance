@@ -1,6 +1,6 @@
 import {DateComparator, DateConverter} from "@/shared/lib/datetime";
-import type {Transaction} from "../model/Transaction.ts";
-import type {ITransactionsApi} from "./ITransactionsApi.ts";
+import type {Transaction} from "../model/Transaction";
+import type {ITransactionsApi} from "./ITransactionsApi";
 
 const STORAGE_KEY = "transactions";
 

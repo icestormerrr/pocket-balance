@@ -2,14 +2,14 @@ import {useMemo} from "react";
 import {useFormContext} from "react-hook-form";
 
 import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
-import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form.tsx";
-import {Input, NumericInput} from "@/shared/ui/input.tsx";
-import {SelectInput} from "@/shared/ui/select.tsx";
-import {SegmentInput} from "@/shared/ui/tabs.tsx";
+import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
+import {Input, NumericInput} from "@/shared/ui/input";
+import {SelectInput} from "@/shared/ui/select";
+import {SegmentInput} from "@/shared/ui/tabs";
 
 import {DateConverter} from "@/shared/lib/datetime";
-import {Calendar} from "@/shared/ui/calendar.tsx";
-import type {TransactionsFormState} from "../../../model/schema.ts";
+import {Calendar} from "@/shared/ui/calendar";
+import type {TransactionsFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
   const {control, watch, setValue} = useFormContext<TransactionsFormState>();

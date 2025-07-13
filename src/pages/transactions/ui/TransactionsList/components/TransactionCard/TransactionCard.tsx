@@ -1,8 +1,8 @@
 import {memo} from "react";
 
 import {DateConverter} from "@/shared/lib/datetime";
-import {Badge} from "@/shared/ui/badge.tsx";
-import {Card, CardContent} from "@/shared/ui/card.tsx";
+import {Badge} from "@/shared/ui/badge";
+import {Card, CardContent} from "@/shared/ui/card";
 
 type Props = {
   id: string;

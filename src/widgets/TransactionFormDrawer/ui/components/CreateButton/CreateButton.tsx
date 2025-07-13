@@ -3,10 +3,10 @@ import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useCreateTransaction} from "@/entities/transaction";
-import {Button} from "@/shared/ui/button.tsx";
+import {Button} from "@/shared/ui/button";
 
 import type {FC} from "react";
-import type {TransactionsFormState} from "../../../model/schema.ts";
+import type {TransactionsFormState} from "../../../model/schema";
 
 type Props = {
   onSuccess: () => void;

@@ -1,7 +1,7 @@
 import {CirclePlus} from "lucide-react";
 import {useState} from "react";
 
-import {Button} from "@/shared/ui/button.tsx";
+import {Button} from "@/shared/ui/button";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 
 export function CreateOperationButton({className}: {className?: string}) {

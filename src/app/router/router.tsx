@@ -6,7 +6,7 @@ import MorePage from "@/pages/more";
 import ReportsPage from "@/pages/reports";
 import TransactionsPage from "@/pages/transactions";
 
-import {RootLayout} from "@/app/layout/RootLayout.tsx";
+import {RootLayout} from "@/app/layout/RootLayout";
 
 const rootRoute = createRootRoute({
   component: RootLayout,

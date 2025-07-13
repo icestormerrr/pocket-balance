@@ -1,11 +1,11 @@
 import {useFormContext} from "react-hook-form";
 
 import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
-import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form.tsx";
-import {Input} from "@/shared/ui/input.tsx";
-import {SegmentInput} from "@/shared/ui/tabs.tsx";
+import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
+import {Input} from "@/shared/ui/input";
+import {SegmentInput} from "@/shared/ui/tabs";
 
-import type {CategoryFormState} from "../../../model/schema.ts";
+import type {CategoryFormState} from "../../../model/schema";
 
 export const CategoryFormFields = () => {
   const {control} = useFormContext<CategoryFormState>();

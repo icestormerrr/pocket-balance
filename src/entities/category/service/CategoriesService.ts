@@ -1,7 +1,7 @@
-import {CategoriesLocalStorageApi} from "@/entities/category/api/CategoriesLocalStorageApi.ts";
-import type {ICategoriesApi} from "../api/ICategoriesApi.ts";
-import type {Category, CategoryType} from "../model/Category.ts";
-import type {ICategoriesService} from "./ICategoriesService.ts";
+import {CategoriesLocalStorageApi} from "@/entities/category/api/CategoriesLocalStorageApi";
+import type {ICategoriesApi} from "../api/ICategoriesApi";
+import type {Category, CategoryType} from "../model/Category";
+import type {ICategoriesService} from "./ICategoriesService";
 
 export class CategoriesService implements ICategoriesService {
   private readonly api: ICategoriesApi;
@@ -18,12 +18,31 @@ export class CategoriesService implements ICategoriesService {
     return this.api.getById(id);
   }
 
-  async create(tx: Omit<Category, "id" | "creationDatetime">): Promise<Category> {
-    return this.api.create({...tx, creationDatetime: new Date().toUTCString()});
+  validateCategory(data: {name?: unknown; type?: unknown; color?: unknown}) {
+    if (typeof data.name !== "string" || data.name.trim().length === 0) {
+      throw new Error("Название категории не может быть пустым");
+    }
+
+    if (data.type !== "expense" && data.type !== "income") {
+      throw new Error("Тип категории должен быть 'income' или 'expense'");
+    }
+
+    if (typeof data.color !== "string" || !/^#[0-9A-F]{6}$/i.test(data.color)) {
+      throw new Error("Цвет должен быть в формате HEX, например #FFAA00");
+    }
   }
 
-  async update(id: string, tx: Partial<Omit<Category, "id">>): Promise<Category | null> {
-    return this.api.update(id, tx);
+  async create(category: Omit<Category, "id" | "creationDatetime">): Promise<Category> {
+    this.validateCategory(category);
+    return this.api.create({
+      ...category,
+      creationDatetime: new Date().toUTCString(),
+    });
+  }
+
+  async update(id: string, category: Partial<Omit<Category, "id">>): Promise<Category | null> {
+    this.validateCategory(category);
+    return this.api.update(id, category);
   }
 
   async delete(id: string): Promise<void> {

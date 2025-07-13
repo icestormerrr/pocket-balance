@@ -1,6 +1,6 @@
 import {Link} from "@tanstack/react-router";
 
-import {exportLocalStorageData} from "@/pages/more/lib/sharing.tsx";
+import {exportLocalStorageData} from "@/pages/more/lib/sharing";
 import {Button} from "@/shared/ui/button";
 import {Import, List, Share} from "lucide-react";
 import {useRef} from "react";

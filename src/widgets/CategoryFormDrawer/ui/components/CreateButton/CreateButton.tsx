@@ -3,10 +3,10 @@ import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useCreateCategory} from "@/entities/category";
-import {Button} from "@/shared/ui/button.tsx";
+import {Button} from "@/shared/ui/button";
 
 import type {FC} from "react";
-import type {CategoryFormState} from "../../../model/schema.ts";
+import type {CategoryFormState} from "../../../model/schema";
 
 type Props = {
   onSuccess: () => void;

@@ -18,10 +18,10 @@ import {useFormContext} from "react-hook-form";
 
 // Зависимости от других модулей
 import {useCreateTransaction} from "@/entities/transaction";
-import {Button} from "@/shared/ui/button.tsx";
+import {Button} from "@/shared/ui/button";
 
 // Зависимости внутри модуля
-import type {TransactionsFormState} from "../../../model/schema.ts";
+import type {TransactionsFormState} from "../../../model/schema";
 ```
 
 

@@ -1,10 +1,10 @@
-import {categoriesService} from "@/entities/category/service/CategoriesService.ts";
-import type {ICategoriesService} from "@/entities/category/service/ICategoriesService.ts";
+import {categoriesService} from "@/entities/category/service/CategoriesService";
+import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
-import type {CategoryType} from "@/entities/category/model/Category.ts";
-import type {ITransactionsApi} from "../api/ITransactionsApi.ts";
-import {TransactionsLocalStorageApi} from "../api/TransactionsLocalStorageApi.ts";
-import type {Transaction} from "../model/Transaction.ts";
+import type {CategoryType} from "@/entities/category/model/Category";
+import type {ITransactionsApi} from "../api/ITransactionsApi";
+import {TransactionsLocalStorageApi} from "../api/TransactionsLocalStorageApi";
+import type {Transaction} from "../model/Transaction";
 import type {ITransactionsService} from "./ITransactionsService";
 
 export class TransactionsService implements ITransactionsService {
@@ -106,11 +106,38 @@ export class TransactionsService implements ITransactionsService {
     });
   }
 
+  private async validateTransaction(tx: Partial<Omit<Transaction, "id">>): Promise<void> {
+    const errors: string[] = [];
+
+    if (tx.amount === undefined || typeof tx.amount !== "number" || tx.amount <= 0) {
+      errors.push("Сумма должна быть положительным числом.");
+    }
+
+    if (!tx.categoryId || typeof tx.categoryId !== "string") {
+      errors.push("Не указана категория.");
+    } else {
+      const category = await this.categoriesService.getById(tx.categoryId);
+      if (!category) {
+        errors.push("Категория не найдена.");
+      }
+    }
+
+    if (!tx.date || isNaN(Date.parse(tx.date))) {
+      errors.push("Дата должна быть в формате ISO и быть валидной.");
+    }
+
+    if (errors.length > 0) {
+      throw new Error(errors.join(" "));
+    }
+  }
+
   async create(tx: Omit<Transaction, "id">): Promise<Transaction> {
+    await this.validateTransaction(tx);
     return this.api.create(tx);
   }
 
   async update(id: string, tx: Partial<Omit<Transaction, "id">>): Promise<Transaction | null> {
+    await this.validateTransaction(tx);
     return this.api.update(id, tx);
   }
 

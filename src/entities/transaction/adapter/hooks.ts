@@ -1,7 +1,7 @@
-import type {CategoryType} from "@/entities/category/model/Category.ts";
+import type {CategoryType} from "@/entities/category/model/Category";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import type {Transaction} from "../model/Transaction.ts";
-import {transactionsService} from "../service/TransactionsService.ts";
+import type {Transaction} from "../model/Transaction";
+import {transactionsService} from "../service/TransactionsService";
 
 export const useTransactions = (filter: {startDate?: string; endDate?: string; categoryType?: CategoryType}) => {
   return useQuery({

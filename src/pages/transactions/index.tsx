@@ -3,8 +3,8 @@ import {useState} from "react";
 import {useTransactions} from "@/entities/transaction";
 import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
 
-import TransactionsList from "./ui/TransactionsList/TransactionsList.tsx";
-import {TransactionsStats} from "./ui/TransactionsStats/TransactionsStats.tsx";
+import TransactionsList from "./ui/TransactionsList/TransactionsList";
+import {TransactionsStats} from "./ui/TransactionsStats/TransactionsStats";
 
 const TransactionsPage = () => {
   const [filter, setFilter] = useState<TransactionDateFilterType>({});
@@ -13,9 +13,7 @@ const TransactionsPage = () => {
 
   return (
     <div className="p-4 space-y-4 max-w-md mx-auto">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Операции</h1>
-      </div>
+      <h1 className="flex justify-between items-center text-2xl font-bold">Операции</h1>
 
       <TransactionsDateFilters filter={filter} onFilterChange={setFilter} />
 

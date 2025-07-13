@@ -1,5 +1,5 @@
-import type {Category, CategoryType} from "../model/Category.ts";
-import type {ICategoriesApi} from "./ICategoriesApi.ts";
+import type {Category, CategoryType} from "../model/Category";
+import type {ICategoriesApi} from "./ICategoriesApi";
 
 const STORAGE_KEY = "categories";
 

@@ -1,10 +1,10 @@
 import {Outlet} from "@tanstack/react-router";
 
-import {Toaster} from "@/shared/ui/sonner.tsx";
+import {Toaster} from "@/shared/ui/sonner";
 
 import "@ionic/react/css/core.css";
-import {BottomBar} from "./BottomBar/BottomBar.tsx";
-import {AnimationWrapper} from "./components/AnimationWrapper/AnimationWrapper.tsx";
+import {BottomBar} from "./BottomBar/BottomBar";
+import {AnimationWrapper} from "./components/AnimationWrapper/AnimationWrapper";
 
 export const RootLayout = () => {
   return (

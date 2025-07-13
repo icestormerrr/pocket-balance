@@ -1,4 +1,4 @@
-import type {Transaction} from "../model/Transaction.ts";
+import type {Transaction} from "../model/Transaction";
 
 export interface ITransactionsApi {
   getAll(filter: {startDate?: string; endDate?: string}): Promise<Transaction[]>;

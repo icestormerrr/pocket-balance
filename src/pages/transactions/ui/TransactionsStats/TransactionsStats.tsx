@@ -1,6 +1,6 @@
 import {useTransactionsSummary} from "@/entities/transaction";
-import {cn} from "@/shared/lib/styling.ts";
-import {Card, CardContent} from "@/shared/ui/card.tsx";
+import {cn} from "@/shared/lib/styling";
+import {Card, CardContent} from "@/shared/ui/card";
 import {memo} from "react";
 
 export const TransactionsStats = memo(() => {

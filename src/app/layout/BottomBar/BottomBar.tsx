@@ -2,7 +2,7 @@ import {cn} from "@/shared/lib/styling";
 import {CircleEllipsis, LayoutList, PieChart, SlidersHorizontal} from "lucide-react";
 
 import {Link, useRouterState} from "@tanstack/react-router";
-import {CreateOperationButton} from "./components/CreateOperationButton.tsx";
+import {CreateOperationButton} from "./components/CreateOperationButton";
 
 const navItems = [
   {label: "Операции", icon: LayoutList, link: "/transactions"},

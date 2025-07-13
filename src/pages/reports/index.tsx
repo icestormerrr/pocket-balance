@@ -2,13 +2,13 @@ import {ChartColumn, ChartPie} from "lucide-react";
 import {useMemo, useState} from "react";
 
 import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
-import type {CategoryType} from "@/entities/category/model/Category.ts";
-import {useAmountGroupedByCategory} from "@/entities/transaction/adapter/hooks.ts";
+import type {CategoryType} from "@/entities/category/model/Category";
+import {useAmountGroupedByCategory} from "@/entities/transaction/adapter/hooks";
 import {SegmentInput, Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
 
 import {CategoryAmountBarReport} from "./ui/CategoryAmountBarReport";
-import {CategoryAmountListReport} from "./ui/CategoryAmountListReport.tsx";
+import {CategoryAmountListReport} from "./ui/CategoryAmountListReport";
 import {CategoryAmountPieReport} from "./ui/CategoryAmountPieReport";
 
 const ReportsPage = () => {
