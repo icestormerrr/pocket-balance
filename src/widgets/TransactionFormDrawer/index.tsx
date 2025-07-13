@@ -1,9 +1,10 @@
 import {useTransaction} from "@/entities/transaction";
-import {Drawer, DrawerContent, DrawerTitle} from "@/shared/ui/drawer";
+import {Drawer, DrawerContent} from "@/shared/ui/drawer";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
+import {DateConverter} from "@/shared/lib/datetime";
 import {type TransactionsFormState, transactionFormSchema} from "./model/schema";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
 import {DeleteButton} from "./ui/components/DeleteButton/DeleteButton";
@@ -17,11 +18,13 @@ type Props = {
 };
 
 const defaultValues: TransactionsFormState = {
-  date: new Date().toUTCString(),
+  date: DateConverter.dateToISO(new Date()),
   categoryType: "expense",
   categoryId: "",
   id: "",
-  amount: 0,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  amount: undefined,
   comment: "",
   accountId: "",
 };
@@ -52,26 +55,22 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
   }, [onOpenChange]);
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-      <DrawerContent className="min-h-[90vh] transition-all">
-        <FormProvider {...form}>
-          <DrawerTitle></DrawerTitle>
-
+    <FormProvider {...form}>
+      <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
+        <DrawerContent className="min-h-[95vh] transition-all">
           <div className="p-4 mx-auto w-full max-w-sm">
-            <div className="pb-0 flex flex-col gap-2">
-              <TransactionFormFields />
-            </div>
-            <div className={"mt-2 flex justify-between"}>
-              {id && (
-                <div className="basis-[10%]">
-                  <DeleteButton onSuccess={handleSuccessButtonClick} />
-                </div>
-              )}
+            <TransactionFormFields />
 
+            <div className={"mt-4 flex justify-between"}>
               {id ? (
-                <div className="basis-[85%]">
-                  <UpdateButton onSuccess={handleSuccessButtonClick} />
-                </div>
+                <>
+                  <div className="basis-[10%]">
+                    <DeleteButton onSuccess={handleSuccessButtonClick} />
+                  </div>
+                  <div className="basis-[85%]">
+                    <UpdateButton onSuccess={handleSuccessButtonClick} />
+                  </div>
+                </>
               ) : (
                 <div className="basis-[100%]">
                   <CreateButton onSuccess={handleSuccessButtonClick} />
@@ -79,9 +78,9 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
               )}
             </div>
           </div>
-        </FormProvider>
-      </DrawerContent>
-    </Drawer>
+        </DrawerContent>
+      </Drawer>
+    </FormProvider>
   );
 });
 

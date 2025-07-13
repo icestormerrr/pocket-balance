@@ -1,10 +1,11 @@
+import {Trash} from "lucide-react";
+import type {FC} from "react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useDeleteCategory} from "@/entities/category";
 import {Button} from "@/shared/ui/button";
 
-import type {FC} from "react";
 import type {CategoryFormState} from "../../../model/schema";
 
 type Props = {
@@ -42,7 +43,7 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
 
   return (
     <Button className={"bg-red-500 basis-[45%]"} onClick={handleDeleteButtonClick}>
-      Удалить
+      <Trash />
     </Button>
   );
 };

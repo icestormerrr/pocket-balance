@@ -12,7 +12,7 @@ export const useTransactions = (filter: {startDate?: string; endDate?: string; c
 
 export const useTransaction = (id?: string) => {
   return useQuery({
-    queryKey: ["transactions", id],
+    queryKey: ["transaction", id],
     queryFn: () => transactionsService.getById(id!),
     enabled: !!id,
   });
@@ -53,6 +53,7 @@ export const useCreateTransaction = () => {
     mutationFn: (tx: Omit<Transaction, "id">) => transactionsService.create(tx),
     onSuccess: () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactions")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transaction")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAmount")});
@@ -66,8 +67,10 @@ export const useUpdateTransaction = () => {
     mutationFn: ({id, tx}: {id: string; tx: Partial<Omit<Transaction, "id">>}) => transactionsService.update(id, tx),
     onSuccess: () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactions")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transaction")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAmount")});
     },
   });
 };
@@ -78,8 +81,10 @@ export const useDeleteTransaction = () => {
     mutationFn: (id: string) => transactionsService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactions")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transaction")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAmount")});
     },
   });
 };

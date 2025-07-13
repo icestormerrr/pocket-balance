@@ -1,24 +1,31 @@
-import {memo} from "react";
+import {type FC, memo} from "react";
 
+import type {CategoryType} from "@/entities/category";
+import type {Transaction} from "@/entities/transaction";
 import {DateConverter} from "@/shared/lib/datetime";
 import {Badge} from "@/shared/ui/badge";
 import {Card, CardContent} from "@/shared/ui/card";
 
 type Props = {
-  id: string;
-  amount: number;
-  date?: string;
-  comment?: string;
-  categoryName: string;
+  transaction: Transaction & {categoryName: string; categoryType?: CategoryType};
+  onClick: (transaction: Transaction) => void;
 };
 
-export const TransactionCard = memo(({amount, date, comment, categoryName}: Props) => {
+export const TransactionCard: FC<Props> = memo(({transaction, onClick}) => {
+  const {amount, date, comment, categoryName, categoryType} = transaction;
+
+  const handleClick = () => {
+    onClick(transaction);
+  };
+
   return (
-    <Card className="w-full max-w-md rounded-xl shadow-sm">
+    <Card className="w-full max-w-md rounded-xl shadow-sm" onClick={handleClick}>
       <CardContent className="space-y-2">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-semibold">{amount} ₽</p>
+            <p className={`text-sm font-semibold ${categoryType === "expense" ? "text-[#ef4444]" : "text-[#22c55e]"}`}>
+              {amount} ₽
+            </p>
           </div>
           <p className="text-xs text-muted-foreground">
             {date ? DateConverter.ISOToFormattedString(date, "MMM DD") : ""}

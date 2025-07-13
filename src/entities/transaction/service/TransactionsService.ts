@@ -20,7 +20,7 @@ export class TransactionsService implements ITransactionsService {
     startDate?: string;
     endDate?: string;
     categoryType?: CategoryType;
-  }): Promise<(Transaction & {categoryName: string; categoryType: CategoryType})[]> {
+  }): Promise<(Transaction & {categoryName: string; categoryType?: CategoryType})[]> {
     const [transactions, categories] = await Promise.all([
       this.api.getAll({startDate: filter.startDate, endDate: filter.endDate}),
       this.categoriesService.getAll({}),
@@ -31,7 +31,7 @@ export class TransactionsService implements ITransactionsService {
       return {
         ...t,
         categoryName: category?.name ?? "Неизвестная категория",
-        categoryType: category?.type ?? "expense",
+        categoryType: category?.type,
       };
     });
 
@@ -43,8 +43,12 @@ export class TransactionsService implements ITransactionsService {
     });
   }
 
-  async getById(id: string): Promise<Transaction | null> {
-    return this.api.getById(id);
+  async getById(id: string): Promise<(Transaction & {categoryType?: CategoryType}) | null> {
+    const tx = await this.api.getById(id);
+    if (!tx) return null;
+    const category = await this.categoriesService.getById(tx.categoryId);
+
+    return {...tx, categoryType: category?.type};
   }
 
   async getUniqYears(): Promise<number[]> {

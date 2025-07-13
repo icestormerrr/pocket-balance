@@ -14,32 +14,35 @@ function save(transactions: Transaction[]) {
 }
 
 export class TransactionsLocalStorageApi implements ITransactionsApi {
+  // возможный неожиданный эффект: сортирует по датам
   async getAll(filter: {startDate?: string; endDate?: string}): Promise<Transaction[]> {
     const raw = load();
 
-    return raw.filter(tx => {
-      const date = DateConverter.ISOToDate(tx.date);
+    return raw
+      .filter(tx => {
+        const date = DateConverter.ISOToDate(tx.date);
 
-      if (filter.startDate && filter.endDate) {
-        // console.log(date, DateConverter.ISOToDate(filter.endDate));
-        return DateComparator.isBetweenOrEqual(
-          date,
-          DateConverter.ISOToDate(filter.startDate),
-          DateConverter.ISOToDate(filter.endDate),
-          "day"
-        );
-      }
+        if (filter.startDate && filter.endDate) {
+          // console.log(date, DateConverter.ISOToDate(filter.endDate));
+          return DateComparator.isBetweenOrEqual(
+            date,
+            DateConverter.ISOToDate(filter.startDate),
+            DateConverter.ISOToDate(filter.endDate),
+            "day"
+          );
+        }
 
-      if (filter.startDate) {
-        return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.startDate), "day");
-      }
+        if (filter.startDate) {
+          return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.startDate), "day");
+        }
 
-      if (filter.endDate) {
-        return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.endDate), "day");
-      }
+        if (filter.endDate) {
+          return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.endDate), "day");
+        }
 
-      return true;
-    });
+        return true;
+      })
+      .sort((date1, date2) => (DateComparator.isBefore(date1.date, date2.date) ? 1 : -1));
   }
 
   async getById(id: string): Promise<Transaction | null> {

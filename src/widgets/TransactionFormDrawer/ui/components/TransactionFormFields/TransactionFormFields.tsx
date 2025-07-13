@@ -19,7 +19,7 @@ export const TransactionFormFields = () => {
   const categoriesOptions = useMemo(() => categories?.map(c => ({label: c.name, value: c.id})) ?? [], [categories]);
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <FormField
         control={control}
         name="categoryType"
@@ -57,6 +57,7 @@ export const TransactionFormFields = () => {
           </FormItem>
         )}
       />
+
       <FormField
         control={control}
         name="categoryId"
@@ -69,6 +70,20 @@ export const TransactionFormFields = () => {
           </FormItem>
         )}
       />
+
+      <FormField
+        control={control}
+        name="comment"
+        render={({field}) => (
+          <FormItem>
+            <FormLabel>Комментарий</FormLabel>
+            <FormControl>
+              <Input type="text" {...field} />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
       <FormField
         control={control}
         name="date"
@@ -89,18 +104,6 @@ export const TransactionFormFields = () => {
           </FormItem>
         )}
       />
-      <FormField
-        control={control}
-        name="comment"
-        render={({field}) => (
-          <FormItem>
-            <FormLabel>Комментарий</FormLabel>
-            <FormControl>
-              <Input type="text" {...field} />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-    </>
+    </div>
   );
 };

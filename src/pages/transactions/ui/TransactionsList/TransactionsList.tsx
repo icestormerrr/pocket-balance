@@ -1,4 +1,4 @@
-import {type FC, useState} from "react";
+import {type FC, useCallback, useState} from "react";
 
 import type {Transaction} from "@/entities/transaction";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
@@ -13,26 +13,27 @@ const TransactionsList: FC<Props> = ({transactions}) => {
   const [open, setOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction>();
 
-  const handleTransactionClick = (transaction: Transaction) => {
+  const handleTransactionClick = useCallback((transaction: Transaction) => {
     setOpen(true);
     setSelectedTransaction(transaction);
-  };
+  }, []);
+
+  const handleCloseTransactionFormDrawer = useCallback(() => {
+    setOpen(false);
+    setSelectedTransaction(undefined);
+  }, []);
 
   return (
     <>
-      <TransactionFormDrawer open={open} onOpenChange={setOpen} transactionId={selectedTransaction?.id} />
+      <TransactionFormDrawer
+        open={open}
+        onOpenChange={handleCloseTransactionFormDrawer}
+        transactionId={selectedTransaction?.id}
+      />
 
       <div className="flex flex-col gap-3">
         {transactions?.map(transaction => (
-          <div onClick={() => handleTransactionClick(transaction)} key={transaction.id}>
-            <TransactionCard
-              id={transaction.id}
-              amount={transaction.amount}
-              date={transaction.date}
-              comment={transaction.comment}
-              categoryName={transaction.categoryName}
-            />
-          </div>
+          <TransactionCard transaction={transaction} onClick={handleTransactionClick} />
         ))}
       </div>
     </>

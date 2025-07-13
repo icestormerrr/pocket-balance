@@ -3,7 +3,7 @@ import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
 import {useCategory} from "@/entities/category";
-import {Drawer, DrawerContent, DrawerHeader, DrawerTitle} from "@/shared/ui/drawer";
+import {Drawer, DrawerContent} from "@/shared/ui/drawer";
 
 import {type CategoryFormState, categorySchema} from "./model/schema";
 import {CategoryFormFields} from "./ui/components/CategoryFormFields/CategoryFormFields";
@@ -46,29 +46,22 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
   }, [onOpenChange]);
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-      <DrawerContent className="h-[100vh] transition-all">
-        <FormProvider {...form}>
-          <div className="mx-auto w-full max-w-sm">
-            <DrawerHeader>
-              <DrawerTitle>{id ? "Редактирование" : "Новая категория"}</DrawerTitle>
-            </DrawerHeader>
+    <FormProvider {...form}>
+      <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
+        <DrawerContent className="h-[100vh] transition-all">
+          <div className="mx-auto w-full max-w-sm p-4 pt-0">
+            <CategoryFormFields />
 
-            <div className="p-4 pb-0 flex flex-col gap-2">
-              <CategoryFormFields />
-            </div>
-
-            <div className={"mt-50 flex justify-between"}>
-              {id && (
-                <div className="basis-[10%]">
-                  <DeleteButton onSuccess={handleSuccessButtonClick} />
-                </div>
-              )}
-
+            <div className={"mt-4 flex justify-between"}>
               {id ? (
-                <div className="basis-[85%]">
-                  <UpdateButton onSuccess={handleSuccessButtonClick} />
-                </div>
+                <>
+                  <div className="basis-[10%]">
+                    <DeleteButton onSuccess={handleSuccessButtonClick} />
+                  </div>
+                  <div className="basis-[85%]">
+                    <UpdateButton onSuccess={handleSuccessButtonClick} />
+                  </div>
+                </>
               ) : (
                 <div className="basis-[100%]">
                   <CreateButton onSuccess={handleSuccessButtonClick} />
@@ -76,9 +69,9 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
               )}
             </div>
           </div>
-        </FormProvider>
-      </DrawerContent>
-    </Drawer>
+        </DrawerContent>
+      </Drawer>
+    </FormProvider>
   );
 });
 

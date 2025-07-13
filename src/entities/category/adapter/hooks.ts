@@ -11,7 +11,7 @@ export const useCategories = (type?: CategoryType) => {
 
 export const useCategory = (id?: string) => {
   return useQuery<Category | null>({
-    queryKey: ["categories", id],
+    queryKey: ["category", id],
     queryFn: () => categoriesService.getById(id!),
     enabled: !!id,
   });
@@ -23,6 +23,7 @@ export const useCreateCategory = () => {
     mutationFn: (data: Omit<Category, "id" | "creationDatetime">) => categoriesService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("categories")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("category")});
     },
   });
 };
@@ -33,6 +34,7 @@ export const useUpdateCategory = () => {
     mutationFn: ({id, data}: {id: string; data: Partial<Omit<Category, "id">>}) => categoriesService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("categories")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("category")});
     },
   });
 };
@@ -43,6 +45,7 @@ export const useDeleteCategory = () => {
     mutationFn: (id: string) => categoriesService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("categories")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("category")});
     },
   });
 };

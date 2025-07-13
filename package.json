@@ -9,13 +9,14 @@
     "lint": "eslint .",
     "preview": "vite preview --host",
     "dev:android": "npx cap sync && npx cap run android",
-    "build:android": "npx cap android sync && npx cap build android",
     "test:unit": "jest"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
     "@capacitor/cli": "^7.4.2",
     "@capacitor/core": "^7.4.2",
+    "@capacitor/file-transfer": "^1.0.1",
+    "@capacitor/filesystem": "^7.1.2",
     "@capacitor/status-bar": "^7.0.1",
     "@hookform/resolvers": "^5.0.1",
     "@ionic/react": "^8.6.4",
@@ -59,7 +60,6 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/recharts": "^1.8.29",
-    "@types/testing-library__jest-dom": "^6.0.0",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.30.1",

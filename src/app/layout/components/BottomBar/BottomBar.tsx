@@ -9,7 +9,7 @@ const navItems = [
   {label: "Отчёт", icon: PieChart, link: "/reports"},
   {central: true},
   {label: "План", icon: SlidersHorizontal},
-  {label: "Настройки", icon: CircleEllipsis, link: "more"},
+  {label: "Ещё", icon: CircleEllipsis, link: "more"},
 ];
 
 export function BottomBar() {
@@ -18,10 +18,12 @@ export function BottomBar() {
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-50 h-20 flex items-center justify-center bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="w-full max-w-md mx-auto flex justify-around items-center px-4">
+      <div className={`w-full max-w-md mx-auto grid grid-cols-5 px-4`}>
         {navItems.map(({label, icon: Icon, link, central}, idx) =>
           central ? (
-            <CreateOperationButton key="central" className="mt-[-5px]" />
+            <div className="flex justify-center">
+              <CreateOperationButton key="central" className="mt-[-5px]" />
+            </div>
           ) : (
             <Link
               key={idx}

@@ -7,8 +7,8 @@ export interface ITransactionsService {
     startDate?: string;
     endDate?: string;
     categoryType: CategoryType;
-  }): Promise<(Transaction & {categoryName: string})[]>;
-  getById(id: string): Promise<Transaction | null>;
+  }): Promise<(Transaction & {categoryName: string; categoryType?: CategoryType})[]>;
+  getById(id: string): Promise<(Transaction & {categoryType?: CategoryType}) | null>;
   getAmountGropedByCategories(filter: {startDate?: string; endDate?: string; categoryType?: CategoryType}): Promise<
     {
       categoryId: string;
