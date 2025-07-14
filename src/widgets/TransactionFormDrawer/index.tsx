@@ -24,7 +24,7 @@ const defaultValues: TransactionsFormState = {
   id: "",
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  amount: undefined,
+  amount: "",
   comment: "",
   accountId: "",
 };
@@ -57,7 +57,7 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
   return (
     <FormProvider {...form}>
       <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-        <DrawerContent className="min-h-[95vh] transition-all">
+        <DrawerContent className="min-h-[93vh] transition-all">
           <div className="p-4 mx-auto w-full max-w-sm">
             <TransactionFormFields />
 

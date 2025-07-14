@@ -3,6 +3,7 @@ import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useUpdateCategory} from "@/entities/category";
+import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
 import type {FC} from "react";
@@ -33,6 +34,8 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
               label: "ОК",
               onClick: () => console.log("Undo"),
             },
+            style: {marginTop: getStatusBarHeight()},
+            position: "top-center",
           });
         },
         onError: () => {
@@ -41,6 +44,8 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
               label: "ОК",
               onClick: () => console.log("Undo"),
             },
+            style: {marginTop: getStatusBarHeight()},
+            position: "top-center",
           });
         },
       }

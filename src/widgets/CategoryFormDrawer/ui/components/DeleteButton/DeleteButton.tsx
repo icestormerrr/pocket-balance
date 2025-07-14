@@ -4,6 +4,7 @@ import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useDeleteCategory} from "@/entities/category";
+import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
 import type {CategoryFormState} from "../../../model/schema";
@@ -28,6 +29,8 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
             label: "ОК",
             onClick: () => console.log("Undo"),
           },
+          style: {marginTop: getStatusBarHeight()},
+          position: "top-center",
         });
       },
       onError: () => {
@@ -36,6 +39,8 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
             label: "ОК",
             onClick: () => console.log("Undo"),
           },
+          style: {marginTop: getStatusBarHeight()},
+          position: "top-center",
         });
       },
     });

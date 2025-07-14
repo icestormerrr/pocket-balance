@@ -13,21 +13,27 @@ export const TransactionsStats: FC<Props> = memo(({summary}) => {
       <Card className="py-2">
         <CardContent className="p-4 flex flex-col items-start">
           <span className="text-sm text-muted-foreground">Доходы</span>
-          <div className={cn("text-2xl font-semibold break-all text-[#22c55e]")}>{summary?.income} ₽</div>
+          <div className={cn("text-xl font-semibold break-all text-[#22c55e]")}>
+            {summary?.income.toLocaleString("ru-RU").replace(/,/g, " ")} ₽
+          </div>
         </CardContent>
       </Card>
 
       <Card className="py-2">
         <CardContent className="p-4 flex flex-col items-start">
           <span className="text-sm text-muted-foreground">Расходы</span>
-          <div className="text-2xl font-semibold break-all text-[#ef4444]">{summary?.expense} ₽</div>
+          <div className="text-xl font-semibold break-all text-[#ef4444]">
+            {summary?.expense.toLocaleString("ru-RU").replace(/,/g, " ")} ₽
+          </div>
         </CardContent>
       </Card>
 
       <Card className="py-2">
         <CardContent className="p-4 flex flex-col items-start">
           <span className="text-sm text-muted-foreground">Остаток</span>
-          <div className="text-2xl font-semibold break-all">{summary ? summary?.income - summary?.expense : ""} ₽</div>
+          <div className="text-xl font-semibold break-all">
+            {summary ? (summary.income - summary.expense).toLocaleString("ru-RU").replace(/,/g, " ") : ""} ₽
+          </div>
         </CardContent>
       </Card>
     </div>
