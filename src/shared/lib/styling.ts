@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getStatusBarHeight = () => {
-  return 44;
+  return 50;
 };

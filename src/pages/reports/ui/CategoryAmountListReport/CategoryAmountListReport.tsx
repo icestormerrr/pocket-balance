@@ -15,7 +15,7 @@ export const CategoryAmountListReport = ({chartData}: Props) => {
   const totalAmount = useMemo(() => chartData?.reduce((sum, item) => sum + item.amount, 0), [chartData]);
   return (
     <div className="space-y-4 mt-2">
-      <ScrollArea className="h-[290px] w-full rounded-md border p-2">
+      <ScrollArea className="h-[280px] w-full rounded-md border p-2">
         <div className="flex flex-col gap-2">
           {chartData?.map((item, index) => (
             <div key={index} className="flex items-center justify-between p-2 rounded-md bg-muted">

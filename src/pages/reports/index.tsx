@@ -4,6 +4,7 @@ import {useMemo, useState} from "react";
 import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
 import type {CategoryType} from "@/entities/category/model/Category";
 import {useAmountGroupedByCategory} from "@/entities/transaction/adapter/hooks";
+import {DateConverter, DateCreator} from "@/shared/lib/datetime";
 import {SegmentInput, Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
 
@@ -13,7 +14,10 @@ import {CategoryAmountPieReport} from "./ui/CategoryAmountPieReport/CategoryAmou
 
 const ReportsPage = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>("expense");
-  const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>({});
+  const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>(() => {
+    const {startDate, endDate} = DateCreator.createPeriod(new Date().getFullYear(), new Date().getMonth());
+    return {startDate: DateConverter.dateToISO(startDate), endDate: DateConverter.dateToISO(endDate)};
+  });
 
   const {data} = useAmountGroupedByCategory({
     startDate: dateFilter.startDate,
