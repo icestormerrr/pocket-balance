@@ -1,7 +1,12 @@
 import {CategoriesLocalStorageApi} from "@/entities/category/api/CategoriesLocalStorageApi";
 import type {ICategoriesApi} from "../api/ICategoriesApi";
-import type {Category, CategoryType} from "../model/Category";
-import type {ICategoriesService} from "./ICategoriesService";
+import type {Category} from "../model/Category";
+import type {
+  CategoriesFilter,
+  CategoryCreatePayload,
+  CategoryUpdatePayload,
+  ICategoriesService,
+} from "./ICategoriesService";
 
 export class CategoriesService implements ICategoriesService {
   private readonly api: ICategoriesApi;
@@ -10,7 +15,7 @@ export class CategoriesService implements ICategoriesService {
     this.api = api;
   }
 
-  async getAll(filter: {type?: CategoryType}): Promise<Category[]> {
+  async getAll(filter: CategoriesFilter): Promise<Category[]> {
     return this.api.getAll(filter);
   }
 
@@ -18,21 +23,26 @@ export class CategoriesService implements ICategoriesService {
     return this.api.getById(id);
   }
 
-  validateCategory(data: {name?: unknown; type?: unknown; color?: unknown}) {
-    if (typeof data.name !== "string" || data.name.trim().length === 0) {
+  // дописать проверку на лишние поля
+  validateCategory(data: unknown) {
+    if (typeof data !== "object" || data === null) {
+      throw new Error("Некорректная категория");
+    }
+
+    if (!("name" in data) || typeof data.name !== "string" || data.name.trim().length === 0) {
       throw new Error("Название категории не может быть пустым");
     }
 
-    if (data.type !== "expense" && data.type !== "income") {
+    if (!("type" in data) || (data.type !== "expense" && data.type !== "income")) {
       throw new Error("Тип категории должен быть 'income' или 'expense'");
     }
 
-    if (typeof data.color !== "string" || !/^#[0-9A-F]{6}$/i.test(data.color)) {
+    if (!("color" in data) || typeof data.color !== "string" || !/^#[0-9A-F]{6}$/i.test(data.color)) {
       throw new Error("Цвет должен быть в формате HEX, например #FFAA00");
     }
   }
 
-  async create(category: Omit<Category, "id" | "creationDatetime">): Promise<Category> {
+  async create(category: CategoryCreatePayload): Promise<Category> {
     this.validateCategory(category);
     return this.api.create({
       ...category,
@@ -40,7 +50,7 @@ export class CategoriesService implements ICategoriesService {
     });
   }
 
-  async update(id: string, category: Partial<Omit<Category, "id">>): Promise<Category | null> {
+  async update(id: string, category: CategoryUpdatePayload): Promise<Category | null> {
     this.validateCategory(category);
     return this.api.update(id, category);
   }

@@ -1,10 +1,10 @@
-import type {Transaction} from "@/entities/transaction";
+import type {Transaction, TransactionWithCategory} from "@/entities/transaction";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 import {type FC, useCallback, useState} from "react";
 import {TransactionCard} from "./components/TransactionCard/TransactionCard";
 
 type Props = {
-  transactions: (Transaction & {categoryName: string})[];
+  transactions: TransactionWithCategory[];
 };
 
 const monthNames = [

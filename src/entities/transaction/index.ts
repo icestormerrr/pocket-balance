@@ -8,6 +8,12 @@ import {
   useUpdateTransaction,
 } from "./adapter/hooks";
 import type {Transaction} from "./model/Transaction";
+import type {
+  TransactionsFilter,
+  TransactionsGroupedByCategory,
+  TransactionsSummary,
+  TransactionWithCategory,
+} from "./service/ITransactionsService";
 
 export {
   useCreateTransaction,
@@ -18,4 +24,10 @@ export {
   useTransactionsYears,
   useUpdateTransaction,
 };
-export type {Transaction};
+export type {
+  Transaction,
+  TransactionsFilter,
+  TransactionsGroupedByCategory,
+  TransactionsSummary,
+  TransactionWithCategory,
+};

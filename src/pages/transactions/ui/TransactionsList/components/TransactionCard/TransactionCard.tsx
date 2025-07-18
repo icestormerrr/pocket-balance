@@ -1,12 +1,11 @@
 import {type FC, memo} from "react";
 
-import type {CategoryType} from "@/entities/category";
-import type {Transaction} from "@/entities/transaction";
+import type {Transaction, TransactionWithCategory} from "@/entities/transaction";
 import {Badge} from "@/shared/ui/badge";
 import {Card, CardContent} from "@/shared/ui/card";
 
 type Props = {
-  transaction: Transaction & {categoryName: string; categoryType?: CategoryType};
+  transaction: TransactionWithCategory;
   onClick: (transaction: Transaction) => void;
 };
 

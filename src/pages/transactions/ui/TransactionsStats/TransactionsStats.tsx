@@ -1,11 +1,12 @@
 import {type FC, memo} from "react";
 
+import type {TransactionsSummary} from "@/entities/transaction";
 import {cn} from "@/shared/lib/styling";
 import {Card, CardContent} from "@/shared/ui/card";
 
 type Props = {
-  summaryGlobal?: {expense: number; income: number};
-  summaryForPeriod?: {expense: number; income: number};
+  summaryGlobal?: TransactionsSummary;
+  summaryForPeriod?: TransactionsSummary;
 };
 
 export const TransactionsStats: FC<Props> = memo(({summaryForPeriod, summaryGlobal}) => {

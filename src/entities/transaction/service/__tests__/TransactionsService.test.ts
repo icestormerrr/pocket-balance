@@ -64,9 +64,16 @@ describe("TransactionsService", () => {
 
   it("getById returns transaction", async () => {
     mockApi.getById.mockResolvedValue(mockTransactions[0]);
+    mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
+
     const service = makeService();
     const result = await service.getById("1");
-    expect(result).toEqual(mockTransactions[0]);
+
+    expect(result).toEqual({
+      ...mockTransactions[0],
+      categoryName: mockCategories[0].name,
+      categoryType: mockCategories[0].type,
+    });
   });
 
   it("getUniqYears returns unique years", async () => {

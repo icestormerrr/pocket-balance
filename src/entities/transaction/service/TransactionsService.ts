@@ -1,11 +1,18 @@
 import {categoriesService} from "@/entities/category/service/CategoriesService";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
-import type {CategoryType} from "@/entities/category/model/Category";
 import type {ITransactionsApi} from "../api/ITransactionsApi";
 import {TransactionsLocalStorageApi} from "../api/TransactionsLocalStorageApi";
 import type {Transaction} from "../model/Transaction";
-import type {ITransactionsService} from "./ITransactionsService";
+import type {
+  ITransactionsService,
+  TransactionCreatePayload,
+  TransactionsFilter,
+  TransactionsGroupedByCategory,
+  TransactionsSummary,
+  TransactionUpdatePayload,
+  TransactionWithCategory,
+} from "./ITransactionsService";
 
 export class TransactionsService implements ITransactionsService {
   private readonly api: ITransactionsApi;
@@ -16,11 +23,7 @@ export class TransactionsService implements ITransactionsService {
     this.categoriesService = categoriesService;
   }
 
-  async getAll(filter: {
-    startDate?: string;
-    endDate?: string;
-    categoryType?: CategoryType;
-  }): Promise<(Transaction & {categoryName: string; categoryType?: CategoryType})[]> {
+  async getAll(filter: TransactionsFilter): Promise<TransactionWithCategory[]> {
     const [transactions, categories] = await Promise.all([
       this.api.getAll({startDate: filter.startDate, endDate: filter.endDate}),
       this.categoriesService.getAll({}),
@@ -43,12 +46,14 @@ export class TransactionsService implements ITransactionsService {
     });
   }
 
-  async getById(id: string): Promise<(Transaction & {categoryType?: CategoryType}) | null> {
+  async getById(id: string): Promise<TransactionWithCategory | null> {
     const tx = await this.api.getById(id);
+
     if (!tx) return null;
+
     const category = await this.categoriesService.getById(tx.categoryId);
 
-    return {...tx, categoryType: category?.type};
+    return {...tx, categoryType: category?.type, categoryName: category?.name ?? "Неизвестная категория"};
   }
 
   async getUniqYears(): Promise<number[]> {
@@ -59,7 +64,7 @@ export class TransactionsService implements ITransactionsService {
     return Array.from(new Set(years));
   }
 
-  async getSummary(startDate?: string, endDate?: string): Promise<{income: number; expense: number}> {
+  async getSummary(startDate?: string, endDate?: string): Promise<TransactionsSummary> {
     const transactions = await this.getAll({startDate, endDate});
 
     const summary = transactions.reduce(
@@ -77,20 +82,7 @@ export class TransactionsService implements ITransactionsService {
     return summary;
   }
 
-  async getAmountGropedByCategories(
-    filter: {
-      startDate?: string;
-      endDate?: string;
-      categoryType?: CategoryType;
-    } = {}
-  ): Promise<
-    {
-      categoryId: string;
-      categoryName: string;
-      categoryColor?: string;
-      amount: number;
-    }[]
-  > {
+  async getAmountGropedByCategories(filter: TransactionsFilter = {}): Promise<TransactionsGroupedByCategory[]> {
     const transactions = await this.getAll(filter);
     const categories = await this.categoriesService.getAll({});
 
@@ -110,7 +102,8 @@ export class TransactionsService implements ITransactionsService {
     });
   }
 
-  private async validateTransaction(tx: Partial<Omit<Transaction, "id">>): Promise<void> {
+  // дописать проверку на лишние поля
+  private async validateTransaction(tx: TransactionUpdatePayload): Promise<void> {
     const errors: string[] = [];
 
     if (tx.amount === undefined || typeof tx.amount !== "number" || tx.amount <= 0) {
@@ -135,12 +128,12 @@ export class TransactionsService implements ITransactionsService {
     }
   }
 
-  async create(tx: Omit<Transaction, "id">): Promise<Transaction> {
+  async create(tx: TransactionCreatePayload): Promise<Transaction> {
     await this.validateTransaction(tx);
     return this.api.create(tx);
   }
 
-  async update(id: string, tx: Partial<Omit<Transaction, "id">>): Promise<Transaction | null> {
+  async update(id: string, tx: TransactionUpdatePayload): Promise<Transaction | null> {
     await this.validateTransaction(tx);
     return this.api.update(id, tx);
   }
