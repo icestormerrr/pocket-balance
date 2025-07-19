@@ -68,7 +68,7 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
   };
 
   return (
-    <div className="flex flex-col gap-2 mt-5">
+    <div className="flex flex-col gap-2">
       <BadgeGroup
         value={selectedYear}
         onChange={v => handleYearChange(v ?? null)}

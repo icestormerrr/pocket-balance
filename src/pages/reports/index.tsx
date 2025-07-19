@@ -25,11 +25,14 @@ const ReportsPage = () => {
     categoryType: categoryFilter as CategoryType,
   });
 
-  const chartData = useMemo(() => data?.map(item => ({...item, fill: item.categoryColor})), [data]);
+  const chartData = useMemo(
+    () => data?.map(item => ({...item, fill: item.categoryColor})).sort((item1, item2) => item2.amount - item1.amount),
+    [data]
+  );
 
   return (
-    <div className={"p-4 overflow-y-auto overscroll-contain"}>
-      <Tabs defaultValue="pie">
+    <div className={"p-4 flex flex-col gap-4 max-h-full"}>
+      <Tabs defaultValue="pie" className="flex flex-col gap-4 max-h-full">
         <div className="flex justify-between items-center">
           <TabsList className="w-30">
             <TabsTrigger value="pie">

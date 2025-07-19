@@ -12,12 +12,17 @@ const navItems = [
   {label: "Ещё", icon: CircleEllipsis, link: "more"},
 ];
 
+export const BOTTOM_BAR_HEIGHT = 80;
+
 export function BottomBar() {
   const location = useRouterState({select: s => s.location});
   const pathname = location.pathname;
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-50 h-20 flex items-center justify-center bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav
+      className="fixed bottom-0 inset-x-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      style={{height: BOTTOM_BAR_HEIGHT}}
+    >
       <div className={`w-full max-w-md mx-auto grid grid-cols-5 px-4`}>
         {navItems.map(({label, icon: Icon, link, central}, idx) =>
           central ? (

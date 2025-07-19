@@ -121,7 +121,6 @@
 }
 
 html, body {
-  overscroll-behavior: none;
   scroll-behavior: smooth;
   background: var(--background);
   color: var(--foreground);
