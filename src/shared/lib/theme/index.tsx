@@ -1,3 +1,4 @@
+import {StatusBar, Style} from "@capacitor/status-bar";
 import {createContext, useContext, useEffect, useState} from "react";
 
 export type Theme = "dark" | "light" | "system";
@@ -33,14 +34,12 @@ export function ThemeProvider({
 
     root.classList.remove("light", "dark");
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const actualTheme =
+      theme === "system" ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : theme;
 
-      root.classList.add(systemTheme);
-      return;
-    }
+    StatusBar.setStyle({style: actualTheme === "dark" ? Style.Dark : Style.Light});
 
-    root.classList.add(theme);
+    root.classList.add(actualTheme);
   }, [theme]);
 
   const value = {

@@ -19,7 +19,7 @@ const TransactionsPage = () => {
   const {data: summaryForPeriod} = useTransactionsSummary({startDate: filter.startDate, endDate: filter.endDate});
 
   return (
-    <div className="px-4 pb-4 space-y-4 max-w-md mx-auto">
+    <div className="p-4 space-y-4 max-w-md mx-auto">
       <h1 className="flex justify-between items-center text-2xl font-bold">Операции</h1>
       <div
         className="sticky top-0 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-[16px] mb-0 -mx-4 px-4"

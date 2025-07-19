@@ -31,7 +31,8 @@ const CategoriesPage = () => {
 
       <div className="p-4 space-y-4 max-w-md mx-auto">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Категории</h1>
+          <h1 className="flex justify-between items-center text-2xl font-bold">Категории</h1>
+
           <Button onClick={handleAddCategoryClick}>Добавить</Button>
         </div>
 
