@@ -15,7 +15,7 @@ export const TransactionFormFields = () => {
   const {control, watch, setValue} = useFormContext<TransactionsFormState>();
   const categoryType = watch("categoryType");
 
-  const {data: categories} = useCategories(categoryType);
+  const {data: categories} = useCategories({type: categoryType});
   const categoriesOptions = useMemo(() => categories?.map(c => ({label: c.name, value: c.id})) ?? [], [categories]);
 
   return (

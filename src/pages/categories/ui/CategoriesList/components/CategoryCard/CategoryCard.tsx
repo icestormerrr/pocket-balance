@@ -13,8 +13,8 @@ export const CategoryCard: FC<Props> = memo(({category, onClick}) => {
   };
 
   return (
-    <Card className="mb-2 cursor-pointer" onClick={handleClick}>
-      <CardContent className="p-4 flex items-center justify-between">
+    <Card className="w-full max-w-md rounded-xl shadow-sm" onClick={handleClick}>
+      <CardContent className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 rounded-full" style={{backgroundColor: category.color}} />
           <span>{category.name}</span>

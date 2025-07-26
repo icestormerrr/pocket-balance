@@ -1,10 +1,10 @@
 import {useState} from "react";
 
 import {useTransactions, useTransactionsSummary} from "@/entities/transaction";
-import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
-
 import {DateConverter, DateCreator} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
+import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
+
 import TransactionsList from "./ui/TransactionsList/TransactionsList";
 import {TransactionsStats} from "./ui/TransactionsStats/TransactionsStats";
 

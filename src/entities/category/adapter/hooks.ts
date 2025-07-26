@@ -1,11 +1,13 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import type {Category, CategoryType} from "../model/Category";
-import {categoriesService} from "../service/CategoriesService";
 
-export const useCategories = (type?: CategoryType) => {
+import type {Category} from "../model/Category";
+import {categoriesService} from "../service/CategoriesService";
+import type {CategoriesFilter} from "../service/ICategoriesService";
+
+export const useCategories = (filter: CategoriesFilter) => {
   return useQuery<Category[]>({
-    queryKey: ["categories", type],
-    queryFn: () => categoriesService.getAll({type}),
+    queryKey: ["categories", filter?.type],
+    queryFn: () => categoriesService.getAll(filter),
   });
 };
 

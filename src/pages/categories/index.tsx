@@ -1,12 +1,15 @@
 import {useCallback, useState} from "react";
 
-import {type Category, useCategories} from "@/entities/category";
+import {type CategoriesFilter, type Category, useCategories} from "@/entities/category";
 import {CategoriesList} from "@/pages/categories/ui/CategoriesList/CategoriesList";
+import {CategoryFilters} from "@/pages/categories/ui/CategoryFilters/CategoryFilters";
 import {Button} from "@/shared/ui/button";
 import CategoryFormDrawer from "@/widgets/CategoryFormDrawer";
 
 const CategoriesPage = () => {
-  const {data: categories} = useCategories();
+  const [filter, setFilter] = useState<CategoriesFilter>({});
+  const {data: categories} = useCategories(filter);
+
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category>();
 
@@ -34,6 +37,10 @@ const CategoriesPage = () => {
           <h1 className="flex justify-between items-center text-2xl font-bold">Категории</h1>
 
           <Button onClick={handleAddCategoryClick}>Добавить</Button>
+        </div>
+
+        <div>
+          <CategoryFilters filter={filter} onFilterChange={setFilter} />
         </div>
 
         {categories && <CategoriesList categories={categories} onCategoryClick={handleCategoryClick} />}
