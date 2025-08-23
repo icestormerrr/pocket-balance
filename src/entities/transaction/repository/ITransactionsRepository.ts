@@ -1,6 +1,6 @@
 import type {Transaction} from "../model/Transaction";
 
-export interface ITransactionsApi {
+export interface ITransactionsRepository {
   getAll(filter: {startDate?: string; endDate?: string}): Promise<Transaction[]>;
   getById(id: string): Promise<Transaction | null>;
   create(transaction: Omit<Transaction, "id">): Promise<Transaction>;

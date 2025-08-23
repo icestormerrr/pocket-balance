@@ -3,11 +3,11 @@ import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 import type {Category, CategoryType} from "@/entities/category";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
-import type {ITransactionsApi} from "../../api/ITransactionsApi";
 import type {Transaction} from "../../model/Transaction";
+import type {ITransactionsRepository} from "../../repository/ITransactionsRepository";
 import {TransactionsService} from "../TransactionsService";
 
-const mockApi: jest.Mocked<ITransactionsApi> = {
+const mockRepo: jest.Mocked<ITransactionsRepository> = {
   getAll: jest.fn(),
   getById: jest.fn(),
   create: jest.fn(),
@@ -23,7 +23,7 @@ const mockCategoriesService: jest.Mocked<ICategoriesService> = {
   delete: jest.fn(),
 };
 
-const makeService = () => new TransactionsService(mockApi, mockCategoriesService);
+const makeService = () => new TransactionsService(mockRepo, mockCategoriesService);
 
 const mockTransactions: Transaction[] = [
   {
@@ -51,7 +51,7 @@ beforeEach(() => {
 
 describe("TransactionsService", () => {
   it("getAll returns transactions with categoryName and type, and filters by type", async () => {
-    mockApi.getAll.mockResolvedValue(mockTransactions);
+    mockRepo.getAll.mockResolvedValue(mockTransactions);
     mockCategoriesService.getAll.mockResolvedValue(mockCategories);
 
     const service = makeService();
@@ -63,7 +63,7 @@ describe("TransactionsService", () => {
   });
 
   it("getById returns transaction", async () => {
-    mockApi.getById.mockResolvedValue(mockTransactions[0]);
+    mockRepo.getById.mockResolvedValue(mockTransactions[0]);
     mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
 
     const service = makeService();
@@ -77,14 +77,14 @@ describe("TransactionsService", () => {
   });
 
   it("getUniqYears returns unique years", async () => {
-    mockApi.getAll.mockResolvedValue(mockTransactions);
+    mockRepo.getAll.mockResolvedValue(mockTransactions);
     const service = makeService();
     const years = await service.getUniqYears();
     expect(years).toEqual([2024, 2023]);
   });
 
   it("getSummary calculates total income and expense", async () => {
-    mockApi.getAll.mockResolvedValue(mockTransactions);
+    mockRepo.getAll.mockResolvedValue(mockTransactions);
     mockCategoriesService.getAll.mockResolvedValue(mockCategories);
 
     const service = makeService();
@@ -94,7 +94,7 @@ describe("TransactionsService", () => {
   });
 
   it("getAmountGropedByCategories returns grouped amounts", async () => {
-    mockApi.getAll.mockResolvedValue(mockTransactions);
+    mockRepo.getAll.mockResolvedValue(mockTransactions);
     mockCategoriesService.getAll.mockResolvedValue(mockCategories);
 
     const service = makeService();
@@ -147,7 +147,7 @@ describe("TransactionsService", () => {
 
     it("create works with valid data", async () => {
       mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
-      mockApi.create.mockResolvedValue({...validTx, id: "123"});
+      mockRepo.create.mockResolvedValue({...validTx, id: "123"});
 
       const service = makeService();
       const result = await service.create(validTx);
@@ -155,9 +155,9 @@ describe("TransactionsService", () => {
       expect(result).toEqual({...validTx, id: "123"});
     });
 
-    it("update calls api after validation", async () => {
+    it("update calls repository after validation", async () => {
       mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
-      mockApi.update.mockResolvedValue({...validTx, id: "1"});
+      mockRepo.update.mockResolvedValue({...validTx, id: "1"});
 
       const service = makeService();
       const result = await service.update("1", validTx);
@@ -166,9 +166,9 @@ describe("TransactionsService", () => {
     });
   });
 
-  it("delete calls api", async () => {
+  it("delete calls repository", async () => {
     const service = makeService();
     await service.delete("1");
-    expect(mockApi.delete).toHaveBeenCalledWith("1");
+    expect(mockRepo.delete).toHaveBeenCalledWith("1");
   });
 });

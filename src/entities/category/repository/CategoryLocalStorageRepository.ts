@@ -1,5 +1,5 @@
 import type {Category, CategoryType} from "../model/Category";
-import type {ICategoriesApi} from "./ICategoriesApi";
+import type {ICategoriesRepository} from "./ICategoriesRepository";
 
 const STORAGE_KEY = "categories";
 
@@ -12,7 +12,7 @@ function save(categories: Category[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
 }
 
-export class CategoriesLocalStorageApi implements ICategoriesApi {
+export class CategoryLocalStorageRepository implements ICategoriesRepository {
   async getAll(filter: {type?: CategoryType}): Promise<Category[]> {
     return load().filter(cat => {
       if (filter.type) {

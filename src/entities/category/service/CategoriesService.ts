@@ -1,6 +1,6 @@
-import {CategoriesLocalStorageApi} from "@/entities/category/api/CategoriesLocalStorageApi";
-import type {ICategoriesApi} from "../api/ICategoriesApi";
 import type {Category} from "../model/Category";
+import {CategoryLocalStorageRepository} from "../repository/CategoryLocalStorageRepository";
+import type {ICategoriesRepository} from "../repository/ICategoriesRepository";
 import type {
   CategoriesFilter,
   CategoryCreatePayload,
@@ -9,18 +9,18 @@ import type {
 } from "./ICategoriesService";
 
 export class CategoriesService implements ICategoriesService {
-  private readonly api: ICategoriesApi;
+  private readonly repository: ICategoriesRepository;
 
-  constructor(api: ICategoriesApi) {
-    this.api = api;
+  constructor(api: ICategoriesRepository) {
+    this.repository = api;
   }
 
   async getAll(filter: CategoriesFilter): Promise<Category[]> {
-    return this.api.getAll(filter);
+    return this.repository.getAll(filter);
   }
 
   async getById(id: string): Promise<Category | null> {
-    return this.api.getById(id);
+    return this.repository.getById(id);
   }
 
   // дописать проверку на лишние поля
@@ -44,7 +44,7 @@ export class CategoriesService implements ICategoriesService {
 
   async create(category: CategoryCreatePayload): Promise<Category> {
     this.validateCategory(category);
-    return this.api.create({
+    return this.repository.create({
       ...category,
       creationDatetime: new Date().toUTCString(),
     });
@@ -52,12 +52,12 @@ export class CategoriesService implements ICategoriesService {
 
   async update(id: string, category: CategoryUpdatePayload): Promise<Category | null> {
     this.validateCategory(category);
-    return this.api.update(id, category);
+    return this.repository.update(id, category);
   }
 
   async delete(id: string): Promise<void> {
-    return this.api.delete(id);
+    return this.repository.delete(id);
   }
 }
 
-export const categoriesService = new CategoriesService(new CategoriesLocalStorageApi());
+export const categoriesService = new CategoriesService(new CategoryLocalStorageRepository());

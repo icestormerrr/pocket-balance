@@ -1,9 +1,9 @@
 import {categoriesService} from "@/entities/category/service/CategoriesService";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
-import type {ITransactionsApi} from "../api/ITransactionsApi";
-import {TransactionsLocalStorageApi} from "../api/TransactionsLocalStorageApi";
 import type {Transaction} from "../model/Transaction";
+import type {ITransactionsRepository} from "../repository/ITransactionsRepository";
+import {TransactionsLocalStorageRepository} from "../repository/TransactionsLocalStorageRepository";
 import type {
   ITransactionsService,
   TransactionCreatePayload,
@@ -15,17 +15,17 @@ import type {
 } from "./ITransactionsService";
 
 export class TransactionsService implements ITransactionsService {
-  private readonly api: ITransactionsApi;
+  private readonly repository: ITransactionsRepository;
   private readonly categoriesService: ICategoriesService;
 
-  constructor(api: ITransactionsApi, categoriesService: ICategoriesService) {
-    this.api = api;
+  constructor(api: ITransactionsRepository, categoriesService: ICategoriesService) {
+    this.repository = api;
     this.categoriesService = categoriesService;
   }
 
   async getAll(filter: TransactionsFilter): Promise<TransactionWithCategory[]> {
     const [transactions, categories] = await Promise.all([
-      this.api.getAll({startDate: filter.startDate, endDate: filter.endDate}),
+      this.repository.getAll({startDate: filter.startDate, endDate: filter.endDate}),
       this.categoriesService.getAll({}),
     ]);
 
@@ -47,7 +47,7 @@ export class TransactionsService implements ITransactionsService {
   }
 
   async getById(id: string): Promise<TransactionWithCategory | null> {
-    const tx = await this.api.getById(id);
+    const tx = await this.repository.getById(id);
 
     if (!tx) return null;
 
@@ -57,7 +57,7 @@ export class TransactionsService implements ITransactionsService {
   }
 
   async getUniqYears(): Promise<number[]> {
-    const transactions = await this.api.getAll({});
+    const transactions = await this.repository.getAll({});
 
     const years = transactions.map(d => new Date(d.date).getFullYear());
 
@@ -130,17 +130,17 @@ export class TransactionsService implements ITransactionsService {
 
   async create(tx: TransactionCreatePayload): Promise<Transaction> {
     await this.validateTransaction(tx);
-    return this.api.create(tx);
+    return this.repository.create(tx);
   }
 
   async update(id: string, tx: TransactionUpdatePayload): Promise<Transaction | null> {
     await this.validateTransaction(tx);
-    return this.api.update(id, tx);
+    return this.repository.update(id, tx);
   }
 
   async delete(id: string): Promise<void> {
-    return this.api.delete(id);
+    return this.repository.delete(id);
   }
 }
 
-export const transactionsService = new TransactionsService(new TransactionsLocalStorageApi(), categoriesService);
+export const transactionsService = new TransactionsService(new TransactionsLocalStorageRepository(), categoriesService);

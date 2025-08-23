@@ -1,10 +1,10 @@
 import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 
-import type {ICategoriesApi} from "../../api/ICategoriesApi";
 import type {Category, CategoryType} from "../../model/Category";
+import type {ICategoriesRepository} from "../../repository/ICategoriesRepository";
 import {CategoriesService} from "../CategoriesService";
 
-const mockApi: jest.Mocked<ICategoriesApi> = {
+const mockRepo: jest.Mocked<ICategoriesRepository> = {
   getAll: jest.fn(),
   getById: jest.fn(),
   create: jest.fn(),
@@ -12,7 +12,7 @@ const mockApi: jest.Mocked<ICategoriesApi> = {
   delete: jest.fn(),
 };
 
-const service = new CategoriesService(mockApi);
+const service = new CategoriesService(mockRepo);
 
 const validCategory: Omit<Category, "id" | "creationDatetime"> = {
   name: "Food",
@@ -25,33 +25,33 @@ describe("CategoriesService", () => {
     jest.clearAllMocks();
   });
 
-  test("getAll calls API with correct filter", async () => {
+  test("getAll calls Repo with correct filter", async () => {
     const filter = {type: "income" as CategoryType};
-    mockApi.getAll.mockResolvedValueOnce([]);
+    mockRepo.getAll.mockResolvedValueOnce([]);
     const result = await service.getAll(filter);
-    expect(mockApi.getAll).toHaveBeenCalledWith(filter);
+    expect(mockRepo.getAll).toHaveBeenCalledWith(filter);
     expect(result).toEqual([]);
   });
 
-  test("getById calls API with correct ID", async () => {
+  test("getById calls Repo with correct ID", async () => {
     const category = {id: "1", ...validCategory, creationDatetime: new Date().toUTCString()};
-    mockApi.getById.mockResolvedValueOnce(category);
+    mockRepo.getById.mockResolvedValueOnce(category);
     const result = await service.getById("1");
-    expect(mockApi.getById).toHaveBeenCalledWith("1");
+    expect(mockRepo.getById).toHaveBeenCalledWith("1");
     expect(result).toEqual(category);
   });
 
-  test("create calls validateCategory and API with formatted data", async () => {
+  test("create calls validateCategory and Repo with formatted data", async () => {
     const created: Category = {
       id: "123",
       ...validCategory,
       creationDatetime: "2024-01-01T00:00:00Z",
     };
 
-    mockApi.create.mockResolvedValueOnce(created);
+    mockRepo.create.mockResolvedValueOnce(created);
     const result = await service.create(validCategory);
 
-    expect(mockApi.create).toHaveBeenCalledWith(
+    expect(mockRepo.create).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Food",
         type: "expense",
@@ -62,18 +62,18 @@ describe("CategoriesService", () => {
     expect(result).toBe(created);
   });
 
-  test("update calls validateCategory and API", async () => {
+  test("update calls validateCategory and Repo", async () => {
     const updated = {...validCategory, creationDatetime: new Date().toUTCString(), id: "1"};
-    mockApi.update.mockResolvedValueOnce(updated);
+    mockRepo.update.mockResolvedValueOnce(updated);
     const result = await service.update("1", validCategory);
-    expect(mockApi.update).toHaveBeenCalledWith("1", validCategory);
+    expect(mockRepo.update).toHaveBeenCalledWith("1", validCategory);
     expect(result).toBe(updated);
   });
 
-  test("delete calls API with correct ID", async () => {
-    mockApi.delete.mockResolvedValueOnce();
+  test("delete calls Repo with correct ID", async () => {
+    mockRepo.delete.mockResolvedValueOnce();
     await service.delete("1");
-    expect(mockApi.delete).toHaveBeenCalledWith("1");
+    expect(mockRepo.delete).toHaveBeenCalledWith("1");
   });
 
   describe("validateCategory", () => {

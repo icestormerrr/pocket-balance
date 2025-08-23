@@ -1,7 +1,6 @@
 import {createRootRoute, createRoute, createRouter} from "@tanstack/react-router";
 
 import CategoriesPage from "@/pages/categories";
-import MainPage from "@/pages/main";
 import MorePage from "@/pages/more";
 import ReportsPage from "@/pages/reports";
 import TransactionsPage from "@/pages/transactions";
@@ -15,7 +14,7 @@ const rootRoute = createRootRoute({
 const mainPage = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: MainPage,
+  component: TransactionsPage,
 });
 
 const transactionsRoute = createRoute({

@@ -34,6 +34,7 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
 
   const form = useForm<TransactionsFormState>({
     resolver: zodResolver(transactionFormSchema),
+    mode: "onChange",
     defaultValues,
   });
   const id = form.watch("id");

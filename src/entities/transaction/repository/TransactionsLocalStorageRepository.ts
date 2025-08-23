@@ -1,6 +1,6 @@
 import {DateComparator, DateConverter} from "@/shared/lib/datetime";
 import type {Transaction} from "../model/Transaction";
-import type {ITransactionsApi} from "./ITransactionsApi";
+import type {ITransactionsRepository} from "./ITransactionsRepository";
 
 const STORAGE_KEY = "transactions";
 
@@ -13,7 +13,7 @@ function save(transactions: Transaction[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
 }
 
-export class TransactionsLocalStorageApi implements ITransactionsApi {
+export class TransactionsLocalStorageRepository implements ITransactionsRepository {
   // возможный неожиданный эффект: сортирует по датам
   async getAll(filter: {startDate?: string; endDate?: string}): Promise<Transaction[]> {
     const raw = load();

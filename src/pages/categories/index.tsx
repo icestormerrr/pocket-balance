@@ -7,7 +7,7 @@ import {Button} from "@/shared/ui/button";
 import CategoryFormDrawer from "@/widgets/CategoryFormDrawer";
 
 const CategoriesPage = () => {
-  const [filter, setFilter] = useState<CategoriesFilter>({});
+  const [filter, setFilter] = useState<CategoriesFilter>({type: "expense"});
   const {data: categories} = useCategories(filter);
 
   const [open, setOpen] = useState(false);
@@ -36,7 +36,9 @@ const CategoriesPage = () => {
         <div className="flex justify-between items-center">
           <h1 className="flex justify-between items-center text-2xl font-bold">Категории</h1>
 
-          <Button onClick={handleAddCategoryClick}>Добавить</Button>
+          <Button size="sm" onClick={handleAddCategoryClick}>
+            Добавить
+          </Button>
         </div>
 
         <div>

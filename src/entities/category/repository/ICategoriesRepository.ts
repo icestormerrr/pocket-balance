@@ -1,6 +1,6 @@
 import type {Category, CategoryType} from "../model/Category";
 
-export interface ICategoriesApi {
+export interface ICategoriesRepository {
   getAll(filter: {type?: CategoryType}): Promise<Category[]>;
   getById(id: string): Promise<Category | null>;
   create(transaction: Omit<Category, "id">): Promise<Category>;
