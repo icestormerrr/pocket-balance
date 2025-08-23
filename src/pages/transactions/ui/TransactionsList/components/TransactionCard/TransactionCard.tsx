@@ -27,7 +27,7 @@ export const TransactionCard: FC<Props> = memo(({transaction, onClick}) => {
             {categoryName}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{comment}</p>
+        {comment && <p className="text-sm text-muted-foreground line-clamp-2 mt-2">{comment}</p>}
       </CardContent>
     </Card>
   );

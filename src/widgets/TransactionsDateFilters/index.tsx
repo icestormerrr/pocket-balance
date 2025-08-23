@@ -37,7 +37,6 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
 
   const handleYearChange = (year: number | null) => {
     if (year === null) {
-      onFilterChange({});
       return;
     }
 
