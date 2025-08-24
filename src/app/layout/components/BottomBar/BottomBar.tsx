@@ -1,4 +1,4 @@
-import {cn} from "@/shared/lib/styling";
+import {BOTTOM_BAR_HEIGHT, cn} from "@/shared/lib/styling";
 import {CircleEllipsis, LayoutList, PieChart, SlidersHorizontal} from "lucide-react";
 
 import {Link, useRouterState} from "@tanstack/react-router";
@@ -11,8 +11,6 @@ const navItems = [
   {label: "План", icon: SlidersHorizontal},
   {label: "Ещё", icon: CircleEllipsis, link: "more"},
 ];
-
-export const BOTTOM_BAR_HEIGHT = 80;
 
 export function BottomBar() {
   const location = useRouterState({select: s => s.location});

@@ -10,7 +10,7 @@ type Props = {
   }[];
 };
 
-export const CategoryAmountListReport = ({chartData}: Props) => {
+export const CategoriesAmountsList = ({chartData}: Props) => {
   const totalAmount = useMemo(() => chartData?.reduce((sum, item) => sum + item.amount, 0), [chartData]);
 
   return (

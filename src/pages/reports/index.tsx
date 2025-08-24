@@ -1,62 +1,28 @@
-import {ChartColumn, ChartPie} from "lucide-react";
-import {useMemo, useState} from "react";
+import {Card} from "@/shared/ui/card";
+import {Carousel, CarouselContent, CarouselItem} from "@/shared/ui/carousel";
 
-import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
-import type {CategoryType} from "@/entities/category/model/Category";
-import {useAmountGroupedByCategory} from "@/entities/transaction/adapter/hooks";
-import {DateConverter, DateCreator} from "@/shared/lib/datetime";
-import {SegmentInput, Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
+import {CategoriesReport} from "@/pages/reports/ui/CategoriesReport/CategoriesReport";
+import {getMainContentHeight} from "@/shared/lib/styling";
 
-import {CategoryAmountBarReport} from "./ui/CategoryAmountBarReport/CategoryAmountBarReport";
-import {CategoryAmountListReport} from "./ui/CategoryAmountListReport/CategoryAmountListReport";
-import {CategoryAmountPieReport} from "./ui/CategoryAmountPieReport/CategoryAmountPieReport";
+export const REPORTS_PAGE_PADDING = 16;
 
 const ReportsPage = () => {
-  const [categoryFilter, setCategoryFilter] = useState<string>("expense");
-  const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>(() => {
-    const {startDate, endDate} = DateCreator.createPeriod(new Date().getFullYear(), new Date().getMonth());
-    return {startDate: DateConverter.dateToISO(startDate), endDate: DateConverter.dateToISO(endDate)};
-  });
-
-  const {data} = useAmountGroupedByCategory({
-    startDate: dateFilter.startDate,
-    endDate: dateFilter.endDate,
-    categoryType: categoryFilter as CategoryType,
-  });
-
-  const chartData = useMemo(
-    () => data?.map(item => ({...item, fill: item.categoryColor})).sort((item1, item2) => item2.amount - item1.amount),
-    [data]
-  );
-
   return (
-    <div className={"p-4 flex flex-col gap-4 max-h-full"}>
-      <Tabs defaultValue="pie" className="flex flex-col gap-4 max-h-full">
-        <div className="flex justify-between items-center">
-          <TabsList className="w-30">
-            <TabsTrigger value="pie">
-              <ChartPie />
-            </TabsTrigger>
-            <TabsTrigger value="bar">
-              <ChartColumn />
-            </TabsTrigger>
-          </TabsList>
-          <SegmentInput value={categoryFilter} onChange={setCategoryFilter} options={CATEGORY_TYPE_OPTIONS} />
-        </div>
-
-        <TransactionsDateFilters filter={dateFilter} onFilterChange={setDateFilter} />
-
-        <TabsContent value="pie">
-          <CategoryAmountPieReport chartData={chartData} />
-        </TabsContent>
-
-        <TabsContent value="bar">
-          <CategoryAmountBarReport chartData={chartData} />
-        </TabsContent>
-      </Tabs>
-
-      <CategoryAmountListReport chartData={chartData} />
+    <div style={{padding: REPORTS_PAGE_PADDING}}>
+      <Carousel className="w-full max-h-full">
+        <CarouselContent>
+          <CarouselItem>
+            <Card
+              className="p-4 overflow-auto box-border"
+              style={{height: getMainContentHeight() - REPORTS_PAGE_PADDING * 2}}
+            >
+              <CategoriesReport />
+            </Card>
+          </CarouselItem>
+        </CarouselContent>
+        {/*<CarouselPrevious />*/}
+        {/*<CarouselNext />*/}
+      </Carousel>
     </div>
   );
 };

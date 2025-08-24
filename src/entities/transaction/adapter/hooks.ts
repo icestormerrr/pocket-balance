@@ -25,7 +25,7 @@ export const useTransactionsSummary = ({startDate, endDate}: {startDate?: string
   });
 };
 
-export const useAmountGroupedByCategory = ({
+export const useCategoriesReport = ({
   startDate,
   endDate,
   categoryType,
@@ -35,8 +35,8 @@ export const useAmountGroupedByCategory = ({
   categoryType?: CategoryType;
 }) => {
   return useQuery({
-    queryKey: ["transactionsAmount", startDate, endDate, categoryType],
-    queryFn: () => transactionsService.getAmountGropedByCategories({startDate, endDate, categoryType}),
+    queryKey: ["transactionsCategoriesReport", startDate, endDate, categoryType],
+    queryFn: () => transactionsService.getCategoriesReport({startDate, endDate, categoryType}),
   });
 };
 
@@ -56,7 +56,7 @@ export const useCreateTransaction = () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transaction")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
-      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAmount")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsCategoriesReport")});
     },
   });
 };

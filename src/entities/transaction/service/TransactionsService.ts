@@ -82,7 +82,7 @@ export class TransactionsService implements ITransactionsService {
     return summary;
   }
 
-  async getAmountGropedByCategories(filter: TransactionsFilter = {}): Promise<TransactionsGroupedByCategory[]> {
+  async getCategoriesReport(filter: TransactionsFilter = {}): Promise<TransactionsGroupedByCategory[]> {
     const transactions = await this.getAll(filter);
     const categories = await this.categoriesService.getAll({});
 

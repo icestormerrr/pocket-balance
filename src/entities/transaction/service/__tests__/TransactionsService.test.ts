@@ -93,12 +93,12 @@ describe("TransactionsService", () => {
     expect(result).toEqual({income: 200, expense: 100});
   });
 
-  it("getAmountGropedByCategories returns grouped amounts", async () => {
+  it("getCategoriesReport returns amounts grouped by categories", async () => {
     mockRepo.getAll.mockResolvedValue(mockTransactions);
     mockCategoriesService.getAll.mockResolvedValue(mockCategories);
 
     const service = makeService();
-    const result = await service.getAmountGropedByCategories();
+    const result = await service.getCategoriesReport();
 
     expect(result).toEqual([
       {

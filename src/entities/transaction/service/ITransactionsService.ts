@@ -5,7 +5,7 @@ import type {Transaction} from "../model/Transaction";
 export interface ITransactionsService {
   getAll(filter: TransactionsFilter): Promise<TransactionWithCategory[]>;
   getById(id: string): Promise<TransactionWithCategory | null>;
-  getAmountGropedByCategories(filter: TransactionsFilter): Promise<TransactionsGroupedByCategory[]>;
+  getCategoriesReport(filter: TransactionsFilter): Promise<TransactionsGroupedByCategory[]>;
   getSummary(startDate: string, endDate: string): Promise<TransactionsSummary>;
   getUniqYears(): Promise<number[]>;
   create(tx: TransactionCreatePayload): Promise<Transaction>;
