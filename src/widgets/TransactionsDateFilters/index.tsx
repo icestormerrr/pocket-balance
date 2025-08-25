@@ -12,9 +12,10 @@ export type TransactionDateFilterType = {
 interface TransactionsFiltersProps {
   filter?: TransactionDateFilterType;
   onFilterChange: (filter: TransactionDateFilterType) => void;
+  showMonths?: boolean;
 }
 
-const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersProps) => {
+const TransactionsDateFilters = ({filter, onFilterChange, showMonths = true}: TransactionsFiltersProps) => {
   const {data: years} = useTransactionsYears();
 
   const {selectedYear, selectedMonth} = useMemo(() => {
@@ -74,7 +75,7 @@ const TransactionsDateFilters = ({filter, onFilterChange}: TransactionsFiltersPr
         options={years?.map(y => ({label: y.toString(), value: y})) ?? []}
       />
       <AnimatePresence initial={false}>
-        {selectedYear !== undefined && (
+        {showMonths && selectedYear !== undefined && (
           <motion.div
             key="month-filter"
             variants={{

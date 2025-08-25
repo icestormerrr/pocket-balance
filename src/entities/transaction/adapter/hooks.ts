@@ -40,6 +40,21 @@ export const useCategoriesReport = ({
   });
 };
 
+export const useBalanceReport = ({
+  startDate,
+  endDate,
+  granularity,
+}: {
+  startDate?: string;
+  endDate?: string;
+  granularity: "year" | "month" | "day";
+}) => {
+  return useQuery({
+    queryKey: ["transactionsBalanceReport", startDate, endDate, granularity],
+    queryFn: () => transactionsService.getBalanceReport({startDate, endDate, granularity}),
+  });
+};
+
 export const useTransactionsYears = () => {
   return useQuery({
     queryKey: ["transactionsYears"],
@@ -57,6 +72,7 @@ export const useCreateTransaction = () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsCategoriesReport")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsBalanceReport")});
     },
   });
 };
@@ -70,7 +86,8 @@ export const useUpdateTransaction = () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transaction")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
-      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAmount")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsCategoriesReport")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsBalanceReport")});
     },
   });
 };
@@ -84,7 +101,8 @@ export const useDeleteTransaction = () => {
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transaction")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
       queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
-      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAmount")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsCategoriesReport")});
+      queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsBalanceReport")});
     },
   });
 };

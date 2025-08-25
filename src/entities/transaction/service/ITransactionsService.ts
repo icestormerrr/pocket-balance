@@ -6,6 +6,11 @@ export interface ITransactionsService {
   getAll(filter: TransactionsFilter): Promise<TransactionWithCategory[]>;
   getById(id: string): Promise<TransactionWithCategory | null>;
   getCategoriesReport(filter: TransactionsFilter): Promise<TransactionsGroupedByCategory[]>;
+  getBalanceReport(opts: {
+    granularity: "year" | "month" | "day";
+    startDate?: string;
+    endDate?: string;
+  }): Promise<BalanceByPeriod[]>;
   getSummary(startDate: string, endDate: string): Promise<TransactionsSummary>;
   getUniqYears(): Promise<number[]>;
   create(tx: TransactionCreatePayload): Promise<Transaction>;
@@ -29,6 +34,14 @@ export interface TransactionsGroupedByCategory {
   categoryName: string;
   categoryColor?: string;
   amount: number;
+}
+
+export interface BalanceByPeriod {
+  label: string;
+  periodStart: string;
+  income: number;
+  expense: number;
+  balance: number;
 }
 
 export interface TransactionsSummary {

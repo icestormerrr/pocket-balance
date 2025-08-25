@@ -1,6 +1,7 @@
 import {Directory, Encoding, Filesystem} from "@capacitor/filesystem";
 import {toast} from "sonner";
 
+// TODO: отрефакторить
 export async function exportLocalStorageData(keys: string[]) {
   const data: Record<string, unknown> = {};
 

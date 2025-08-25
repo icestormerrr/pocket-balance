@@ -1,4 +1,6 @@
 import {
+  useBalanceReport,
+  useCategoriesReport,
   useCreateTransaction,
   useDeleteTransaction,
   useTransaction,
@@ -16,6 +18,8 @@ import type {
 } from "./service/ITransactionsService";
 
 export {
+  useBalanceReport,
+  useCategoriesReport,
   useCreateTransaction,
   useDeleteTransaction,
   useTransaction,

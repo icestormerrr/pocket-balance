@@ -1,11 +1,13 @@
+import {useMemo, useState} from "react";
+
 import {CATEGORY_TYPE_OPTIONS, type CategoryType} from "@/entities/category";
-import {useCategoriesReport} from "@/entities/transaction/adapter/hooks";
-import {CategoriesAmountsList} from "@/pages/reports/ui/CategoriesReport/components/CategoriesAmountsList/CategoriesAmountsList";
-import {CategoryAmountPieChart} from "@/pages/reports/ui/CategoriesReport/components/CategoryAmountPieChart/CategoryAmountPieChart";
+import {useCategoriesReport} from "@/entities/transaction";
 import {DateConverter, DateCreator} from "@/shared/lib/datetime";
 import {SegmentInput} from "@/shared/ui/tabs";
 import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
-import {useMemo, useState} from "react";
+
+import {CategoriesAmountsList} from "./components/CategoriesAmountsList/CategoriesAmountsList";
+import {CategoryAmountPieChart} from "./components/CategoryAmountPieChart/CategoryAmountPieChart";
 
 export const CategoriesReport = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>("expense");

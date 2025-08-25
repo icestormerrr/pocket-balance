@@ -116,6 +116,85 @@ describe("TransactionsService", () => {
     ]);
   });
 
+  describe("getBalanceReport (cumulative)", () => {
+    beforeEach(() => {
+      mockRepo.getAll.mockResolvedValue(mockTransactions);
+      mockCategoriesService.getAll.mockResolvedValue(mockCategories);
+    });
+
+    it("year: balance is cumulative", async () => {
+      const service = makeService();
+      const report = await service.getBalanceReport({granularity: "year"});
+
+      expect(report).toEqual([
+        {
+          label: "2023",
+          periodStart: "2023-01-01",
+          income: 200,
+          expense: 0,
+          balance: 200, // 200
+        },
+        {
+          label: "2024",
+          periodStart: "2024-01-01",
+          income: 0,
+          expense: 100,
+          balance: 100, // 200 - 100 = 100
+        },
+      ]);
+    });
+
+    it("month: balance is cumulative", async () => {
+      const service = makeService();
+      const report = await service.getBalanceReport({granularity: "month"});
+
+      expect(report).toEqual([
+        {
+          label: "2023-12",
+          periodStart: "2023-12-01",
+          income: 200,
+          expense: 0,
+          balance: 200,
+        },
+        {
+          label: "2024-01",
+          periodStart: "2024-01-01",
+          income: 0,
+          expense: 100,
+          balance: 100,
+        },
+      ]);
+    });
+
+    it("day: balance is cumulative", async () => {
+      const service = makeService();
+      const report = await service.getBalanceReport({granularity: "day"});
+
+      expect(report).toEqual([
+        {
+          label: "2023-12-01",
+          periodStart: "2023-12-01",
+          income: 200,
+          expense: 0,
+          balance: 200,
+        },
+        {
+          label: "2024-01-01",
+          periodStart: "2024-01-01",
+          income: 0,
+          expense: 100,
+          balance: 100,
+        },
+      ]);
+    });
+
+    it("throws on wrong granularity", async () => {
+      const service = makeService();
+      // @ts-ignore
+      await expect(service.getBalanceReport({granularity: "week"})).rejects.toThrow(/granularity/);
+    });
+  });
+
   describe("validation", () => {
     const validTx = {
       amount: 100,

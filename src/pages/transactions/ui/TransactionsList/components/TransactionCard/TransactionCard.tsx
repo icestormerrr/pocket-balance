@@ -20,7 +20,9 @@ export const TransactionCard: FC<Props> = memo(({transaction, onClick}) => {
     <Card className="w-full max-w-md rounded-xl shadow-sm" onClick={handleClick}>
       <CardContent className="space-y-2">
         <div className="flex justify-between items-center m-0">
-          <p className={`text-sm font-semibold ${categoryType === "expense" ? "text-[#ef4444]" : "text-[#22c55e]"}`}>
+          <p
+            className={`text-sm font-semibold ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
+          >
             {amount.toLocaleString("ru-RU").replace(/,/g, " ")} ₽
           </p>
           <Badge variant="outline" className="text-xs">

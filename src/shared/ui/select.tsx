@@ -19,6 +19,7 @@ type SelectInputProps = {
   onChange: (value: string | null, option: Option | null) => void;
   renderOption?: (option: Option) => ReactNode;
   className?: string;
+  hideSearch?: boolean;
 };
 
 export const SelectInput = ({
@@ -29,6 +30,7 @@ export const SelectInput = ({
   placeholder,
   renderOption,
   className,
+  hideSearch,
 }: SelectInputProps) => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -74,7 +76,9 @@ export const SelectInput = ({
         </DrawerHeader>
 
         <div className="px-4 pb-4">
-          <Input placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} className="mb-4" />
+          {!hideSearch && (
+            <Input placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} className="mb-4" />
+          )}
 
           <ScrollArea className="h-[50vh] rounded-md border">
             <div className="flex flex-col gap-1 p-2">

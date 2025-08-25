@@ -15,7 +15,7 @@ export const TransactionsStats: FC<Props> = memo(({summaryForPeriod, summaryGlob
       <Card className="py-2">
         <CardContent className="p-4 flex flex-col items-start">
           <span className="text-sm text-muted-foreground">Доходы</span>
-          <div className={cn("text-xl font-semibold break-all text-[#22c55e]")}>
+          <div className={cn("text-xl font-semibold break-all text-[var(--positive-accent)]")}>
             {summaryForPeriod?.income.toLocaleString("ru-RU").replace(/,/g, " ")} ₽
           </div>
         </CardContent>
@@ -24,7 +24,7 @@ export const TransactionsStats: FC<Props> = memo(({summaryForPeriod, summaryGlob
       <Card className="py-2">
         <CardContent className="p-4 flex flex-col items-start">
           <span className="text-sm text-muted-foreground">Расходы</span>
-          <div className="text-xl font-semibold break-all text-[#ef4444]">
+          <div className="text-xl font-semibold break-all text-[var(--negative-accent)]">
             {summaryForPeriod?.expense.toLocaleString("ru-RU").replace(/,/g, " ")} ₽
           </div>
         </CardContent>

@@ -49,7 +49,7 @@ export const TransactionFormFields = () => {
                 <NumericInput
                   min={0}
                   {...field}
-                  className={`border-none w-full p-0 m-0 shadow-none h-auto text-6xl font-bold text-right ${categoryType === "expense" ? "text-[#ef4444]" : "text-[#22c55e]"}`}
+                  className={`border-none w-full p-0 m-0 shadow-none h-auto text-6xl font-bold text-right ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
                 />
                 <h1 className={"text-6xl font-bold"}>₽</h1>
               </div>
