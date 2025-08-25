@@ -1,9 +1,8 @@
 import {useState} from "react";
 
-import {useBalanceReport} from "@/entities/transaction";
+import {useBalanceReport, TransactionsDateFilters, type TransactionDateFilterType} from "@/entities/transaction";
 import {DateConverter, DateCreator} from "@/shared/lib/datetime";
 import {SegmentInput} from "@/shared/ui/tabs";
-import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
 
 import {BalanceLineChart} from "./components/BalanceLineChart/BalanceLineChart";
 

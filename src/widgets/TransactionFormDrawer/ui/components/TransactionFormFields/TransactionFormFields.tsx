@@ -92,13 +92,12 @@ export const TransactionFormFields = () => {
             <FormLabel>Дата</FormLabel>
             <FormControl>
               <Calendar
-                style={{width: "100%"}}
                 mode="single"
                 selected={field.value ? DateConverter.ISOToDate(field.value) : undefined}
                 onSelect={date => {
                   field.onChange(DateConverter.dateToISO(date));
                 }}
-                className="rounded-lg border"
+                className="rounded-lg border w-full"
               />
             </FormControl>
           </FormItem>

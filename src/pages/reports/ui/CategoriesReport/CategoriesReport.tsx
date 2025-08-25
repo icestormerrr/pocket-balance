@@ -1,10 +1,9 @@
 import {useMemo, useState} from "react";
 
 import {CATEGORY_TYPE_OPTIONS, type CategoryType} from "@/entities/category";
-import {useCategoriesReport} from "@/entities/transaction";
+import {useCategoriesReport, TransactionsDateFilters, type TransactionDateFilterType} from "@/entities/transaction";
 import {DateConverter, DateCreator} from "@/shared/lib/datetime";
 import {SegmentInput} from "@/shared/ui/tabs";
-import TransactionsDateFilters, {type TransactionDateFilterType} from "@/widgets/TransactionsDateFilters";
 
 import {CategoriesAmountsList} from "./components/CategoriesAmountsList/CategoriesAmountsList";
 import {CategoryAmountPieChart} from "./components/CategoryAmountPieChart/CategoryAmountPieChart";

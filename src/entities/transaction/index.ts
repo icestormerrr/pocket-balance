@@ -16,6 +16,9 @@ import type {
   TransactionsSummary,
   TransactionWithCategory,
 } from "./service/ITransactionsService";
+import TransactionsDateFilters, {
+  type TransactionDateFilterType,
+} from "@/entities/transaction/ui/TransactionsDateFilters";
 
 export {
   useBalanceReport,
@@ -27,6 +30,7 @@ export {
   useTransactionsSummary,
   useTransactionsYears,
   useUpdateTransaction,
+  TransactionsDateFilters
 };
 export type {
   Transaction,
@@ -34,4 +38,5 @@ export type {
   TransactionsGroupedByCategory,
   TransactionsSummary,
   TransactionWithCategory,
+  TransactionDateFilterType
 };
