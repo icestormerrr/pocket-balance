@@ -5,6 +5,7 @@ import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
 import {DateConverter} from "@/shared/lib/datetime";
+import {getStatusBarHeight} from "@/shared/lib/styling";
 import {type TransactionsFormState, transactionFormSchema} from "./model/schema";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
 import {DeleteButton} from "./ui/components/DeleteButton/DeleteButton";
@@ -58,7 +59,7 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
   return (
     <FormProvider {...form}>
       <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-        <DrawerContent className="min-h-[93vh] transition-all">
+        <DrawerContent className="transition-all" style={{minHeight: window.innerHeight - getStatusBarHeight()}}>
           <div className="p-4 mx-auto w-full max-w-sm">
             <TransactionFormFields />
 

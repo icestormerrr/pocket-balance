@@ -23,7 +23,6 @@ export class TransactionsLocalStorageRepository implements ITransactionsReposito
         const date = DateConverter.ISOToDate(tx.date);
 
         if (filter.startDate && filter.endDate) {
-          // console.log(date, DateConverter.ISOToDate(filter.endDate));
           return DateComparator.isBetweenOrEqual(
             date,
             DateConverter.ISOToDate(filter.startDate),

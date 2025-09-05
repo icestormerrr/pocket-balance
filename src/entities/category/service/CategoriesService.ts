@@ -1,3 +1,4 @@
+import {DateConverter} from "@/shared/lib/datetime";
 import type {Category} from "../model/Category";
 import {CategoryLocalStorageRepository} from "../repository/CategoryLocalStorageRepository";
 import type {ICategoriesRepository} from "../repository/ICategoriesRepository";
@@ -46,7 +47,7 @@ export class CategoriesService implements ICategoriesService {
     this.validateCategory(category);
     return this.repository.create({
       ...category,
-      creationDatetime: new Date().toUTCString(),
+      creationDatetime: DateConverter.dateToISO(new Date()),
     });
   }
 
