@@ -2,32 +2,65 @@ import {DateConverter} from "@/shared/lib/datetime";
 import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Calendar} from "@/shared/ui/calendar";
-import {Popover, PopoverContent, PopoverTrigger} from "@/shared/ui/popover";
+import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {CalendarIcon} from "lucide-react";
+import {useMemo} from "react";
 
 type Props = {
-  value: Date | undefined;
-  onChange: (value: Date | undefined) => void;
+  title?: string;
   placeholder?: string;
   className?: string;
 };
 
-export function DatePicker({value, onChange, placeholder = "Выберите дату", className}: Props) {
+type RangeModeProps = Props & {
+  value: {from: Date | undefined; to: Date | undefined} | undefined;
+  onChange: (value: {from: Date | undefined; to: Date | undefined} | undefined) => void;
+  mode: "range";
+};
+
+type SingleModeProps = Props & {
+  value: Date | undefined;
+  onChange: (value: Date | undefined) => void;
+  mode: "single";
+};
+
+export function DatePickerMobile({
+  value,
+  onChange,
+  placeholder = "Выберите дату",
+  title = "Выберите дату",
+  className,
+  mode,
+}: SingleModeProps | RangeModeProps) {
+  const dateLabel = useMemo(() => {
+    if (!value) return placeholder;
+
+    if (mode === "range") {
+      return `${DateConverter.dateToFormattedString(value.from, "DD.MM.YYYY")} - ${DateConverter.dateToFormattedString(value.to, "DD.MM.YYYY")}`;
+    }
+
+    return DateConverter.dateToFormattedString(value, "DD.MM.YYYY");
+  }, [mode, placeholder, value]);
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <Drawer>
+      <DrawerTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(`justify-start text-left font-normal`, !value && "text-muted-foreground", className)}
         >
           <CalendarIcon />
-          {value ? DateConverter.dateToFormattedString(value, "MMM DD") : <span>{placeholder}</span>}
+          {dateLabel}
         </Button>
-      </PopoverTrigger>
+      </DrawerTrigger>
 
-      <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" selected={value} onSelect={onChange} initialFocus />
-      </PopoverContent>
-    </Popover>
+      <DrawerContent className="px-4 pb-4">
+        <DrawerHeader className="px-0 py-4">
+          <DrawerTitle>{title}</DrawerTitle>
+        </DrawerHeader>
+        {/* @ts-expect-error необходимо сужение типов в зависимости от mode */}
+        <Calendar mode={mode} selected={value} onSelect={onChange} className="rounded-lg border w-full" />
+      </DrawerContent>
+    </Drawer>
   );
 }

@@ -47,7 +47,7 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Button className={"bg-red-500 basis-[45%]"} onClick={handleDeleteButtonClick}>
+    <Button variant={"destructive"} className={"basis-[45%]"} onClick={handleDeleteButtonClick}>
       <Trash />
     </Button>
   );

@@ -8,7 +8,7 @@ import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 
 import {DateConverter} from "@/shared/lib/datetime";
-import {Calendar} from "@/shared/ui/calendar";
+import {DatePickerMobile} from "@/shared/ui/date-picker";
 import type {TransactionsFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
@@ -91,13 +91,12 @@ export const TransactionFormFields = () => {
           <FormItem>
             <FormLabel>Дата</FormLabel>
             <FormControl>
-              <Calendar
-                mode="single"
-                selected={field.value ? DateConverter.ISOToDate(field.value) : undefined}
-                onSelect={date => {
+              <DatePickerMobile
+                mode={"single"}
+                value={field.value ? DateConverter.ISOToDate(field.value) : undefined}
+                onChange={date => {
                   field.onChange(DateConverter.dateToISO(date));
                 }}
-                className="rounded-lg border w-full"
               />
             </FormControl>
           </FormItem>
