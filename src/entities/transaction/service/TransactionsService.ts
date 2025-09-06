@@ -37,6 +37,7 @@ export class TransactionsService implements ITransactionsService {
         ...t,
         categoryName: category?.name ?? "Неизвестная категория",
         categoryType: category?.type,
+        categoryShortName: category?.shortName,
       };
     });
 

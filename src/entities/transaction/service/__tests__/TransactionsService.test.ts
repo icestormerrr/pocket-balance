@@ -41,8 +41,8 @@ const mockTransactions: Transaction[] = [
 ];
 
 const mockCategories: Category[] = [
-  {id: "c1", name: "Food", type: "expense" as CategoryType, color: "#f00", creationDatetime: ""},
-  {id: "c2", name: "Salary", type: "income" as CategoryType, color: "#ff0", creationDatetime: ""},
+  {id: "c1", name: "Food", type: "expense" as CategoryType, color: "#f00", creationDatetime: "", shortName: "Fo"},
+  {id: "c2", name: "Salary", type: "income" as CategoryType, color: "#ff0", creationDatetime: "", shortName: "Sa"},
 ];
 
 beforeEach(() => {

@@ -21,7 +21,7 @@ export const CreateButton: FC<Props> = ({onSuccess}) => {
     const formValues = getValues();
 
     createCategory(
-      {type: formValues.type, name: formValues.name, color: formValues.color},
+      {type: formValues.type, name: formValues.name, color: formValues.color, shortName: formValues.shortName},
       {
         onSuccess: () => {
           onSuccess();

@@ -3,6 +3,7 @@ export type CategoryType = "expense" | "income";
 export type Category = {
   id: string;
   name: string;
+  shortName: string;
   type: CategoryType;
   creationDatetime: string;
   color: string;

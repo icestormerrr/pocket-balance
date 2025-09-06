@@ -27,6 +27,7 @@ export interface TransactionsFilter {
 export interface TransactionWithCategory extends Transaction {
   categoryName: string;
   categoryType?: CategoryType;
+  categoryShortName?: string;
 }
 
 export interface TransactionsGroupedByCategory {

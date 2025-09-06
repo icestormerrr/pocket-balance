@@ -34,6 +34,14 @@ export class CategoriesService implements ICategoriesService {
       throw new Error("Название категории не может быть пустым");
     }
 
+    if (!("shortName" in data) || typeof data.shortName !== "string" || data.name.trim().length === 0) {
+      throw new Error("Аббревиатура/иконка категории не может быть пустой");
+    }
+
+    if (data.shortName.length > 3) {
+      throw new Error("Аббревиатура/иконка категории не может быть длиннее нескольких символов");
+    }
+
     if (!("type" in data) || (data.type !== "expense" && data.type !== "income")) {
       throw new Error("Тип категории должен быть 'income' или 'expense'");
     }

@@ -16,6 +16,7 @@ const service = new CategoriesService(mockRepo);
 
 const validCategory: Omit<Category, "id" | "creationDatetime"> = {
   name: "Food",
+  shortName: "F",
   type: "expense",
   color: "#FFAA00",
 };
@@ -78,25 +79,37 @@ describe("CategoriesService", () => {
 
   describe("validateCategory", () => {
     test("throws error if name is empty", () => {
-      expect(() => service.validateCategory({name: "   ", type: "income", color: "#FFFFFF"})).toThrow(
+      expect(() => service.validateCategory({name: "   ", type: "income", color: "#FFFFFF", shortName: "Fo"})).toThrow(
         "Название категории не может быть пустым"
       );
     });
 
     test("throws error if name is not a string", () => {
-      expect(() => service.validateCategory({name: 123, type: "income", color: "#FFFFFF"})).toThrow(
+      expect(() => service.validateCategory({name: 123, type: "income", color: "#FFFFFF", shortName: "Fo"})).toThrow(
         "Название категории не может быть пустым"
       );
     });
 
-    test("throws error if type is invalid", () => {
-      expect(() => service.validateCategory({name: "Food", type: "invalid", color: "#FFFFFF"})).toThrow(
-        "Тип категории должен быть 'income' или 'expense'"
+    test("throws error if shortName is not a string", () => {
+      expect(() => service.validateCategory({name: "Food", type: "income", color: "#FFFFFF", shortName: 2})).toThrow(
+        "Аббревиатура/иконка категории не может быть пустой"
       );
     });
 
+    test("throws error if shortName length is more than maxLength", () => {
+      expect(() =>
+        service.validateCategory({name: "Food", type: "income", color: "#FFFFFF", shortName: "Food"})
+      ).toThrow("Аббревиатура/иконка категории не может быть длиннее нескольких символов");
+    });
+
+    test("throws error if type is invalid", () => {
+      expect(() =>
+        service.validateCategory({name: "Food", type: "invalid", color: "#FFFFFF", shortName: "Fo"})
+      ).toThrow("Тип категории должен быть 'income' или 'expense'");
+    });
+
     test("throws error if color is not a hex", () => {
-      expect(() => service.validateCategory({name: "Food", type: "expense", color: "red"})).toThrow(
+      expect(() => service.validateCategory({name: "Food", type: "expense", color: "red", shortName: "Fo"})).toThrow(
         "Цвет должен быть в формате HEX, например #FFAA00"
       );
     });

@@ -24,7 +24,7 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
     updateCategory(
       {
         id: formValues.id,
-        data: {type: formValues.type, name: formValues.name, color: formValues.color},
+        data: {type: formValues.type, name: formValues.name, color: formValues.color, shortName: formValues.shortName},
       },
       {
         onSuccess: () => {

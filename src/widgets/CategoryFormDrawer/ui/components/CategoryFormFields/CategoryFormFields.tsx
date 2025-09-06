@@ -1,7 +1,7 @@
 import {useFormContext} from "react-hook-form";
 
 import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
-import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
+import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/ui/form";
 import {Input} from "@/shared/ui/input";
 import {SegmentInput} from "@/shared/ui/tabs";
 
@@ -21,6 +21,20 @@ export const CategoryFormFields = () => {
             <FormControl>
               <Input placeholder="Название категории" {...field} />
             </FormControl>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="shortName"
+        render={({field, fieldState}) => (
+          <FormItem>
+            <FormLabel>Аббревиатура/иконка</FormLabel>
+            <FormControl>
+              <Input placeholder="Аббревиатура/иконка категории" {...field} />
+            </FormControl>
+            <FormMessage>{fieldState.error?.message}</FormMessage>
           </FormItem>
         )}
       />

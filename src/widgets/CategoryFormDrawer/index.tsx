@@ -17,7 +17,7 @@ type Props = {
   categoryId: string | undefined;
 };
 
-const defaultValues: CategoryFormState = {type: "expense", id: "", name: "", color: ""};
+const defaultValues: CategoryFormState = {type: "expense", id: "", name: "", color: "", shortName: ""};
 
 const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) => {
   const {refetch} = useCategory(categoryId);
@@ -34,7 +34,7 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
 
     refetch().then(query => {
       if (query.data) {
-        form.reset(query.data);
+        form.reset({...query.data, shortName: query.data.shortName ?? ""});
       } else {
         form.reset(defaultValues);
       }
