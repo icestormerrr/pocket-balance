@@ -4,7 +4,7 @@ import {useFormContext} from "react-hook-form";
 import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
 import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
 import {Input, NumericInput} from "@/shared/ui/input";
-import {SelectInput} from "@/shared/ui/select";
+import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 
 import {DateConverter} from "@/shared/lib/datetime";
@@ -65,7 +65,7 @@ export const TransactionFormFields = () => {
           <FormItem>
             <FormLabel>Категория</FormLabel>
             <FormControl>
-              <SelectInput {...field} options={categoriesOptions} placeholder="Выберите категорию" />
+              <SelectMobile {...field} options={categoriesOptions} placeholder="Выберите категорию" />
             </FormControl>
           </FormItem>
         )}

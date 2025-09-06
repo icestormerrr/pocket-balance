@@ -3,7 +3,7 @@ import {useMemo, useState} from "react";
 
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator} from "@/shared/ui/breadcrumb";
 import {Card} from "@/shared/ui/card";
-import {SelectInput} from "@/shared/ui/select";
+import {SelectMobile} from "@/shared/ui/select";
 
 import {BREADCRUMBS_HEIGHT, REPORTS_PAGE_PADDING} from "./const/heights";
 import {REPORT_OPTIONS, type ReportKey, REPORTS} from "./const/reports";
@@ -22,7 +22,7 @@ const ReportsPage = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <SelectInput
+            <SelectMobile
               title={"Выберите отчёт"}
               placeholder={"Выберите отчёт"}
               value={activeReportKey}

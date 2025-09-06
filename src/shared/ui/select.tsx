@@ -11,7 +11,7 @@ export type Option = {
   value: string;
 };
 
-type SelectInputProps = {
+type SelectMobileProps = {
   title?: string;
   options: Option[];
   value?: string;
@@ -22,7 +22,7 @@ type SelectInputProps = {
   hideSearch?: boolean;
 };
 
-export const SelectInput = ({
+export const SelectMobile = ({
   title = "Выберите опцию",
   options,
   value,
@@ -31,7 +31,7 @@ export const SelectInput = ({
   renderOption,
   className,
   hideSearch,
-}: SelectInputProps) => {
+}: SelectMobileProps) => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -70,7 +70,7 @@ export const SelectInput = ({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-[90vh] max-w-lg mx-auto">
+      <DrawerContent className="max-w-lg mx-auto">
         <DrawerHeader className="px-4 pt-6">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
