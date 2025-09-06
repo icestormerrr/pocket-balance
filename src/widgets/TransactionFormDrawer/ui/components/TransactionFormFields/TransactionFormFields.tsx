@@ -17,7 +17,10 @@ export const TransactionFormFields = () => {
   const categoryType = watch("categoryType");
 
   const {data: categories} = useCategories({type: categoryType});
-  const categoriesOptions = useMemo(() => categories?.map(c => ({label: c.name, value: c.id})) ?? [], [categories]);
+  const categoriesOptions = useMemo(
+    () => categories?.map(c => ({label: `${c.shortName ? c.shortName + " - " : ""}${c.name}`, value: c.id})) ?? [],
+    [categories]
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -25,7 +28,7 @@ export const TransactionFormFields = () => {
         control={control}
         name="amount"
         render={({field}) => (
-          <FormItem>
+          <FormItem className="mt-4">
             <FormControl>
               <div className={"flex justify-end items-center"}>
                 <NumericInput
@@ -100,7 +103,7 @@ export const TransactionFormFields = () => {
           <FormItem>
             <FormLabel>Комментарий</FormLabel>
             <FormControl>
-              <Textarea className="max-h-[250px]" rows={5} {...field} />
+              <Textarea className="max-h-[250px] min-h-[150px]" {...field} />
             </FormControl>
           </FormItem>
         )}
