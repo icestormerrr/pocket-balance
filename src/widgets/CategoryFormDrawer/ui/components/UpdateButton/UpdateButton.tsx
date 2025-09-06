@@ -53,7 +53,7 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Button onClick={handleUpdateButtonClick} disabled={!formState.isValid} className="w-full">
+    <Button size="lg" onClick={handleUpdateButtonClick} disabled={!formState.isValid} className="w-full">
       Сохранить
       <Save />
     </Button>

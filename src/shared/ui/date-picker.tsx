@@ -43,7 +43,7 @@ export function DatePickerMobile({
   }, [mode, placeholder, value]);
 
   return (
-    <Drawer>
+    <Drawer repositionInputs={false}>
       <DrawerTrigger asChild>
         <Button
           variant={"outline"}

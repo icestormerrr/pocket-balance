@@ -59,7 +59,12 @@ export const CategoryFormFields = () => {
           <FormItem>
             <FormLabel>Тип категории</FormLabel>
             <FormControl>
-              <SegmentInput value={field.value} onChange={field.onChange} options={CATEGORY_TYPE_OPTIONS} />
+              <SegmentInput
+                className="bg-transparent"
+                value={field.value}
+                onChange={field.onChange}
+                options={CATEGORY_TYPE_OPTIONS}
+              />
             </FormControl>
           </FormItem>
         )}

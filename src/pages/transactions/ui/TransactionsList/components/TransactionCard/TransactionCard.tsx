@@ -17,7 +17,7 @@ export const TransactionCard: FC<Props> = memo(({transaction, onClick}) => {
   };
 
   return (
-    <Card className="w-full max-w-md rounded-xl shadow-sm cursor-pointer" onClick={handleClick}>
+    <Card className="w-full max-w-md rounded-xl shadow-sm cursor-pointer py-4" onClick={handleClick}>
       <CardContent className="flex items-center gap-3 px-4 py-0">
         <Avatar>
           <AvatarFallback>{categoryShortName}</AvatarFallback>

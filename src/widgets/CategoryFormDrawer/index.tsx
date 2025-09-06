@@ -3,7 +3,8 @@ import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
 import {useCategory} from "@/entities/category";
-import {Drawer, DrawerContent} from "@/shared/ui/drawer";
+import {getStatusBarHeight} from "@/shared/lib/styling";
+import {Drawer, DrawerContent, DrawerFooter} from "@/shared/ui/drawer";
 
 import {type CategoryFormState, categorySchema} from "./model/schema";
 import {CategoryFormFields} from "./ui/components/CategoryFormFields/CategoryFormFields";
@@ -48,11 +49,16 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
   return (
     <FormProvider {...form}>
       <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-        <DrawerContent className="h-[100vh] transition-all">
-          <div className="mx-auto w-full max-w-sm p-4 pt-0">
+        <DrawerContent
+          className="transition-all px-4 pb-4 mx-auto"
+          style={{minHeight: window.innerHeight - getStatusBarHeight()}}
+        >
+          <div className="mt-4">
             <CategoryFormFields />
+          </div>
 
-            <div className={"mt-4 flex justify-between"}>
+          <DrawerFooter className="px-0">
+            <div className={"flex justify-between"}>
               {id ? (
                 <>
                   <div className="basis-[10%]">
@@ -68,7 +74,7 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
                 </div>
               )}
             </div>
-          </div>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </FormProvider>

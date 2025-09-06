@@ -1,5 +1,5 @@
 import {useTransaction} from "@/entities/transaction";
-import {Drawer, DrawerContent} from "@/shared/ui/drawer";
+import {Drawer, DrawerContent, DrawerFooter} from "@/shared/ui/drawer";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
@@ -59,11 +59,16 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
   return (
     <FormProvider {...form}>
       <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-        <DrawerContent className="transition-all" style={{minHeight: window.innerHeight - getStatusBarHeight()}}>
-          <div className="p-4 mx-auto w-full max-w-sm">
+        <DrawerContent
+          className="transition-all px-4 pb-4 mx-auto"
+          style={{minHeight: window.innerHeight - getStatusBarHeight()}}
+        >
+          <div className="mt-4">
             <TransactionFormFields />
+          </div>
 
-            <div className={"mt-4 flex justify-between"}>
+          <DrawerFooter className="px-0">
+            <div className={"flex justify-between"}>
               {id ? (
                 <>
                   <div className="basis-[10%]">
@@ -79,7 +84,7 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
                 </div>
               )}
             </div>
-          </div>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </FormProvider>

@@ -2,13 +2,14 @@ import {useMemo} from "react";
 import {useFormContext} from "react-hook-form";
 
 import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
-import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
-import {Input, NumericInput} from "@/shared/ui/input";
-import {SelectMobile} from "@/shared/ui/select";
-import {SegmentInput} from "@/shared/ui/tabs";
-
 import {DateConverter} from "@/shared/lib/datetime";
 import {DatePickerMobile} from "@/shared/ui/date-picker";
+import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
+import {NumericInput} from "@/shared/ui/input";
+import {SelectMobile} from "@/shared/ui/select";
+import {SegmentInput} from "@/shared/ui/tabs";
+import {Textarea} from "@/shared/ui/textarea";
+
 import type {TransactionsFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
@@ -22,25 +23,6 @@ export const TransactionFormFields = () => {
     <div className="flex flex-col gap-2">
       <FormField
         control={control}
-        name="categoryType"
-        render={({field}) => (
-          <FormItem>
-            <FormControl>
-              <SegmentInput
-                value={categoryType}
-                onChange={type => {
-                  field.onChange(type);
-                  setValue("categoryId", "");
-                }}
-                options={CATEGORY_TYPE_OPTIONS}
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={control}
         name="amount"
         render={({field}) => (
           <FormItem>
@@ -49,10 +31,31 @@ export const TransactionFormFields = () => {
                 <NumericInput
                   min={0}
                   {...field}
-                  className={`border-none w-full p-0 m-0 shadow-none h-auto text-6xl font-bold text-right ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
+                  className={`w-full p-0 m-0 shadow-none h-auto text-6xl font-bold text-right ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
                 />
                 <h1 className={"text-6xl font-bold"}>₽</h1>
               </div>
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="categoryType"
+        render={({field}) => (
+          <FormItem>
+            <FormLabel>Тип</FormLabel>
+            <FormControl>
+              <SegmentInput
+                value={categoryType}
+                className={"bg-transparent"}
+                onChange={type => {
+                  field.onChange(type);
+                  setValue("categoryId", "");
+                }}
+                options={CATEGORY_TYPE_OPTIONS}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -73,19 +76,6 @@ export const TransactionFormFields = () => {
 
       <FormField
         control={control}
-        name="comment"
-        render={({field}) => (
-          <FormItem>
-            <FormLabel>Комментарий</FormLabel>
-            <FormControl>
-              <Input type="text" {...field} />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={control}
         name="date"
         render={({field}) => (
           <FormItem>
@@ -98,6 +88,19 @@ export const TransactionFormFields = () => {
                   field.onChange(DateConverter.dateToISO(date));
                 }}
               />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="comment"
+        render={({field}) => (
+          <FormItem>
+            <FormLabel>Комментарий</FormLabel>
+            <FormControl>
+              <Textarea className="max-h-[250px]" rows={5} {...field} />
             </FormControl>
           </FormItem>
         )}
