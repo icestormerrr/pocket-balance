@@ -17,6 +17,7 @@ type SelectMobileProps = {
   value?: string;
   placeholder: string;
   onChange: (value: string | null, option: Option | null) => void;
+  renderField?: (props: FieldProps) => ReactNode;
   renderOption?: (option: Option) => ReactNode;
   className?: string;
   hideSearch?: boolean;
@@ -28,6 +29,7 @@ export const SelectMobile = ({
   value,
   onChange,
   placeholder,
+  renderField,
   renderOption,
   className,
   hideSearch,
@@ -60,15 +62,9 @@ export const SelectMobile = ({
   return (
     <Drawer open={open} onOpenChange={setOpen} repositionInputs={false}>
       <DrawerTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn("justify-between w-full", className)}
-        >
-          {value ? options.find(opt => opt.value === value)?.label : placeholder}
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
+        {renderField
+          ? renderField({className, value, placeholder, options})
+          : renderDefaultField({className, value, placeholder, options})}
       </DrawerTrigger>
       <DrawerContent className="max-w-lg mx-auto">
         <DrawerHeader className="px-4 pt-6">
@@ -94,3 +90,19 @@ export const SelectMobile = ({
     </Drawer>
   );
 };
+
+type FieldProps = {
+  className?: string;
+  value?: string;
+  placeholder: string;
+  options: Option[];
+};
+
+function renderDefaultField({className, value, placeholder, options}: FieldProps): ReactNode {
+  return (
+    <Button variant="outline" role="combobox" className={cn("justify-between w-full", className)}>
+      {value ? options.find(opt => opt.value === value)?.label : placeholder}
+      <ChevronsUpDown className="opacity-50" />
+    </Button>
+  );
+}

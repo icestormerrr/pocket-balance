@@ -10,6 +10,7 @@ import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 import {Textarea} from "@/shared/ui/textarea";
 
+import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
 import type {TransactionsFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
@@ -18,7 +19,9 @@ export const TransactionFormFields = () => {
 
   const {data: categories} = useCategories({type: categoryType});
   const categoriesOptions = useMemo(
-    () => categories?.map(c => ({label: `${c.shortName ? c.shortName + " - " : ""}${c.name}`, value: c.id})) ?? [],
+    () =>
+      categories?.map(c => ({label: `${c.shortName ? c.shortName + " - " : ""}${c.name}`, value: c.id, payload: c})) ??
+      [],
     [categories]
   );
 
@@ -26,18 +29,38 @@ export const TransactionFormFields = () => {
     <div className="flex flex-col gap-2">
       <FormField
         control={control}
+        name="categoryId"
+        render={({field}) => (
+          <SelectMobile
+            {...field}
+            renderField={() => (
+              <div className={"flex justify-center"}>
+                <Avatar className={"h-[100px] w-[100px]"}>
+                  <AvatarFallback className={"text-4xl"}>
+                    {categoriesOptions.find(opt => opt.value === field.value)?.payload?.shortName}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            )}
+            options={categoriesOptions}
+            placeholder="Выберите категорию"
+          />
+        )}
+      />
+
+      <FormField
+        control={control}
         name="amount"
         render={({field}) => (
-          <FormItem className="mt-4">
+          <FormItem className="my-4">
             <FormControl>
-              <div className={"flex justify-end items-center"}>
-                <NumericInput
-                  min={0}
-                  {...field}
-                  className={`w-full p-0 m-0 shadow-none h-auto text-6xl font-bold text-right ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
-                />
-                <h1 className={"text-6xl font-bold"}>₽</h1>
-              </div>
+              <NumericInput
+                {...field}
+                min={0}
+                inline
+                placeholder={"Введите сумму"}
+                className={`w-full text-4xl font-bold text-center ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -59,19 +82,6 @@ export const TransactionFormFields = () => {
                 }}
                 options={CATEGORY_TYPE_OPTIONS}
               />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={control}
-        name="categoryId"
-        render={({field}) => (
-          <FormItem>
-            <FormLabel>Категория</FormLabel>
-            <FormControl>
-              <SelectMobile {...field} options={categoriesOptions} placeholder="Выберите категорию" />
             </FormControl>
           </FormItem>
         )}
