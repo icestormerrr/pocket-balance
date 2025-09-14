@@ -48,7 +48,7 @@ type NumericInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type
   inline?: boolean;
 };
 // TODO: unite common logic of Input and NumericInput or unite components
-function NumericInput({
+function InputNumber({
   className,
   onFocus,
   value,
@@ -77,7 +77,7 @@ function NumericInput({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value;
+    const raw = e.target.value || "0";
     const floatRegex = allowNegative ? /^-?\d*(\.\d*)?$/ : /^\d*(\.\d*)?$/;
     const intRegex = allowNegative ? /^-?\d*$/ : /^\d*$/;
     const regex = mode === "float" ? floatRegex : intRegex;
@@ -112,4 +112,4 @@ function NumericInput({
   );
 }
 
-export {Input, NumericInput};
+export {Input, InputNumber};

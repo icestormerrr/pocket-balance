@@ -5,7 +5,7 @@ import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
 import {DateConverter} from "@/shared/lib/datetime";
 import {DatePickerMobile} from "@/shared/ui/date-picker";
 import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
-import {NumericInput} from "@/shared/ui/input";
+import {InputNumber} from "@/shared/ui/input";
 import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 import {Textarea} from "@/shared/ui/textarea";
@@ -35,8 +35,8 @@ export const TransactionFormFields = () => {
             {...field}
             renderField={() => (
               <div className={"flex justify-center"}>
-                <Avatar className={"h-[100px] w-[100px]"}>
-                  <AvatarFallback className={"text-4xl"}>
+                <Avatar className={"h-[130px] w-[130px]"}>
+                  <AvatarFallback className={"text-5xl"}>
                     {categoriesOptions.find(opt => opt.value === field.value)?.payload?.shortName}
                   </AvatarFallback>
                 </Avatar>
@@ -52,14 +52,14 @@ export const TransactionFormFields = () => {
         control={control}
         name="amount"
         render={({field}) => (
-          <FormItem className="my-4">
+          <FormItem className="my-1">
             <FormControl>
-              <NumericInput
+              <InputNumber
                 {...field}
                 min={0}
                 inline
                 placeholder={"Введите сумму"}
-                className={`w-full text-4xl font-bold text-center ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
+                className={`h-auto w-full text-5xl font-bold text-center ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
               />
             </FormControl>
           </FormItem>
@@ -113,7 +113,7 @@ export const TransactionFormFields = () => {
           <FormItem>
             <FormLabel>Комментарий</FormLabel>
             <FormControl>
-              <Textarea className="max-h-[250px] min-h-[150px]" {...field} />
+              <Textarea className="max-h-[250px]" {...field} />
             </FormControl>
           </FormItem>
         )}

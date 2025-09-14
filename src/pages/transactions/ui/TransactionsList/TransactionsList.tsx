@@ -1,4 +1,5 @@
 import type {Transaction, TransactionWithCategory} from "@/entities/transaction";
+import {DateConverter} from "@/shared/lib/datetime";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 import {type FC, useCallback, useState} from "react";
 import {TransactionCard} from "./components/TransactionCard/TransactionCard";
@@ -22,7 +23,6 @@ const monthNames = [
   "Декабрь",
 ];
 
-// Форматируем день: "14 июля 2025"
 function formatDay(date: Date): string {
   return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 }
@@ -41,8 +41,6 @@ const TransactionsList: FC<Props> = ({transactions}) => {
     setSelectedTransaction(undefined);
   }, []);
 
-  let lastYear = -1;
-  let lastMonth = -1;
   let lastDay = -1;
 
   return (
@@ -55,19 +53,11 @@ const TransactionsList: FC<Props> = ({transactions}) => {
 
       <div className="flex flex-col gap-3">
         {transactions.map(transaction => {
-          const date = new Date(transaction.date);
-          const year = date.getFullYear();
-          const month = date.getMonth();
+          const date = DateConverter.ISOToDate(transaction.date);
           const day = date.getDate();
 
-          // Определяем, нужно ли выводить заголовок года + месяца
-          const showMonthHeader = year !== lastYear || month !== lastMonth;
-          // Определяем, нужно ли выводить разделитель для дня
-          const showDayHeader = day !== lastDay || showMonthHeader;
+          const showDayHeader = day !== lastDay;
 
-          // Обновляем "последние" значения для следующей итерации
-          lastYear = year;
-          lastMonth = month;
           lastDay = day;
 
           return (

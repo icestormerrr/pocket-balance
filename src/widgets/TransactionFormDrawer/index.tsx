@@ -23,9 +23,7 @@ const defaultValues: TransactionsFormState = {
   categoryType: "expense",
   categoryId: "",
   id: "",
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  amount: "",
+  amount: 0,
   comment: "",
   accountId: "",
 };
