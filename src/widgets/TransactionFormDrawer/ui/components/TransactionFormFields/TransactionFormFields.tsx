@@ -5,12 +5,13 @@ import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
 import {DateConverter} from "@/shared/lib/datetime";
 import {DatePickerMobile} from "@/shared/ui/date-picker";
 import {FormControl, FormField, FormItem, FormLabel} from "@/shared/ui/form";
-import {InputNumber} from "@/shared/ui/input";
+import {Input} from "@/shared/ui/input";
 import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 import {Textarea} from "@/shared/ui/textarea";
 
 import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
+import {ChevronsUpDown} from "lucide-react";
 import type {TransactionsFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
@@ -37,7 +38,7 @@ export const TransactionFormFields = () => {
               <div className={"flex justify-center"}>
                 <Avatar className={"h-[130px] w-[130px]"}>
                   <AvatarFallback className={"text-5xl"}>
-                    {categoriesOptions.find(opt => opt.value === field.value)?.payload?.shortName}
+                    {categoriesOptions.find(opt => opt.value === field.value)?.payload?.shortName ?? <ChevronsUpDown />}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -52,13 +53,16 @@ export const TransactionFormFields = () => {
         control={control}
         name="amount"
         render={({field}) => (
-          <FormItem className="my-1">
+          <FormItem>
             <FormControl>
-              <InputNumber
+              <Input
                 {...field}
+                value={String(field.value)}
+                onChange={e => field.onChange(Number(e.target.value))}
+                type="number"
                 min={0}
                 inline
-                placeholder={"Введите сумму"}
+                placeholder={"0₽"}
                 className={`h-auto w-full text-5xl font-bold text-center ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
               />
             </FormControl>
