@@ -29,15 +29,15 @@ export class CategoryLocalStorageRepository implements ICategoriesRepository {
 
   async create(category: Omit<Category, "id">): Promise<Category> {
     const categories = load();
-    const newTx: Category = {...category, id: crypto.randomUUID()};
-    categories.push(newTx);
+    const newCat: Category = {...category, id: crypto.randomUUID()};
+    categories.push(newCat);
     save(categories);
-    return newTx;
+    return newCat;
   }
 
   async update(id: string, partial: Partial<Omit<Category, "id">>): Promise<Category | null> {
     const categories = load();
-    const index = categories.findIndex(tx => tx.id === id);
+    const index = categories.findIndex(cat => cat.id === id);
     if (index === -1) return null;
 
     const updated = {...categories[index], ...partial};
@@ -47,7 +47,7 @@ export class CategoryLocalStorageRepository implements ICategoriesRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const categories = load().filter(tx => tx.id !== id);
+    const categories = load().filter(cat => cat.id !== id);
     save(categories);
   }
 }
