@@ -1,11 +1,11 @@
 import {type FC, memo} from "react";
 
-import type {Transaction, TransactionWithCategory} from "@/entities/transaction";
+import type {Transaction, TransactionExtended} from "@/entities/transaction";
 import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
 import {Card, CardContent} from "@/shared/ui/card";
 
 type Props = {
-  transaction: TransactionWithCategory;
+  transaction: TransactionExtended;
   onClick: (transaction: Transaction) => void;
 };
 
@@ -33,7 +33,7 @@ export const TransactionCard: FC<Props> = memo(({transaction, onClick}) => {
             categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"
           }`}
         >
-          {amount.toLocaleString("ru-RU").replace(/,/g, " ")} ₽
+          {amount.toLocaleString("ru-RU").replace(/,/g, " ")}
         </p>
       </CardContent>
     </Card>

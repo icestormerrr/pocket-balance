@@ -9,6 +9,7 @@ import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 import {Textarea} from "@/shared/ui/textarea";
 
+import {useAccounts} from "@/entities/account";
 import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
 import {Card} from "@/shared/ui/card";
 import {Cell} from "@/shared/ui/cell";
@@ -27,6 +28,12 @@ export const TransactionFormFields = () => {
       categories?.map(c => ({label: `${c.shortName ? c.shortName + " - " : ""}${c.name}`, value: c.id, payload: c})) ??
       [],
     [categories]
+  );
+
+  const {data: accounts} = useAccounts({});
+  const accountsOptions = useMemo(
+    () => accounts?.map(acc => ({label: acc.name, value: acc.id, payload: acc})) ?? [],
+    [accounts]
   );
 
   return (
@@ -122,6 +129,42 @@ export const TransactionFormFields = () => {
                 </Cell>
               </div>
             </DatePickerMobile>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="accountId"
+          render={({field}) => (
+            <SelectMobile
+              {...field}
+              renderField={() => (
+                <div>
+                  <Cell>
+                    <Cell.Content>
+                      <Cell.Content.Title>Счёт</Cell.Content.Title>
+                      {field.value && (
+                        <Cell.Content.Subtitle>
+                          {
+                            accountsOptions.find(opt => {
+                              if (opt.value === field.value) {
+                                console.log(opt.value, field.value);
+                              }
+                              return opt.value === field.value;
+                            })?.label
+                          }
+                        </Cell.Content.Subtitle>
+                      )}
+                    </Cell.Content>
+                    <Cell.RightContent>
+                      <ChevronRight />
+                    </Cell.RightContent>
+                  </Cell>
+                </div>
+              )}
+              options={accountsOptions}
+              placeholder="Выберите счёт"
+            />
           )}
         />
 

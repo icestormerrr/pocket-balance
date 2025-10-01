@@ -7,8 +7,8 @@ import type {AccountCreatePayload, AccountsFilter, AccountUpdatePayload, IAccoun
 export class AccountsService implements IAccountsService {
   private readonly repository: IAccountsRepository;
 
-  constructor(api: IAccountsRepository) {
-    this.repository = api;
+  constructor(repository: IAccountsRepository) {
+    this.repository = repository;
   }
 
   async getAll(filter: AccountsFilter): Promise<Account[]> {
@@ -33,7 +33,7 @@ export class AccountsService implements IAccountsService {
       throw new Error("Начальная сумма не может быть пустой");
     }
 
-    if (!("currency" in data) || typeof data.currency !== "string" || data.currency.trim().length === 0) {
+    if (!("currencyCode" in data) || typeof data.currencyCode !== "string" || data.currencyCode.trim().length === 0) {
       throw new Error("Валюта не может быть пустой");
     }
   }

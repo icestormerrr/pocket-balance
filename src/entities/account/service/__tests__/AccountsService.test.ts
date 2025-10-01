@@ -16,7 +16,7 @@ const service = new AccountsService(mockRepo);
 
 const validAccount: Omit<Account, "id" | "creationDatetime"> = {
   name: "Food",
-  currency: "RUB",
+  currencyCode: "RUB",
   startAmount: 1000,
 };
 
@@ -46,7 +46,7 @@ describe("AccountsService", () => {
     expect(mockRepo.create).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Food",
-        currency: "RUB",
+        currencyCode: "RUB",
         creationDatetime: expect.any(String),
       })
     );
@@ -69,25 +69,25 @@ describe("AccountsService", () => {
 
   describe("validateAccount", () => {
     test("throws error if name is empty", () => {
-      expect(() => service.validateAccount({name: "   ", currency: "RUB", startAmount: 10})).toThrow(
+      expect(() => service.validateAccount({name: "   ", currencyCode: "RUB", startAmount: 10})).toThrow(
         "Название счета не может быть пустым"
       );
     });
 
     test("throws error if name is not a string", () => {
-      expect(() => service.validateAccount({name: 123, currency: "RUB", startAmount: 10})).toThrow(
+      expect(() => service.validateAccount({name: 123, currencyCode: "RUB", startAmount: 10})).toThrow(
         "Название счета не может быть пустым"
       );
     });
 
     test("throws error if startAmoutn is empty", () => {
-      expect(() => service.validateAccount({name: "sdsd", currency: "RUB"})).toThrow(
+      expect(() => service.validateAccount({name: "sdsd", currencyCode: "RUB"})).toThrow(
         "Начальная сумма не может быть пустой"
       );
     });
 
     test("throws error if startAmoutn is not number", () => {
-      expect(() => service.validateAccount({name: "sdsd", currency: "RUB", startAmount: "s"})).toThrow(
+      expect(() => service.validateAccount({name: "sdsd", currencyCode: "RUB", startAmount: "s"})).toThrow(
         "Начальная сумма не может быть пустой"
       );
     });

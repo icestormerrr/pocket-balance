@@ -1,14 +1,20 @@
 import {BOTTOM_BAR_HEIGHT, cn} from "@/shared/lib/styling";
-import {CircleEllipsis, LayoutList, PieChart, SlidersHorizontal} from "lucide-react";
+import {CircleEllipsis, CreditCard, LayoutList, PieChart} from "lucide-react";
 
 import {Link, useRouterState} from "@tanstack/react-router";
 import {CreateOperationButton} from "./components/CreateOperationButton";
 
 const navItems = [
+  {label: "Счета", icon: CreditCard, link: "/accounts"},
   {label: "Операции", icon: LayoutList, link: "/transactions"},
+  {
+    content: (
+      <div className="flex justify-center">
+        <CreateOperationButton key="central" className="mt-[-5px]" />
+      </div>
+    ),
+  },
   {label: "Отчёт", icon: PieChart, link: "/reports"},
-  {central: true},
-  {label: "План", icon: SlidersHorizontal},
   {label: "Ещё", icon: CircleEllipsis, link: "more"},
 ];
 
@@ -22,11 +28,9 @@ export function BottomBar() {
       style={{height: BOTTOM_BAR_HEIGHT}}
     >
       <div className={`w-full max-w-md mx-auto grid grid-cols-5 px-4`}>
-        {navItems.map(({label, icon: Icon, link, central}, idx) =>
-          central ? (
-            <div className="flex justify-center">
-              <CreateOperationButton key="central" className="mt-[-5px]" />
-            </div>
+        {navItems.map(({label, icon: Icon, link, content}, idx) =>
+          content ? (
+            content
           ) : (
             <Link
               key={idx}

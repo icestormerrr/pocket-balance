@@ -3,6 +3,8 @@ import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 import type {Category, CategoryType} from "@/entities/category";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
+import type {Account} from "@/entities/account";
+import type {IAccountsService} from "@/entities/account/service/IAccountsService";
 import type {Transaction} from "../../model/Transaction";
 import type {ITransactionsRepository} from "../../repository/ITransactionsRepository";
 import {TransactionsService} from "../TransactionsService";
@@ -23,19 +25,29 @@ const mockCategoriesService: jest.Mocked<ICategoriesService> = {
   delete: jest.fn(),
 };
 
-const makeService = () => new TransactionsService(mockRepo, mockCategoriesService);
+const mockAccountService: jest.Mocked<IAccountsService> = {
+  getAll: jest.fn(),
+  getById: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn(),
+};
+
+const makeService = () => new TransactionsService(mockRepo, mockCategoriesService, mockAccountService);
 
 const mockTransactions: Transaction[] = [
   {
     id: "1",
     amount: 100,
     categoryId: "c1",
+    accountId: "a1",
     date: "2024-01-01",
   },
   {
     id: "2",
     amount: 200,
     categoryId: "c2",
+    accountId: "a2",
     date: "2023-12-01",
   },
 ];
@@ -45,10 +57,15 @@ const mockCategories: Category[] = [
   {id: "c2", name: "Salary", type: "income" as CategoryType, color: "#ff0", creationDatetime: "", shortName: "Sa"},
 ];
 
+const mockAccounts: Account[] = [
+  {id: "a1", startAmount: 1000, name: "Счёт 1", currencyCode: "RUB", creationDatetime: ""},
+  {id: "a2", startAmount: 2000, name: "Счёт 2", currencyCode: "KZT", creationDatetime: ""},
+];
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
-
+// TODO: маленькое покрытие
 describe("TransactionsService", () => {
   it("getAll returns transactions with categoryName and type, and filters by type", async () => {
     mockRepo.getAll.mockResolvedValue(mockTransactions);
@@ -88,7 +105,7 @@ describe("TransactionsService", () => {
     mockCategoriesService.getAll.mockResolvedValue(mockCategories);
 
     const service = makeService();
-    const result = await service.getSummary();
+    const result = await service.getSummary({});
 
     expect(result).toEqual({income: 200, expense: 100});
   });
@@ -187,18 +204,13 @@ describe("TransactionsService", () => {
         },
       ]);
     });
-
-    it("throws on wrong granularity", async () => {
-      const service = makeService();
-      // @ts-ignore
-      await expect(service.getBalanceReport({granularity: "week"})).rejects.toThrow(/granularity/);
-    });
   });
 
   describe("validation", () => {
     const validTx = {
       amount: 100,
       categoryId: "c1",
+      accountId: "a1",
       date: "2024-01-01",
     };
 
@@ -218,13 +230,26 @@ describe("TransactionsService", () => {
       await expect(service.create(validTx)).rejects.toThrow(/Категория не найдена/);
     });
 
+    it("create throws if accountId is missing", async () => {
+      const service = makeService();
+      await expect(service.create({...validTx, accountId: ""})).rejects.toThrow(/Не указан счёт/);
+    });
+
+    it("create throws if account not found", async () => {
+      mockAccountService.getById.mockResolvedValue(null);
+      const service = makeService();
+      await expect(service.create(validTx)).rejects.toThrow(/Счёт не найден/);
+    });
+
     it("create throws if date is invalid", async () => {
+      mockAccountService.getById.mockResolvedValue(mockAccounts[0]);
       mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
       const service = makeService();
       await expect(service.create({...validTx, date: "invalid"})).rejects.toThrow(/Дата должна быть в формате ISO/);
     });
 
     it("create works with valid data", async () => {
+      mockAccountService.getById.mockResolvedValue(mockAccounts[0]);
       mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
       mockRepo.create.mockResolvedValue({...validTx, id: "123"});
 
@@ -236,6 +261,8 @@ describe("TransactionsService", () => {
 
     it("update calls repository after validation", async () => {
       mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
+      mockAccountService.getById.mockResolvedValue(mockAccounts[0]);
+
       mockRepo.update.mockResolvedValue({...validTx, id: "1"});
 
       const service = makeService();

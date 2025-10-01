@@ -1,11 +1,11 @@
-import type {Transaction, TransactionWithCategory} from "@/entities/transaction";
+import type {Transaction, TransactionExtended} from "@/entities/transaction";
 import {DateConverter} from "@/shared/lib/datetime";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 import {type FC, useCallback, useState} from "react";
 import {TransactionCard} from "./components/TransactionCard/TransactionCard";
 
 type Props = {
-  transactions: TransactionWithCategory[];
+  transactions: TransactionExtended[];
 };
 
 const monthNames = [

@@ -1,6 +1,8 @@
 import {categoriesService} from "@/entities/category/service/CategoriesService";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
+import {accountsService} from "@/entities/account/service/AccountsService";
+import type {IAccountsService} from "@/entities/account/service/IAccountsService";
 import dayjs from "dayjs";
 import type {Transaction} from "../model/Transaction";
 import type {ITransactionsRepository} from "../repository/ITransactionsRepository";
@@ -9,30 +11,38 @@ import type {
   BalanceByPeriod,
   ITransactionsService,
   TransactionCreatePayload,
+  TransactionExtended,
   TransactionsFilter,
   TransactionsGroupedByCategory,
   TransactionsSummary,
+  TransactionsSummaryFilter,
   TransactionUpdatePayload,
-  TransactionWithCategory,
 } from "./ITransactionsService";
 
 export class TransactionsService implements ITransactionsService {
   private readonly repository: ITransactionsRepository;
   private readonly categoriesService: ICategoriesService;
+  private readonly accountService: IAccountsService;
 
-  constructor(api: ITransactionsRepository, categoriesService: ICategoriesService) {
-    this.repository = api;
+  constructor(
+    repository: ITransactionsRepository,
+    categoriesService: ICategoriesService,
+    accountsService: IAccountsService
+  ) {
+    this.repository = repository;
     this.categoriesService = categoriesService;
+    this.accountService = accountsService;
   }
 
-  async getAll(filter: TransactionsFilter): Promise<TransactionWithCategory[]> {
+  async getAll(filter: TransactionsFilter): Promise<TransactionExtended[]> {
     const [transactions, categories] = await Promise.all([
       this.repository.getAll({startDate: filter.startDate, endDate: filter.endDate}),
       this.categoriesService.getAll({}),
     ]);
 
-    const transactionsWithCategoryTypeAndName = transactions.map(t => {
+    const transactionsExtended = transactions.map(t => {
       const category = categories.find(c => c.id === t.categoryId);
+
       return {
         ...t,
         categoryName: category?.name ?? "Неизвестная категория",
@@ -41,15 +51,19 @@ export class TransactionsService implements ITransactionsService {
       };
     });
 
-    return transactionsWithCategoryTypeAndName.filter(tx => {
+    return transactionsExtended.filter(tx => {
+      let satisfies = true;
       if (filter.categoryType) {
-        return tx.categoryType === filter.categoryType;
+        satisfies = tx.categoryType === filter.categoryType;
       }
-      return true;
+      if (filter.accountId) {
+        satisfies = tx.accountId === filter.accountId;
+      }
+      return satisfies;
     });
   }
 
-  async getById(id: string): Promise<TransactionWithCategory | null> {
+  async getById(id: string): Promise<TransactionExtended | null> {
     const tx = await this.repository.getById(id);
 
     if (!tx) return null;
@@ -67,8 +81,9 @@ export class TransactionsService implements ITransactionsService {
     return Array.from(new Set(years));
   }
 
-  async getSummary(startDate?: string, endDate?: string): Promise<TransactionsSummary> {
-    const transactions = await this.getAll({startDate, endDate});
+  // TODO: добавить поддержку счетов и валют
+  async getSummary(filter: TransactionsSummaryFilter): Promise<TransactionsSummary> {
+    const transactions = await this.getAll(filter);
 
     const summary = transactions.reduce(
       (acc, tx) => {
@@ -85,6 +100,7 @@ export class TransactionsService implements ITransactionsService {
     return summary;
   }
 
+  // TODO: добавить поддержку счетов и валют
   async getCategoriesReport(filter: TransactionsFilter = {}): Promise<TransactionsGroupedByCategory[]> {
     const transactions = await this.getAll(filter);
     const categories = await this.categoriesService.getAll({});
@@ -105,6 +121,7 @@ export class TransactionsService implements ITransactionsService {
     });
   }
 
+  // TODO: добавить поддержку счетов и валют
   // TODO: отрефакторить
   async getBalanceReport(opts: {
     granularity: "year" | "month" | "day";
@@ -172,22 +189,31 @@ export class TransactionsService implements ITransactionsService {
     const errors: string[] = [];
 
     if (tx.amount === undefined || typeof tx.amount !== "number" || tx.amount <= 0) {
-      errors.push("Сумма должна быть положительным числом.");
+      errors.push("Сумма должна быть положительным числом");
     }
 
     if (!tx.categoryId || typeof tx.categoryId !== "string") {
-      errors.push("Не указана категория.");
+      errors.push("Не указана категория");
     } else {
       const category = await this.categoriesService.getById(tx.categoryId);
       if (!category) {
-        errors.push("Категория не найдена.");
+        errors.push("Категория не найдена");
+      }
+    }
+
+    if (!tx.accountId || typeof tx.accountId !== "string") {
+      errors.push("Не указан счёт");
+    } else {
+      const account = await this.accountService.getById(tx.accountId);
+      if (!account) {
+        errors.push("Счёт не найден");
       }
     }
 
     if (!tx.date || isNaN(Date.parse(tx.date))) {
-      errors.push("Дата должна быть в формате ISO и быть валидной.");
+      errors.push("Дата должна быть в формате ISO и быть валидной");
     }
-
+    console.log(tx, errors);
     if (errors.length > 0) {
       throw new Error(errors.join(" "));
     }
@@ -208,4 +234,8 @@ export class TransactionsService implements ITransactionsService {
   }
 }
 
-export const transactionsService = new TransactionsService(new TransactionsLocalStorageRepository(), categoriesService);
+export const transactionsService = new TransactionsService(
+  new TransactionsLocalStorageRepository(),
+  categoriesService,
+  accountsService
+);

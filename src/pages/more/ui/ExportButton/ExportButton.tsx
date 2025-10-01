@@ -9,7 +9,7 @@ export const ExportButton = () => {
     <Button
       variant="outline"
       className={"w-full"}
-      onClick={() => exportLocalStorageData(["categories", "transactions"])}
+      onClick={() => exportLocalStorageData(["categories", "transactions", "accounts"])}
     >
       Экспортировать <Share />
     </Button>

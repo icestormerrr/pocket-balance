@@ -3,7 +3,7 @@ export type Currency = "RUB" | "USD" | "KZT";
 export type Account = {
   id: string;
   name: string;
-  currency: Currency;
+  currencyCode: Currency;
   startAmount: number;
   creationDatetime: string;
 };

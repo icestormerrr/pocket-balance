@@ -1,3 +1,6 @@
+import TransactionsDateFilters, {
+  type TransactionDateFilterType,
+} from "@/entities/transaction/ui/TransactionsDateFilters";
 import {
   useBalanceReport,
   useCategoriesReport,
@@ -11,16 +14,14 @@ import {
 } from "./adapter/hooks";
 import type {Transaction} from "./model/Transaction";
 import type {
+  TransactionExtended,
   TransactionsFilter,
   TransactionsGroupedByCategory,
   TransactionsSummary,
-  TransactionWithCategory,
 } from "./service/ITransactionsService";
-import TransactionsDateFilters, {
-  type TransactionDateFilterType,
-} from "@/entities/transaction/ui/TransactionsDateFilters";
 
 export {
+  TransactionsDateFilters,
   useBalanceReport,
   useCategoriesReport,
   useCreateTransaction,
@@ -30,13 +31,12 @@ export {
   useTransactionsSummary,
   useTransactionsYears,
   useUpdateTransaction,
-  TransactionsDateFilters
 };
 export type {
   Transaction,
+  TransactionDateFilterType,
+  TransactionExtended,
   TransactionsFilter,
   TransactionsGroupedByCategory,
   TransactionsSummary,
-  TransactionWithCategory,
-  TransactionDateFilterType
 };

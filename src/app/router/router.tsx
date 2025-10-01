@@ -6,6 +6,7 @@ import ReportsPage from "@/pages/reports";
 import TransactionsPage from "@/pages/transactions";
 
 import {RootLayout} from "@/app/layout/RootLayout";
+import AccountsPage from "@/pages/accounts";
 
 const rootRoute = createRootRoute({
   component: RootLayout,
@@ -17,6 +18,11 @@ const mainPage = createRoute({
   component: TransactionsPage,
 });
 
+const accountsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/accounts",
+  component: AccountsPage,
+});
 const transactionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/transactions",
@@ -41,6 +47,13 @@ const settingsRoute = createRoute({
   component: MorePage,
 });
 
-const routeTree = rootRoute.addChildren([mainPage, transactionsRoute, reportsRoute, categoriesRoute, settingsRoute]);
+const routeTree = rootRoute.addChildren([
+  mainPage,
+  accountsRoute,
+  transactionsRoute,
+  reportsRoute,
+  categoriesRoute,
+  settingsRoute,
+]);
 
 export const router = createRouter({routeTree});

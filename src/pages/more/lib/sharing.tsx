@@ -21,7 +21,7 @@ export async function exportLocalStorageData(keys: string[]) {
   if (navigator.share && window.File && window.FileReader && window.Blob) {
     // Web Share API с файлом
     const blob = new Blob([json], {type: "application/json"});
-    const file = new File([blob], "localStorageExport.json", {type: "application/json"});
+    const file = new File([blob], "pocket-balance-export.json", {type: "application/json"});
 
     try {
       await navigator.share({
@@ -30,26 +30,28 @@ export async function exportLocalStorageData(keys: string[]) {
         files: [file],
       });
       toast("Данные успешно экспортированы и готовы к отправке");
+      return;
     } catch (err) {
-      toast.error("Отмена или ошибка при шаринге");
       console.warn("Share cancelled or failed:", err);
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "pocket-balance-export.json";
+      a.click();
     }
-  } else {
-    // Фоллбек: сохраняем в файл на диск через Capacitor Filesystem
-    try {
-      const res = await Filesystem.writeFile({
-        path: `pocket-balance-export.json`,
-        data: json,
-        directory: Directory.Documents,
-        encoding: Encoding.UTF8,
-      });
+  }
 
-      toast(`Данные успешно экспортированы в ${res.uri}`);
+  // Фоллбек: сохраняем в файл на диск через Capacitor Filesystem
+  try {
+    const res = await Filesystem.writeFile({
+      path: `pocket-balance-export.json`,
+      data: json,
+      directory: Directory.Documents,
+      encoding: Encoding.UTF8,
+    });
 
-      // Для Android и iOS можно добавить уведомление или инструкцию как найти файл
-    } catch (err) {
-      toast.error("Ошибка при сохранении файла");
-      console.error("Filesystem write error:", err);
-    }
+    toast(`Данные успешно экспортированы в ${res.uri}`);
+  } catch (err) {
+    toast.error("Ошибка при сохранении файла");
+    console.error("Filesystem write error:", err);
   }
 }

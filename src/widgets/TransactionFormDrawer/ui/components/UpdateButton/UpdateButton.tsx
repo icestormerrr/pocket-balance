@@ -29,6 +29,7 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
           categoryId: formValues.categoryId,
           date: formValues.date,
           comment: formValues.comment,
+          accountId: formValues.accountId,
         },
       },
       {
