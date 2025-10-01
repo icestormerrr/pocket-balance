@@ -6,9 +6,10 @@ import {FormProvider, useForm} from "react-hook-form";
 
 import {DateConverter} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
+import {Button} from "@/shared/ui/button";
+import {DeleteButton} from "@/widgets/TransactionFormDrawer/ui/components/DeleteButton/DeleteButton";
 import {type TransactionsFormState, transactionFormSchema} from "./model/schema";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
-import {DeleteButton} from "./ui/components/DeleteButton/DeleteButton";
 import {TransactionFormFields} from "./ui/components/TransactionFormFields/TransactionFormFields";
 import {UpdateButton} from "./ui/components/UpdateButton/UpdateButton";
 
@@ -56,30 +57,27 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
 
   return (
     <FormProvider {...form}>
-      <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
+      <Drawer open={open} onOpenChange={onOpenChange} dismissible={false} repositionInputs={false}>
         <DrawerContent
           className="transition-all px-4 pb-4 mx-auto"
           style={{minHeight: window.innerHeight - getStatusBarHeight()}}
         >
           <div className="mt-4">
             <TransactionFormFields />
+            <div className={"my-6"}>
+              <DeleteButton onSuccess={handleSuccessButtonClick} />
+            </div>
           </div>
 
           <DrawerFooter className="px-0">
             <div className={"flex justify-between"}>
+              <Button size={"lg"} variant={"outline"} onClick={handleSuccessButtonClick}>
+                Отмена
+              </Button>
               {id ? (
-                <>
-                  <div className="basis-[10%]">
-                    <DeleteButton onSuccess={handleSuccessButtonClick} />
-                  </div>
-                  <div className="basis-[85%]">
-                    <UpdateButton onSuccess={handleSuccessButtonClick} />
-                  </div>
-                </>
+                <UpdateButton onSuccess={handleSuccessButtonClick} />
               ) : (
-                <div className="basis-[100%]">
-                  <CreateButton onSuccess={handleSuccessButtonClick} />
-                </div>
+                <CreateButton onSuccess={handleSuccessButtonClick} />
               )}
             </div>
           </DrawerFooter>

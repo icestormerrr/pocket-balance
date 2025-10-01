@@ -1,12 +1,13 @@
-import {Trash} from "lucide-react";
+import {ChevronRight} from "lucide-react";
+import type {FC} from "react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useDeleteTransaction} from "@/entities/transaction";
 import {getStatusBarHeight} from "@/shared/lib/styling";
-import {Button} from "@/shared/ui/button";
+import {Card} from "@/shared/ui/card";
+import {Cell} from "@/shared/ui/cell";
 
-import type {FC} from "react";
 import type {TransactionsFormState} from "../../../model/schema";
 
 type Props = {
@@ -47,8 +48,15 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Button size="lg" variant="outline" className={"basis-[45%]"} onClick={handleDeleteButtonClick}>
-      <Trash />
-    </Button>
+    <Card onClick={handleDeleteButtonClick} className="p-4">
+      <Cell>
+        <Cell.Content>
+          <span className="text-[var(--negative-accent)]">Удалить</span>
+        </Cell.Content>
+        <Cell.RightContent>
+          <ChevronRight />
+        </Cell.RightContent>
+      </Cell>
+    </Card>
   );
 };
