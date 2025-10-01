@@ -31,7 +31,6 @@ const TransactionsPage = () => {
     endDate: dateFilter.endDate,
     accountId: accountFilter ?? undefined,
   });
-  const {data: summaryGlobal} = useTransactionsSummary({accountId: accountFilter ?? undefined});
   const {data: summaryForPeriod} = useTransactionsSummary({
     startDate: dateFilter.startDate,
     endDate: dateFilter.endDate,
@@ -46,7 +45,7 @@ const TransactionsPage = () => {
         <BadgeGroup value={accountFilter} onChange={setAccountFilter} options={accountsOptions} />
       </div>
 
-      <TransactionsStats summaryForPeriod={summaryForPeriod} summaryGlobal={summaryGlobal} />
+      <TransactionsStats summaryForPeriod={summaryForPeriod} />
       {transactions && <TransactionsList transactions={transactions} />}
     </div>
   );
