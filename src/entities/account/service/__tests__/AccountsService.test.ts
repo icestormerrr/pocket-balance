@@ -17,6 +17,7 @@ const service = new AccountsService(mockRepo);
 const validAccount: Omit<Account, "id" | "creationDatetime"> = {
   name: "Food",
   currency: "RUB",
+  startAmount: 1000,
 };
 
 describe("AccountsService", () => {
@@ -24,7 +25,7 @@ describe("AccountsService", () => {
     jest.clearAllMocks();
   });
 
-  test("getById calls Repo with correct ID", async () => {
+  test("getById calls repository with correct id", async () => {
     const account = {id: "1", ...validAccount, creationDatetime: new Date().toUTCString()};
     mockRepo.getById.mockResolvedValueOnce(account);
     const result = await service.getById("1");
@@ -32,7 +33,7 @@ describe("AccountsService", () => {
     expect(result).toEqual(account);
   });
 
-  test("create calls validateAccount and Repo with formatted data", async () => {
+  test("create calls validateAccount and repository with cretionDate field", async () => {
     const created: Account = {
       id: "123",
       ...validAccount,
@@ -52,7 +53,7 @@ describe("AccountsService", () => {
     expect(result).toBe(created);
   });
 
-  test("update calls validateAccount and Repo", async () => {
+  test("update calls validateAccount and repository", async () => {
     const updated = {...validAccount, creationDatetime: new Date().toUTCString(), id: "1"};
     mockRepo.update.mockResolvedValueOnce(updated);
     const result = await service.update("1", validAccount);
@@ -60,7 +61,7 @@ describe("AccountsService", () => {
     expect(result).toBe(updated);
   });
 
-  test("delete calls Repo with correct ID", async () => {
+  test("delete calls repository with correct id", async () => {
     mockRepo.delete.mockResolvedValueOnce();
     await service.delete("1");
     expect(mockRepo.delete).toHaveBeenCalledWith("1");
@@ -68,23 +69,45 @@ describe("AccountsService", () => {
 
   describe("validateAccount", () => {
     test("throws error if name is empty", () => {
-      expect(() => service.validateAccount({name: "   ", currency: "RUB"})).toThrow(
+      expect(() => service.validateAccount({name: "   ", currency: "RUB", startAmount: 10})).toThrow(
         "Название счета не может быть пустым"
       );
     });
 
     test("throws error if name is not a string", () => {
-      expect(() => service.validateAccount({name: 123, currency: "RUB"})).toThrow(
+      expect(() => service.validateAccount({name: 123, currency: "RUB", startAmount: 10})).toThrow(
         "Название счета не может быть пустым"
       );
     });
 
+    test("throws error if startAmoutn is empty", () => {
+      expect(() => service.validateAccount({name: "sdsd", currency: "RUB"})).toThrow(
+        "Начальная сумма не может быть пустой"
+      );
+    });
+
+    test("throws error if startAmoutn is not number", () => {
+      expect(() => service.validateAccount({name: "sdsd", currency: "RUB", startAmount: "s"})).toThrow(
+        "Начальная сумма не может быть пустой"
+      );
+    });
+
+    test("throws error if startAmoutn is less than zero", () => {
+      expect(() => service.validateAccount({name: "sdsd", currency: "RUB", startAmount: -1})).toThrow(
+        "Начальная сумма не может быть пустой"
+      );
+    });
+
     test("throws error if currency is empty", () => {
-      expect(() => service.validateAccount({name: "sdsd", currency: ""})).toThrow("Валюта не может быть пустой");
+      expect(() => service.validateAccount({name: "sdsd", currency: "", startAmount: 10})).toThrow(
+        "Валюта не может быть пустой"
+      );
     });
 
     test("throws error if currency is not a string", () => {
-      expect(() => service.validateAccount({name: "123", currency: 1})).toThrow("Валюта не может быть пустой");
+      expect(() => service.validateAccount({name: "123", currency: 1, startAmount: 10})).toThrow(
+        "Валюта не может быть пустой"
+      );
     });
 
     test("does not throw if account is valid", () => {

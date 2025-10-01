@@ -4,6 +4,7 @@ export type Account = {
   id: string;
   name: string;
   currency: Currency;
+  startAmount: number;
   creationDatetime: string;
 };
 

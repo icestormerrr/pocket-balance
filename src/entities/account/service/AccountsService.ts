@@ -29,6 +29,10 @@ export class AccountsService implements IAccountsService {
       throw new Error("Название счета не может быть пустым");
     }
 
+    if (!("startAmount" in data) || typeof data.startAmount !== "number" || data.startAmount < 0) {
+      throw new Error("Начальная сумма не может быть пустой");
+    }
+
     if (!("currency" in data) || typeof data.currency !== "string" || data.currency.trim().length === 0) {
       throw new Error("Валюта не может быть пустой");
     }

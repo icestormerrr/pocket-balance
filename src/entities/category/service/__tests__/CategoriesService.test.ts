@@ -26,7 +26,7 @@ describe("CategoriesService", () => {
     jest.clearAllMocks();
   });
 
-  test("getAll calls Repo with correct filter", async () => {
+  test("getAll calls repository with correct filter", async () => {
     const filter = {type: "income" as CategoryType};
     mockRepo.getAll.mockResolvedValueOnce([]);
     const result = await service.getAll(filter);
@@ -34,7 +34,7 @@ describe("CategoriesService", () => {
     expect(result).toEqual([]);
   });
 
-  test("getById calls Repo with correct ID", async () => {
+  test("getById calls Rerepositorypo with correct id", async () => {
     const category = {id: "1", ...validCategory, creationDatetime: new Date().toUTCString()};
     mockRepo.getById.mockResolvedValueOnce(category);
     const result = await service.getById("1");
@@ -42,7 +42,7 @@ describe("CategoriesService", () => {
     expect(result).toEqual(category);
   });
 
-  test("create calls validateCategory and Repo with formatted data", async () => {
+  test("create calls validateCategory and repository with cretionDate field", async () => {
     const created: Category = {
       id: "123",
       ...validCategory,
@@ -63,7 +63,7 @@ describe("CategoriesService", () => {
     expect(result).toBe(created);
   });
 
-  test("update calls validateCategory and Repo", async () => {
+  test("update calls validateCategory and repository", async () => {
     const updated = {...validCategory, creationDatetime: new Date().toUTCString(), id: "1"};
     mockRepo.update.mockResolvedValueOnce(updated);
     const result = await service.update("1", validCategory);
@@ -71,7 +71,7 @@ describe("CategoriesService", () => {
     expect(result).toBe(updated);
   });
 
-  test("delete calls Repo with correct ID", async () => {
+  test("delete calls repository with correct id", async () => {
     mockRepo.delete.mockResolvedValueOnce();
     await service.delete("1");
     expect(mockRepo.delete).toHaveBeenCalledWith("1");
