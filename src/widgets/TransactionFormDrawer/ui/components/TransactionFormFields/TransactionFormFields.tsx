@@ -11,6 +11,7 @@ import {Textarea} from "@/shared/ui/textarea";
 
 import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
 import {Card} from "@/shared/ui/card";
+import {Cell} from "@/shared/ui/cell";
 import {DatePickerMobile} from "@/shared/ui/date-picker";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {ChevronRight, ChevronsUpDown} from "lucide-react";
@@ -55,7 +56,7 @@ export const TransactionFormFields = () => {
         control={control}
         name="amount"
         render={({field}) => (
-          <FormItem>
+          <FormItem className={"my-4"}>
             <FormControl>
               <Input
                 {...field}
@@ -76,19 +77,21 @@ export const TransactionFormFields = () => {
           control={control}
           name="categoryType"
           render={({field}) => (
-            <div className="flex items-center gap-3 p-0">
-              <div className="flex flex-col flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">Тип</p>
-              </div>
-              <SegmentInput
-                value={categoryType}
-                onChange={type => {
-                  field.onChange(type);
-                  setValue("categoryId", "");
-                }}
-                options={CATEGORY_TYPE_OPTIONS}
-              />
-            </div>
+            <Cell>
+              <Cell.Content>
+                <Cell.Content.Title>Тип</Cell.Content.Title>
+              </Cell.Content>
+              <Cell.RightContent>
+                <SegmentInput
+                  value={categoryType}
+                  onChange={type => {
+                    field.onChange(type);
+                    setValue("categoryId", "");
+                  }}
+                  options={CATEGORY_TYPE_OPTIONS}
+                />
+              </Cell.RightContent>
+            </Cell>
           )}
         />
 
@@ -103,17 +106,20 @@ export const TransactionFormFields = () => {
                 field.onChange(DateConverter.dateToISO(date));
               }}
             >
-              <div className="flex items-center gap-3 p-0">
-                <div className="flex flex-col flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">Дата</p>
-                  {field.value && (
-                    <p className="text-xs text-muted-foreground truncate">
-                      {DateConverter.ISOToFormattedString(field.value, "DD.MM.YYYY")}
-                    </p>
-                  )}
-                </div>
-
-                <ChevronRight />
+              <div>
+                <Cell>
+                  <Cell.Content>
+                    <Cell.Content.Title>Дата</Cell.Content.Title>
+                    {field.value && (
+                      <Cell.Content.Subtitle>
+                        {DateConverter.ISOToFormattedString(field.value, "DD.MM.YYYY")}
+                      </Cell.Content.Subtitle>
+                    )}
+                  </Cell.Content>
+                  <Cell.RightContent>
+                    <ChevronRight />
+                  </Cell.RightContent>
+                </Cell>
               </div>
             </DatePickerMobile>
           )}
@@ -124,28 +130,29 @@ export const TransactionFormFields = () => {
           name="comment"
           render={({field}) => (
             <FormItem>
-              <FormControl>
-                <Drawer repositionInputs={false}>
-                  <DrawerTrigger asChild>
-                    <div className="flex items-center gap-3 p-0">
-                      <div className="flex flex-col flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">Комментарий</p>
-                        {field.value && <p className="text-xs text-muted-foreground truncate">{field.value}</p>}
-                      </div>
+              <Drawer repositionInputs={false}>
+                <DrawerTrigger asChild>
+                  <div>
+                    <Cell>
+                      <Cell.Content>
+                        <Cell.Content.Title>Комментарий</Cell.Content.Title>
+                        {field.value && <Cell.Content.Subtitle>{field.value}</Cell.Content.Subtitle>}
+                      </Cell.Content>
+                      <Cell.RightContent>
+                        <ChevronRight />
+                      </Cell.RightContent>
+                    </Cell>
+                  </div>
+                </DrawerTrigger>
 
-                      <ChevronRight />
-                    </div>
-                  </DrawerTrigger>
+                <DrawerContent className="px-4 pb-4 min-h-[80vh]">
+                  <DrawerHeader className="px-0 py-4">
+                    <DrawerTitle>Введите описание</DrawerTitle>
+                  </DrawerHeader>
 
-                  <DrawerContent className="px-4 pb-4 min-h-[80vh]">
-                    <DrawerHeader className="px-0 py-4">
-                      <DrawerTitle>Введите описание</DrawerTitle>
-                    </DrawerHeader>
-
-                    <Textarea className="max-h-[250px]" autoFocus {...field} />
-                  </DrawerContent>
-                </Drawer>
-              </FormControl>
+                  <Textarea className="max-h-[250px]" autoFocus {...field} />
+                </DrawerContent>
+              </Drawer>
             </FormItem>
           )}
         />
