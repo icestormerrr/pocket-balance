@@ -11,7 +11,7 @@ export const RootLayout = () => {
   const statusBar = getStatusBarHeight();
 
   return (
-    <div className="pb-20 box-border relative" style={{paddingTop: statusBar}}>
+    <div className="pb-20 box-border relative max-w-md mx-auto" style={{paddingTop: statusBar}}>
       <GradientBlobs />
 
       <div

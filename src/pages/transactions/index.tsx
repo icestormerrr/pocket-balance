@@ -1,6 +1,11 @@
 import {useState} from "react";
 
-import {useTransactions, useTransactionsSummary, TransactionsDateFilters, type TransactionDateFilterType} from "@/entities/transaction";
+import {
+  TransactionsDateFilters,
+  useTransactions,
+  useTransactionsSummary,
+  type TransactionDateFilterType,
+} from "@/entities/transaction";
 import {DateConverter, DateCreator} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 
@@ -18,7 +23,7 @@ const TransactionsPage = () => {
   const {data: summaryForPeriod} = useTransactionsSummary({startDate: filter.startDate, endDate: filter.endDate});
 
   return (
-    <div className="p-4 space-y-4 max-w-md mx-auto">
+    <div className="p-4 space-y-4">
       <h1 className="flex justify-between items-center text-2xl font-bold mb-0">Операции</h1>
       <div className="mb-0 -mx-4 p-4" style={{top: getStatusBarHeight() - 2}}>
         <TransactionsDateFilters filter={filter} onFilterChange={setFilter} />

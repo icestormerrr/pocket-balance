@@ -4,12 +4,13 @@ import {Button} from "@/shared/ui/button";
 import {Calendar} from "@/shared/ui/calendar";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {CalendarIcon} from "lucide-react";
-import {useMemo} from "react";
+import {type ReactNode, useMemo} from "react";
 
 type Props = {
   title?: string;
   placeholder?: string;
   className?: string;
+  children?: ReactNode;
 };
 
 type RangeModeProps = Props & {
@@ -31,6 +32,7 @@ export function DatePickerMobile({
   title = "Выберите дату",
   className,
   mode,
+  children,
 }: SingleModeProps | RangeModeProps) {
   const dateLabel = useMemo(() => {
     if (!value) return placeholder;
@@ -45,16 +47,20 @@ export function DatePickerMobile({
   return (
     <Drawer repositionInputs={false}>
       <DrawerTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(`justify-start text-left font-normal`, !value && "text-muted-foreground", className)}
-        >
-          <CalendarIcon />
-          {dateLabel}
-        </Button>
+        {children ? (
+          children
+        ) : (
+          <Button
+            variant={"outline"}
+            className={cn(`justify-start text-left font-normal`, !value && "text-muted-foreground", className)}
+          >
+            <CalendarIcon />
+            {dateLabel}
+          </Button>
+        )}
       </DrawerTrigger>
 
-      <DrawerContent className="px-4 pb-4">
+      <DrawerContent className="px-4 pb-4 min-h-[80vh]">
         <DrawerHeader className="px-0 py-4">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
