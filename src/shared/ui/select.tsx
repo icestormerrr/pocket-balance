@@ -66,7 +66,7 @@ export const SelectMobile = ({
           ? renderField({className, value, placeholder, options})
           : renderDefaultField({className, value, placeholder, options})}
       </DrawerTrigger>
-      <DrawerContent className="max-w-lg mx-auto">
+      <DrawerContent className="max-w-lg mx-auto min-h[80vh]">
         <DrawerHeader className="px-4 pt-6">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
