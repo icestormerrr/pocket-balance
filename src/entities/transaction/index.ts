@@ -19,8 +19,10 @@ import type {
   TransactionsGroupedByCategory,
   TransactionsSummary,
 } from "./service/ITransactionsService";
+import {TransactionCard} from "./ui/TransactionCard/TransactionCard";
 
 export {
+  TransactionCard,
   TransactionsDateFilters,
   useBalanceReport,
   useCategoriesReport,

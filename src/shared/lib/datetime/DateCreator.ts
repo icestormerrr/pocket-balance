@@ -23,4 +23,8 @@ export class DateCreator {
       return {startDate, endDate};
     }
   }
+
+  static createStartOfCurrent(unit: "year" | "month" | "day"): Date {
+    return dayjs().startOf(unit).toDate();
+  }
 }

@@ -6,14 +6,14 @@ import {Card, CardContent} from "@/shared/ui/card";
 
 type Props = {
   transaction: TransactionExtended;
-  onClick: (transaction: Transaction) => void;
+  onClick?: (transaction: Transaction) => void;
 };
 
 export const TransactionCard: FC<Props> = memo(({transaction, onClick}) => {
   const {amount, comment, categoryName, categoryType, categoryShortName} = transaction;
 
   const handleClick = () => {
-    onClick(transaction);
+    onClick?.(transaction);
   };
 
   return (

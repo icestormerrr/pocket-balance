@@ -1,8 +1,7 @@
-import type {Transaction, TransactionExtended} from "@/entities/transaction";
+import {type Transaction, TransactionCard, type TransactionExtended} from "@/entities/transaction";
 import {DateConverter} from "@/shared/lib/datetime";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 import {type FC, useCallback, useState} from "react";
-import {TransactionCard} from "./components/TransactionCard/TransactionCard";
 
 type Props = {
   transactions: TransactionExtended[];

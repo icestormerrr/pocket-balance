@@ -1,12 +1,13 @@
 import {BOTTOM_BAR_HEIGHT, cn} from "@/shared/lib/styling";
-import {CircleEllipsis, CreditCard, LayoutList, PieChart} from "lucide-react";
+import {CircleEllipsis, PieChart, Rows4, WalletCards} from "lucide-react";
 
+import {URLS} from "@/shared/const/urls";
 import {Link, useRouterState} from "@tanstack/react-router";
 import {CreateOperationButton} from "./components/CreateOperationButton";
 
 const navItems = [
-  {label: "Счета", icon: CreditCard, link: "/accounts"},
-  {label: "Операции", icon: LayoutList, link: "/transactions"},
+  {label: "Счета", icon: WalletCards, link: URLS.AccountsPage.build()},
+  {label: "Операции", icon: Rows4, link: URLS.TransactionsPage.build()},
   {
     content: (
       <div className="flex justify-center">
@@ -14,8 +15,8 @@ const navItems = [
       </div>
     ),
   },
-  {label: "Отчёт", icon: PieChart, link: "/reports"},
-  {label: "Ещё", icon: CircleEllipsis, link: "more"},
+  {label: "Отчёты", icon: PieChart, link: URLS.ReportsPage.build()},
+  {label: "Ещё", icon: CircleEllipsis, link: URLS.MorePage.build()},
 ];
 
 export function BottomBar() {

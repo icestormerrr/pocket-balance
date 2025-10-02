@@ -1,8 +1,12 @@
+import {Link} from "@tanstack/react-router";
 import {memo, type FC} from "react";
 
 import type {Account} from "@/entities/account";
-import {useTransactionsSummary} from "@/entities/transaction";
-import {Card, CardTitle} from "@/shared/ui/card";
+import {useTransactions, useTransactionsSummary} from "@/entities/transaction";
+import {URLS} from "@/shared/const/urls";
+import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
+import {Button} from "@/shared/ui/button";
+import {Card, CardContent, CardHeader} from "@/shared/ui/card";
 import {Cell} from "@/shared/ui/cell";
 
 type Props = {
@@ -11,20 +15,71 @@ type Props = {
 
 export const AccountCard: FC<Props> = memo(({account}) => {
   const {data: summary} = useTransactionsSummary({accountId: account.id});
+  // const {data: summaryForStartOfMonth} = useTransactionsSummary({
+  //   accountId: account.id,
+  //   endDate: DateConverter.dateToISO(DateCreator.createStartOfCurrent("month")),
+  // });
+
+  // const balanceForStartOfMonth = summaryForStartOfMonth
+  //   ? summaryForStartOfMonth.income - summaryForStartOfMonth.expense
+  //   : 0;
+  const balance = summary ? account.startAmount + summary.income - summary.expense : 0;
+  //
+  // const monthDiff = balance - balanceForStartOfMonth;
+  // const monthDiffInPercent = balanceForStartOfMonth ? (monthDiff / balanceForStartOfMonth) * 100 : monthDiff;
+
+  const {data: transactions} = useTransactions({accountId: account.id});
 
   return (
-    <Card className="w-full gap-2 p-4">
-      <Cell>
-        <Cell.Content>
-          <CardTitle className="text-base font-medium text-muted-foreground">{account.name}</CardTitle>
-        </Cell.Content>
-        <Cell.RightContent>
-          <p className="text-2xl font-bold tracking-tight text-foreground">
-            {summary ? (account.startAmount + summary.income - summary.expense).toLocaleString() : "-"}{" "}
-            <span className="text-muted-foreground text-lg font-normal">{account.currencyCode}</span>
-          </p>
-        </Cell.RightContent>
-      </Cell>
+    <Card className="w-[360px] rounded-2xl shadow-md gap-6">
+      <CardHeader className="pb-0">
+        <div className="flex items-center justify-between">
+          <span className="text-xl font-semibold">
+            {balance.toLocaleString()} {account.currencyCode}
+          </span>
+
+          {/*<Badge*/}
+          {/*  className={`backdrop-blur-2xl ${monthDiff >= 0 ? "text-green-500 bg-green-100" : "text-red-500 bg-red-100"}`}*/}
+          {/*>*/}
+          {/*  {monthDiff.toLocaleString()} ({monthDiffInPercent.toFixed(2)}%)*/}
+          {/*</Badge>*/}
+        </div>
+        <p className="text-sm text-muted-foreground">{account.name}</p>
+      </CardHeader>
+
+      {!!transactions?.length && (
+        <Link to={URLS.TransactionsPage.build()}>
+          <CardContent className="space-y-4">
+            {transactions?.slice(0, 3).map(tx => (
+              <Cell>
+                <Cell.LeftContent>
+                  <Avatar>
+                    <AvatarFallback>{tx.categoryShortName}</AvatarFallback>
+                  </Avatar>
+                </Cell.LeftContent>
+                <Cell.Content>
+                  <Cell.Content.Title>{tx.categoryName}</Cell.Content.Title>
+                  <Cell.Content.Subtitle>{tx.comment}</Cell.Content.Subtitle>
+                </Cell.Content>
+
+                <Cell.RightContent>
+                  <p
+                    className={`text-sm font-semibold whitespace-nowrap ${
+                      tx.categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"
+                    }`}
+                  >
+                    {tx.amount.toLocaleString("ru-RU").replace(/,/g, " ")}
+                  </p>
+                </Cell.RightContent>
+              </Cell>
+            ))}
+
+            <Button className="w-full mt-2 rounded-lg" variant="outline">
+              Показать все
+            </Button>
+          </CardContent>
+        </Link>
+      )}
     </Card>
   );
 });

@@ -32,11 +32,11 @@ export class TransactionsLocalStorageRepository implements ITransactionsReposito
         }
 
         if (filter.startDate) {
-          return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.startDate), "day");
+          return DateComparator.isAfterOrEqual(date, DateConverter.ISOToDate(filter.startDate), "day");
         }
 
         if (filter.endDate) {
-          return !DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.endDate), "day");
+          return DateComparator.isBeforeOrEqual(date, DateConverter.ISOToDate(filter.endDate), "day");
         }
 
         return true;
