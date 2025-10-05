@@ -1,5 +1,5 @@
 import {BOTTOM_BAR_HEIGHT, cn} from "@/shared/lib/styling";
-import {CircleEllipsis, PieChart, Rows4, WalletCards} from "lucide-react";
+import {Bolt, ChartCandlestick, Rows4, WalletCards} from "lucide-react";
 
 import {URLS} from "@/shared/const/urls";
 import {Link, useRouterState} from "@tanstack/react-router";
@@ -15,8 +15,8 @@ const navItems = [
       </div>
     ),
   },
-  {label: "Отчёты", icon: PieChart, link: URLS.ReportsPage.build()},
-  {label: "Ещё", icon: CircleEllipsis, link: URLS.MorePage.build()},
+  {label: "Отчёты", icon: ChartCandlestick, link: URLS.ReportsPage.build()},
+  {label: "Ещё", icon: Bolt, link: URLS.MorePage.build()},
 ];
 
 export function BottomBar() {
@@ -25,7 +25,7 @@ export function BottomBar() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="fixed bottom-0 inset-x-0 z-50 flex items-end justify-center bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-6"
       style={{height: BOTTOM_BAR_HEIGHT}}
     >
       <div className={`w-full max-w-md mx-auto grid grid-cols-5 px-4`}>

@@ -9,7 +9,7 @@ export const getStatusBarHeight = () => {
   return 50;
 };
 
-export const BOTTOM_BAR_HEIGHT = 90;
+export const BOTTOM_BAR_HEIGHT = 80;
 
 export const getMainContentHeight = () => {
   return window.innerHeight - getStatusBarHeight() - BOTTOM_BAR_HEIGHT;

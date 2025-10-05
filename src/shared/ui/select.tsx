@@ -2,7 +2,6 @@ import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {Input} from "@/shared/ui/input";
-import {ScrollArea} from "@/shared/ui/scroll-area";
 import {ChevronsUpDown} from "lucide-react";
 import {type ReactNode, useEffect, useMemo, useState} from "react";
 
@@ -53,7 +52,7 @@ export const SelectMobile = ({
         onChange(option.value, option);
         setOpen(false);
       }}
-      className={cn("justify-start", value === option.value && "bg-muted text-primary hover:bg-muted")}
+      className={cn("justify-start", value === option.value && "bg-muted text-primary hover:bg-muted", "h-12")}
     >
       {option.label}
     </Button>
@@ -66,7 +65,7 @@ export const SelectMobile = ({
           ? renderField({className, value, placeholder, options})
           : renderDefaultField({className, value, placeholder, options})}
       </DrawerTrigger>
-      <DrawerContent className="max-w-lg mx-auto min-h[80vh]">
+      <DrawerContent className="max-w-lg mx-auto max-h-[80vh]">
         <DrawerHeader className="px-4 pt-6">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
@@ -76,7 +75,7 @@ export const SelectMobile = ({
             <Input placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} className="mb-4" />
           )}
 
-          <ScrollArea className="h-[50vh] rounded-md border">
+          <div className="max-h-[60vh] overflow-auto min-h-[250px] rounded-md border">
             <div className="flex flex-col gap-1 p-2">
               {filteredOptions.length === 0 ? (
                 <div className="text-muted-foreground text-sm text-center py-6">Ничего не найдено</div>
@@ -84,7 +83,7 @@ export const SelectMobile = ({
                 filteredOptions.map(renderOption ?? defaultRenderOption)
               )}
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </DrawerContent>
     </Drawer>
