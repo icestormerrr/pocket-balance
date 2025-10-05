@@ -15,34 +15,17 @@ type Props = {
 
 export const AccountCard: FC<Props> = memo(({account}) => {
   const {data: summary} = useTransactionsSummary({accountId: account.id});
-  // const {data: summaryForStartOfMonth} = useTransactionsSummary({
-  //   accountId: account.id,
-  //   endDate: DateConverter.dateToISO(DateCreator.createStartOfCurrent("month")),
-  // });
-
-  // const balanceForStartOfMonth = summaryForStartOfMonth
-  //   ? summaryForStartOfMonth.income - summaryForStartOfMonth.expense
-  //   : 0;
   const balance = summary ? account.startAmount + summary.income - summary.expense : 0;
-  //
-  // const monthDiff = balance - balanceForStartOfMonth;
-  // const monthDiffInPercent = balanceForStartOfMonth ? (monthDiff / balanceForStartOfMonth) * 100 : monthDiff;
 
   const {data: transactions} = useTransactions({accountId: account.id});
 
   return (
-    <Card className="w-[360px] rounded-2xl shadow-md gap-6">
+    <Card className="rounded-2xl shadow-md gap-6">
       <CardHeader className="pb-0">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold">
             {balance.toLocaleString()} {account.currencyCode}
           </span>
-
-          {/*<Badge*/}
-          {/*  className={`backdrop-blur-2xl ${monthDiff >= 0 ? "text-green-500 bg-green-100" : "text-red-500 bg-red-100"}`}*/}
-          {/*>*/}
-          {/*  {monthDiff.toLocaleString()} ({monthDiffInPercent.toFixed(2)}%)*/}
-          {/*</Badge>*/}
         </div>
         <p className="text-sm text-muted-foreground">{account.name}</p>
       </CardHeader>
@@ -50,7 +33,7 @@ export const AccountCard: FC<Props> = memo(({account}) => {
       {!!transactions?.length && (
         <Link to={URLS.TransactionsPage.build()}>
           <CardContent className="space-y-4">
-            {transactions?.slice(0, 3).map(tx => (
+            {transactions.slice(0, 3).map(tx => (
               <Cell>
                 <Cell.LeftContent>
                   <Avatar>

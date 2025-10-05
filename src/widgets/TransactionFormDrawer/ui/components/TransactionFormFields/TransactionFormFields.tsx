@@ -162,7 +162,9 @@ export const TransactionFormFields = () => {
                   </Cell>
                 </div>
               )}
+              hideSearch
               options={accountsOptions}
+              title="Выберите счёт"
               placeholder="Выберите счёт"
             />
           )}

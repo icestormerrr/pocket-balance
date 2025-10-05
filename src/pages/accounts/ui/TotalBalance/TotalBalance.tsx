@@ -13,8 +13,9 @@ export const TotalBalance: FC<Props> = ({accounts}) => {
   const totalStartAmount = accounts.reduce((sum, account) => sum + account.startAmount, 0);
 
   return (
-    <p className="text-5xl font-bold tracking-tight text-foreground my-6">
-      {summaryGlobal ? (totalStartAmount + summaryGlobal.income - summaryGlobal.expense).toLocaleString() : "-"}{" "}
+    <p className="text-4xl font-semibold tracking-tight text-foreground">
+      {summaryGlobal ? (totalStartAmount + summaryGlobal.income - summaryGlobal.expense).toLocaleString() : "-"}
+      {" ₽"}
     </p>
   );
 };
