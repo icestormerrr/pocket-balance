@@ -1,13 +1,19 @@
-import type {CategoryType} from "@/entities/category/model/Category";
-import type {TransactionsFilter} from "@/entities/transaction";
-import type {TransactionsSummaryFilter} from "@/entities/transaction/service/ITransactionsService";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+
 import type {Transaction} from "../model/Transaction";
+import type {TransactionsFilter, TransactionsSummaryFilter} from "../service/ITransactionsService";
 import {transactionsService} from "../service/TransactionsService";
 
 export const useTransactions = (filter: TransactionsFilter) => {
   return useQuery({
-    queryKey: ["transactions", filter.startDate, filter.endDate, filter.categoryType, filter.accountId],
+    queryKey: [
+      "transactions",
+      filter.startDate,
+      filter.endDate,
+      filter.categoryType,
+      filter.accountId,
+      filter.categoryId,
+    ],
     queryFn: () => transactionsService.getAll(filter),
   });
 };
@@ -27,18 +33,18 @@ export const useTransactionsSummary = (filter: TransactionsSummaryFilter) => {
   });
 };
 
-export const useCategoriesReport = ({
-  startDate,
-  endDate,
-  categoryType,
-}: {
-  startDate?: string;
-  endDate?: string;
-  categoryType?: CategoryType;
-}) => {
+export const useCategoriesReport = (filter: TransactionsFilter) => {
   return useQuery({
-    queryKey: ["transactionsCategoriesReport", startDate, endDate, categoryType],
-    queryFn: () => transactionsService.getCategoriesReport({startDate, endDate, categoryType}),
+    queryKey: [
+      "transactionsCategoriesReport",
+      filter.startDate,
+      filter.endDate,
+      filter.categoryType,
+      filter.accountId,
+      filter.categoryId,
+    ],
+    queryFn: () => transactionsService.getCategoriesReport(filter),
+    enabled: !!filter.categoryType,
   });
 };
 

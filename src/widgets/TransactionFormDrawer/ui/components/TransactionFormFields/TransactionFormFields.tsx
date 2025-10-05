@@ -146,14 +146,7 @@ export const TransactionFormFields = () => {
                       <Cell.Content.Title>Счёт</Cell.Content.Title>
                       {field.value && (
                         <Cell.Content.Subtitle>
-                          {
-                            accountsOptions.find(opt => {
-                              if (opt.value === field.value) {
-                                console.log(opt.value, field.value);
-                              }
-                              return opt.value === field.value;
-                            })?.label
-                          }
+                          {accountsOptions.find(opt => opt.value === field.value)?.label}
                         </Cell.Content.Subtitle>
                       )}
                     </Cell.Content>

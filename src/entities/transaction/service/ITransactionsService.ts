@@ -22,6 +22,7 @@ export interface TransactionsFilter {
   startDate?: string;
   endDate?: string;
   categoryType?: CategoryType;
+  categoryId?: string;
   accountId?: string;
 }
 
@@ -36,6 +37,7 @@ export interface TransactionsGroupedByCategory {
   categoryId: string;
   categoryName: string;
   categoryColor?: string;
+  categoryShortName?: string;
   amount: number;
 }
 

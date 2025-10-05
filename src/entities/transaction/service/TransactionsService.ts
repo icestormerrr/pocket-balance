@@ -54,10 +54,13 @@ export class TransactionsService implements ITransactionsService {
     return transactionsExtended.filter(tx => {
       let satisfies = true;
       if (filter.categoryType) {
-        satisfies = tx.categoryType === filter.categoryType;
+        satisfies &&= tx.categoryType === filter.categoryType;
       }
       if (filter.accountId) {
-        satisfies = tx.accountId === filter.accountId;
+        satisfies &&= tx.accountId === filter.accountId;
+      }
+      if (filter.categoryId) {
+        satisfies &&= tx.categoryId === filter.categoryId;
       }
       return satisfies;
     });
@@ -100,7 +103,7 @@ export class TransactionsService implements ITransactionsService {
     return summary;
   }
 
-  // TODO: добавить поддержку счетов и валют
+  // TODO: добавить валют
   async getCategoriesReport(filter: TransactionsFilter = {}): Promise<TransactionsGroupedByCategory[]> {
     const transactions = await this.getAll(filter);
     const categories = await this.categoriesService.getAll({});
@@ -117,6 +120,7 @@ export class TransactionsService implements ITransactionsService {
         categoryName: category?.name ?? "Неизвестная категория",
         amount,
         categoryColor: category?.color,
+        categoryShortName: category?.shortName,
       };
     });
   }
@@ -213,7 +217,7 @@ export class TransactionsService implements ITransactionsService {
     if (!tx.date || isNaN(Date.parse(tx.date))) {
       errors.push("Дата должна быть в формате ISO и быть валидной");
     }
-    console.log(tx, errors);
+
     if (errors.length > 0) {
       throw new Error(errors.join(" "));
     }

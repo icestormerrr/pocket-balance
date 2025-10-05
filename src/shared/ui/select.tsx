@@ -13,8 +13,8 @@ export type Option = {
 type SelectMobileProps = {
   title?: string;
   options: Option[];
-  value?: string;
-  placeholder: string;
+  value?: string | null;
+  placeholder?: string;
   onChange: (value: string | null, option: Option | null) => void;
   renderField?: (props: FieldProps) => ReactNode;
   renderOption?: (option: Option) => ReactNode;
@@ -44,15 +44,15 @@ export const SelectMobile = ({
     if (!open) setSearch("");
   }, [open]);
 
+  const handleOptionClick = (option: Option) => {
+    onChange(option.value !== value ? option.value : null, option);
+    setOpen(false);
+  };
+
   const defaultRenderOption = (option: Option) => (
     <Button
-      key={option.value}
       variant="ghost"
-      onClick={() => {
-        onChange(option.value, option);
-        setOpen(false);
-      }}
-      className={cn("justify-start", value === option.value && "bg-muted text-primary hover:bg-muted", "h-12")}
+      className={cn("justify-start h-12 w-full", value === option.value && "bg-muted text-primary hover:bg-muted")}
     >
       {option.label}
     </Button>
@@ -80,7 +80,11 @@ export const SelectMobile = ({
               {filteredOptions.length === 0 ? (
                 <div className="text-muted-foreground text-sm text-center py-6">Ничего не найдено</div>
               ) : (
-                filteredOptions.map(renderOption ?? defaultRenderOption)
+                filteredOptions.map(opt => (
+                  <div onClick={() => handleOptionClick(opt)} className="w-full" key={opt.value}>
+                    {renderOption ? renderOption(opt) : defaultRenderOption(opt)}
+                  </div>
+                ))
               )}
             </div>
           </div>
@@ -92,8 +96,8 @@ export const SelectMobile = ({
 
 type FieldProps = {
   className?: string;
-  value?: string;
-  placeholder: string;
+  value?: string | null;
+  placeholder?: string;
   options: Option[];
 };
 
