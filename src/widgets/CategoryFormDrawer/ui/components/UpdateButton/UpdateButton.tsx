@@ -1,4 +1,3 @@
-import {Save} from "lucide-react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
@@ -53,9 +52,8 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Button size="lg" onClick={handleUpdateButtonClick} disabled={!formState.isValid} className="w-full">
+    <Button size="lg" onClick={handleUpdateButtonClick} disabled={!formState.isValid}>
       Сохранить
-      <Save />
     </Button>
   );
 };

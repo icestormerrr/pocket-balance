@@ -2,7 +2,7 @@ import {z} from "zod";
 
 export const categorySchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, "Введите название"),
+  name: z.string().min(1, "Введите название").max(100, "Название слишком длинное"),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Неверный формат цвета"),
   type: z.enum(["income", "expense"], {required_error: "Выберите тип"}),
   shortName: z

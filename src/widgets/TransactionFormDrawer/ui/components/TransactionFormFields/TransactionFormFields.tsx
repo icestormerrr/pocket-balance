@@ -1,21 +1,22 @@
+import {ChevronRight, ChevronsUpDown} from "lucide-react";
 import {useMemo} from "react";
 import {useFormContext} from "react-hook-form";
 
+import {useAccounts} from "@/entities/account";
 import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
 import {DateConverter} from "@/shared/lib/datetime";
+import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
+import {Button} from "@/shared/ui/button";
+import {Card} from "@/shared/ui/card";
+import {Cell} from "@/shared/ui/cell";
+import {DatePickerMobile} from "@/shared/ui/date-picker";
+import {Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {FormControl, FormField, FormItem} from "@/shared/ui/form";
 import {Input} from "@/shared/ui/input";
 import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 import {Textarea} from "@/shared/ui/textarea";
 
-import {useAccounts} from "@/entities/account";
-import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
-import {Card} from "@/shared/ui/card";
-import {Cell} from "@/shared/ui/cell";
-import {DatePickerMobile} from "@/shared/ui/date-picker";
-import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
-import {ChevronRight, ChevronsUpDown} from "lucide-react";
 import type {TransactionsFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
@@ -174,31 +175,33 @@ export const TransactionFormFields = () => {
           control={control}
           name="comment"
           render={({field}) => (
-            <FormItem>
-              <Drawer repositionInputs={false}>
-                <DrawerTrigger asChild>
-                  <div>
-                    <Cell>
-                      <Cell.Content>
-                        <Cell.Content.Title>Комментарий</Cell.Content.Title>
-                        {field.value && <Cell.Content.Subtitle>{field.value}</Cell.Content.Subtitle>}
-                      </Cell.Content>
-                      <Cell.RightContent>
-                        <ChevronRight />
-                      </Cell.RightContent>
-                    </Cell>
-                  </div>
-                </DrawerTrigger>
+            <Drawer repositionInputs={false}>
+              <DrawerTrigger asChild>
+                <div>
+                  <Cell>
+                    <Cell.Content>
+                      <Cell.Content.Title>Комментарий</Cell.Content.Title>
+                      {field.value && <Cell.Content.Subtitle>{field.value}</Cell.Content.Subtitle>}
+                    </Cell.Content>
+                    <Cell.RightContent>
+                      <ChevronRight />
+                    </Cell.RightContent>
+                  </Cell>
+                </div>
+              </DrawerTrigger>
 
-                <DrawerContent className="px-4 pb-4 min-h-[80vh]">
-                  <DrawerHeader className="px-0 py-4">
-                    <DrawerTitle>Введите описание</DrawerTitle>
-                  </DrawerHeader>
+              <DrawerContent className="px-4 pb-4 min-h-[80vh]">
+                <DrawerHeader className="px-0 py-4">
+                  <DrawerTitle>Введите описание</DrawerTitle>
+                </DrawerHeader>
 
-                  <Textarea className="max-h-[250px]" autoFocus {...field} />
-                </DrawerContent>
-              </Drawer>
-            </FormItem>
+                <Textarea className="max-h-[250px]" autoFocus {...field} />
+
+                <DrawerClose className="flex justify-end">
+                  <Button className="mt-4 w-25">Готово</Button>
+                </DrawerClose>
+              </DrawerContent>
+            </Drawer>
           )}
         />
       </Card>

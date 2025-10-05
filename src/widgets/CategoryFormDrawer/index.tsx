@@ -4,6 +4,7 @@ import {FormProvider, useForm} from "react-hook-form";
 
 import {useCategory} from "@/entities/category";
 import {getStatusBarHeight} from "@/shared/lib/styling";
+import {Button} from "@/shared/ui/button";
 import {Drawer, DrawerContent, DrawerFooter} from "@/shared/ui/drawer";
 
 import {type CategoryFormState, categorySchema} from "./model/schema";
@@ -55,23 +56,20 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
         >
           <div className="mt-4">
             <CategoryFormFields />
+            <div className={"my-6"}>
+              <DeleteButton onSuccess={handleSuccessButtonClick} />
+            </div>
           </div>
 
           <DrawerFooter className="px-0">
             <div className={"flex justify-between"}>
+              <Button size={"lg"} variant={"outline"} onClick={handleSuccessButtonClick}>
+                Отмена
+              </Button>
               {id ? (
-                <>
-                  <div className="basis-[10%]">
-                    <DeleteButton onSuccess={handleSuccessButtonClick} />
-                  </div>
-                  <div className="basis-[85%]">
-                    <UpdateButton onSuccess={handleSuccessButtonClick} />
-                  </div>
-                </>
+                <UpdateButton onSuccess={handleSuccessButtonClick} />
               ) : (
-                <div className="basis-[100%]">
-                  <CreateButton onSuccess={handleSuccessButtonClick} />
-                </div>
+                <CreateButton onSuccess={handleSuccessButtonClick} />
               )}
             </div>
           </DrawerFooter>
