@@ -1,36 +1,34 @@
+import type {FC} from "react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
-import {useCreateTransaction} from "@/entities/transaction";
+import {useCreateAccount} from "@/entities/account";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
-import type {FC} from "react";
-import type {TransactionFormState} from "../../../model/schema";
+import type {AccountFormState} from "../../../model/schema";
 
 type Props = {
   onSuccess: () => void;
 };
 
 export const CreateButton: FC<Props> = ({onSuccess}) => {
-  const {mutate: createTransaction} = useCreateTransaction();
-  const {getValues, formState} = useFormContext<TransactionFormState>();
+  const {mutate: createAccount} = useCreateAccount();
+  const {getValues, formState} = useFormContext<AccountFormState>();
 
   const handleCreateButtonClick = () => {
     const formValues = getValues();
 
-    createTransaction(
+    createAccount(
       {
-        amount: formValues.amount,
-        categoryId: formValues.categoryId,
-        date: formValues.date,
-        comment: formValues.comment,
-        accountId: formValues.accountId,
+        name: formValues.name,
+        currencyCode: formValues.currencyCode,
+        startAmount: formValues.startAmount,
       },
       {
         onSuccess: () => {
           onSuccess();
-          toast("Операция успешно создана", {
+          toast("Счёт успешно создан", {
             action: {
               label: "ОК",
               onClick: () => console.log("Undo"),
@@ -40,7 +38,7 @@ export const CreateButton: FC<Props> = ({onSuccess}) => {
           });
         },
         onError: () => {
-          toast("Произошла ошибка при создании операции", {
+          toast("Произошла ошибка при создании счёта", {
             action: {
               label: "ОК",
               onClick: () => console.log("Undo"),

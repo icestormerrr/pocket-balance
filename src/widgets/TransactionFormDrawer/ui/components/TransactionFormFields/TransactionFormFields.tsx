@@ -17,10 +17,10 @@ import {SelectMobile} from "@/shared/ui/select";
 import {SegmentInput} from "@/shared/ui/tabs";
 import {Textarea} from "@/shared/ui/textarea";
 
-import type {TransactionsFormState} from "../../../model/schema";
+import type {TransactionFormState} from "../../../model/schema";
 
 export const TransactionFormFields = () => {
-  const {control, watch, setValue} = useFormContext<TransactionsFormState>();
+  const {control, watch, setValue} = useFormContext<TransactionFormState>();
   const categoryType = watch("categoryType");
 
   const {data: categories} = useCategories({type: categoryType});

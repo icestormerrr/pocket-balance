@@ -1,6 +1,6 @@
 import {useAccounts} from "@/entities/account";
 
-import {AccountCard} from "./ui/AccountCard/AccountCard";
+import {AccountsList} from "@/pages/accounts/ui/AccountsList/AccountsList";
 import {TotalBalance} from "./ui/TotalBalance/TotalBalance";
 
 // TODO: нет разбивки по валютам
@@ -13,11 +13,7 @@ const AccountsPage = () => {
         <h1 className="text-2xl font-semibold mb-1">Баланс</h1>
         <TotalBalance accounts={accounts ?? []} />
       </div>
-      <div className={"space-y-4"}>
-        {accounts?.map(account => (
-          <AccountCard account={account} />
-        ))}
-      </div>
+      {accounts && <AccountsList accounts={accounts} />}
     </div>
   );
 };

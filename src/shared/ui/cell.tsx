@@ -34,7 +34,7 @@ type ContentProps = {
 };
 
 const Content: FC<ContentProps> & {Title: typeof Title; Subtitle: typeof Subtitle} = props => {
-  return <div {...props} className="flex flex-col flex-1" />;
+  return <div {...props} className="flex flex-col flex-1 min-w-0" />;
 };
 
 type ContentTitleProps = {

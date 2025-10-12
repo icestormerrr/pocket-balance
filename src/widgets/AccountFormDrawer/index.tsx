@@ -2,13 +2,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
-import {useCategory} from "@/entities/category";
+import {useAccount} from "@/entities/account";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Drawer, DrawerContent, DrawerFooter} from "@/shared/ui/drawer";
 
-import {type CategoryFormState, categorySchema} from "./model/schema";
-import {CategoryFormFields} from "./ui/components/CategoryFormFields/CategoryFormFields";
+import {accountFormSchema, type AccountFormState} from "./model/schema";
+import {AccountFormFields} from "./ui/components/AccountFormFields/AccountFormFields";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
 import {DeleteButton} from "./ui/components/DeleteButton/DeleteButton";
 import {UpdateButton} from "./ui/components/UpdateButton/UpdateButton";
@@ -16,16 +16,21 @@ import {UpdateButton} from "./ui/components/UpdateButton/UpdateButton";
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  categoryId: string | undefined;
+  accountId?: string;
 };
 
-const defaultValues: CategoryFormState = {type: "expense", id: "", name: "", color: "", shortName: ""};
+const defaultValues: AccountFormState = {
+  id: "",
+  name: "",
+  startAmount: 0,
+  currencyCode: "",
+};
 
-const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) => {
-  const {refetch} = useCategory(categoryId);
+const AccountFormDrawer: FC<Props> = memo(({open, onOpenChange, accountId}) => {
+  const {refetch} = useAccount(accountId);
 
-  const form = useForm<CategoryFormState>({
-    resolver: zodResolver(categorySchema),
+  const form = useForm<AccountFormState>({
+    resolver: zodResolver(accountFormSchema),
     mode: "onChange",
     defaultValues,
   });
@@ -36,7 +41,7 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
 
     refetch().then(query => {
       if (query.data) {
-        form.reset({...query.data, shortName: query.data.shortName ?? ""});
+        form.reset(query.data);
       } else {
         form.reset(defaultValues);
       }
@@ -55,7 +60,7 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
           style={{minHeight: window.innerHeight - getStatusBarHeight()}}
         >
           <div className="mt-4">
-            <CategoryFormFields />
+            <AccountFormFields />
             {id && (
               <div className={"my-6"}>
                 <DeleteButton onSuccess={handleSuccessButtonClick} />
@@ -81,6 +86,6 @@ const CategoryFormDrawer: FC<Props> = memo(({open, onOpenChange, categoryId}) =>
   );
 });
 
-CategoryFormDrawer.displayName = "CategoryFormDrawer";
+AccountFormDrawer.displayName = "AccountFormDrawer";
 
-export default CategoryFormDrawer;
+export default AccountFormDrawer;

@@ -1,20 +1,19 @@
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
-import {useUpdateTransaction} from "@/entities/transaction";
+import {useUpdateAccount} from "@/entities/account";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
-import type {FC} from "react";
-import type {TransactionFormState} from "../../../model/schema";
+import type {AccountFormState} from "../../../model/schema";
 
 type Props = {
   onSuccess: () => void;
 };
 
-export const UpdateButton: FC<Props> = ({onSuccess}) => {
-  const {mutate: updateTransaction} = useUpdateTransaction();
-  const {getValues, formState} = useFormContext<TransactionFormState>();
+export const UpdateButton = ({onSuccess}: Props) => {
+  const {mutate: updateTransaction} = useUpdateAccount();
+  const {getValues, formState} = useFormContext<AccountFormState>();
 
   const handleUpdateButtonClick = () => {
     const formValues = getValues();
@@ -23,18 +22,16 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
     updateTransaction(
       {
         id: formValues.id,
-        tx: {
-          amount: formValues.amount,
-          categoryId: formValues.categoryId,
-          date: formValues.date,
-          comment: formValues.comment,
-          accountId: formValues.accountId,
+        data: {
+          name: formValues.name,
+          startAmount: formValues.startAmount,
+          currencyCode: formValues.currencyCode,
         },
       },
       {
         onSuccess: () => {
           onSuccess();
-          toast("Операция успешно сохранена", {
+          toast("Счёт успешно сохранён", {
             action: {
               label: "ОК",
               onClick: () => console.log("Undo"),
@@ -44,7 +41,7 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
           });
         },
         onError: () => {
-          toast("Произошла ошибка при сохранении операции", {
+          toast("Произошла ошибка при сохранении счёта", {
             action: {
               label: "ОК",
               onClick: () => console.log("Undo"),

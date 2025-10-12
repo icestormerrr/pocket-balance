@@ -12,4 +12,4 @@ export const transactionFormSchema = z.object({
   comment: z.string().max(200, "Комментарий слишком длинный").optional(),
 });
 
-export type TransactionsFormState = z.infer<typeof transactionFormSchema>;
+export type TransactionFormState = z.infer<typeof transactionFormSchema>;

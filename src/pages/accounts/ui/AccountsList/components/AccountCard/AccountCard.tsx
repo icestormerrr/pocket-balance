@@ -11,16 +11,21 @@ import {Cell} from "@/shared/ui/cell";
 
 type Props = {
   account: Account;
+  onClick?: (account: Account) => void;
 };
 
-export const AccountCard: FC<Props> = memo(({account}) => {
+export const AccountCard: FC<Props> = memo(({account, onClick}) => {
   const {data: summary} = useTransactionsSummary({accountId: account.id});
   const balance = summary ? account.startAmount + summary.income - summary.expense : 0;
 
   const {data: transactions} = useTransactions({accountId: account.id});
 
+  const handleClick = () => {
+    onClick?.(account);
+  };
+
   return (
-    <Card className="rounded-2xl shadow-md gap-6">
+    <Card className="rounded-2xl shadow-md gap-6" onClick={handleClick}>
       <CardHeader className="pb-0">
         <div className="flex items-center justify-between">
           <span className="text-xl font-semibold">

@@ -8,7 +8,7 @@ import {DateConverter} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {DeleteButton} from "@/widgets/TransactionFormDrawer/ui/components/DeleteButton/DeleteButton";
-import {type TransactionsFormState, transactionFormSchema} from "./model/schema";
+import {type TransactionFormState, transactionFormSchema} from "./model/schema";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
 import {TransactionFormFields} from "./ui/components/TransactionFormFields/TransactionFormFields";
 import {UpdateButton} from "./ui/components/UpdateButton/UpdateButton";
@@ -19,7 +19,7 @@ type Props = {
   transactionId?: string;
 };
 
-const defaultValues: TransactionsFormState = {
+const defaultValues: TransactionFormState = {
   date: DateConverter.dateToISO(new Date()),
   categoryType: "expense",
   categoryId: "",
@@ -29,10 +29,10 @@ const defaultValues: TransactionsFormState = {
   accountId: "",
 };
 
-const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionId}) => {
+const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionId}) => {
   const {refetch} = useTransaction(transactionId);
 
-  const form = useForm<TransactionsFormState>({
+  const form = useForm<TransactionFormState>({
     resolver: zodResolver(transactionFormSchema),
     mode: "onChange",
     defaultValues,
@@ -64,9 +64,11 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
         >
           <div className="mt-4">
             <TransactionFormFields />
-            <div className={"my-6"}>
-              <DeleteButton onSuccess={handleSuccessButtonClick} />
-            </div>
+            {id && (
+              <div className={"my-6"}>
+                <DeleteButton onSuccess={handleSuccessButtonClick} />
+              </div>
+            )}
           </div>
 
           <DrawerFooter className="px-0">
@@ -87,6 +89,6 @@ const TransactionsFormDrawer: FC<Props> = memo(({open, onOpenChange, transaction
   );
 });
 
-TransactionsFormDrawer.displayName = "OperationFormDrawer";
+TransactionFormDrawer.displayName = "TransactionFormDrawer";
 
-export default TransactionsFormDrawer;
+export default TransactionFormDrawer;

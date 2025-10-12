@@ -1,14 +1,12 @@
-export type Currency = "RUB" | "USD" | "KZT";
-
 export type Account = {
   id: string;
   name: string;
-  currencyCode: Currency;
+  currencyCode: string;
   startAmount: number;
   creationDatetime: string;
 };
 
-export const CURRENCY_OPTIONS: {label: string; value: Currency}[] = [
+export const CURRENCY_OPTIONS: {label: string; value: string}[] = [
   {label: "₽", value: "RUB"},
   {label: "$", value: "USD"},
   {label: "₸", value: "KZT"},

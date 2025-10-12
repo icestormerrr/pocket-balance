@@ -16,7 +16,7 @@ export const RootLayout = () => {
 
       <div
         style={{height: statusBar}}
-        className="fixed top-0 w-full bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        className="fixed top-0 w-full bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-1"
       />
 
       <Outlet />
