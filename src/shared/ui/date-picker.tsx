@@ -2,7 +2,7 @@ import {DateConverter} from "@/shared/lib/datetime";
 import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Calendar} from "@/shared/ui/calendar";
-import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
+import {Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {CalendarIcon} from "lucide-react";
 import {type ReactNode, useMemo} from "react";
 
@@ -66,6 +66,10 @@ export function DatePickerMobile({
         </DrawerHeader>
         {/* @ts-expect-error необходимо сужение типов в зависимости от mode */}
         <Calendar mode={mode} selected={value} onSelect={onChange} className="rounded-lg border w-full" />
+
+        <DrawerClose className="flex justify-end">
+          <Button className="mt-4 w-25">Готово</Button>
+        </DrawerClose>
       </DrawerContent>
     </Drawer>
   );

@@ -1,11 +1,10 @@
-import {ChevronRight, ChevronsUpDown} from "lucide-react";
+import {ChevronRight} from "lucide-react";
 import {useMemo} from "react";
 import {useFormContext} from "react-hook-form";
 
 import {useAccounts} from "@/entities/account";
 import {CATEGORY_TYPE_OPTIONS, useCategories} from "@/entities/category";
 import {DateConverter} from "@/shared/lib/datetime";
-import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
 import {Button} from "@/shared/ui/button";
 import {Card} from "@/shared/ui/card";
 import {Cell} from "@/shared/ui/cell";
@@ -38,33 +37,12 @@ export const TransactionFormFields = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2">
-      <FormField
-        control={control}
-        name="categoryId"
-        render={({field}) => (
-          <SelectMobile
-            {...field}
-            renderField={() => (
-              <div className={"flex justify-center"}>
-                <Avatar className={"h-[130px] w-[130px]"}>
-                  <AvatarFallback className={"text-5xl"}>
-                    {categoriesOptions.find(opt => opt.value === field.value)?.payload?.shortName ?? <ChevronsUpDown />}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
-            )}
-            options={categoriesOptions}
-            placeholder="Выберите категорию"
-          />
-        )}
-      />
-
+    <div className="flex flex-col gap-6">
       <FormField
         control={control}
         name="amount"
         render={({field}) => (
-          <FormItem className={"my-4"}>
+          <FormItem className={"mb-5 mt-20"}>
             <FormControl>
               <Input
                 {...field}
@@ -73,14 +51,15 @@ export const TransactionFormFields = () => {
                 type="number"
                 min={0}
                 inline
-                placeholder={"0₽"}
+                placeholder={"0"}
                 className={`h-auto w-full text-5xl font-bold text-center ${categoryType === "expense" ? "text-[var(--negative-accent)]" : "text-[var(--positive-accent)]"}`}
               />
             </FormControl>
           </FormItem>
         )}
       />
-      <Card className="w-full max-w-md rounded-xl shadow-sm cursor-pointer p-4">
+
+      <Card className="w-full rounded-xl p-4">
         <FormField
           control={control}
           name="categoryType"
@@ -102,37 +81,37 @@ export const TransactionFormFields = () => {
             </Cell>
           )}
         />
-
         <FormField
           control={control}
-          name="date"
+          name="categoryId"
           render={({field}) => (
-            <DatePickerMobile
-              mode={"single"}
-              value={field.value ? DateConverter.ISOToDate(field.value) : undefined}
-              onChange={date => {
-                field.onChange(DateConverter.dateToISO(date));
-              }}
-            >
-              <div>
-                <Cell>
-                  <Cell.Content>
-                    <Cell.Content.Title>Дата</Cell.Content.Title>
-                    {field.value && (
-                      <Cell.Content.Subtitle>
-                        {DateConverter.ISOToFormattedString(field.value, "DD.MM.YYYY")}
-                      </Cell.Content.Subtitle>
-                    )}
-                  </Cell.Content>
-                  <Cell.RightContent>
-                    <ChevronRight />
-                  </Cell.RightContent>
-                </Cell>
-              </div>
-            </DatePickerMobile>
+            <SelectMobile
+              {...field}
+              renderField={() => (
+                <div>
+                  <Cell>
+                    <Cell.Content>
+                      <Cell.Content.Title>Категория</Cell.Content.Title>
+                      {field.value && (
+                        <Cell.Content.Subtitle>
+                          {categoriesOptions.find(opt => opt.value === field.value)?.label}
+                        </Cell.Content.Subtitle>
+                      )}
+                    </Cell.Content>
+                    <Cell.RightContent>
+                      <ChevronRight />
+                    </Cell.RightContent>
+                  </Cell>
+                </div>
+              )}
+              options={categoriesOptions}
+              title="Выберите категорию"
+              placeholder="Выберите категорию"
+            />
           )}
         />
-
+      </Card>
+      <Card className="w-full rounded-xl p-4">
         <FormField
           control={control}
           name="accountId"
@@ -161,6 +140,35 @@ export const TransactionFormFields = () => {
               title="Выберите счёт"
               placeholder="Выберите счёт"
             />
+          )}
+        />
+        <FormField
+          control={control}
+          name="date"
+          render={({field}) => (
+            <DatePickerMobile
+              mode={"single"}
+              value={field.value ? DateConverter.ISOToDate(field.value) : undefined}
+              onChange={date => {
+                field.onChange(DateConverter.dateToISO(date));
+              }}
+            >
+              <div>
+                <Cell>
+                  <Cell.Content>
+                    <Cell.Content.Title>Дата</Cell.Content.Title>
+                    {field.value && (
+                      <Cell.Content.Subtitle>
+                        {DateConverter.ISOToFormattedString(field.value, "DD.MM.YYYY")}
+                      </Cell.Content.Subtitle>
+                    )}
+                  </Cell.Content>
+                  <Cell.RightContent>
+                    <ChevronRight />
+                  </Cell.RightContent>
+                </Cell>
+              </div>
+            </DatePickerMobile>
           )}
         />
 

@@ -6,6 +6,7 @@ import {FormProvider, useForm} from "react-hook-form";
 
 import {DateConverter} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
+import {GradientBlob} from "@/shared/ui/background";
 import {Button} from "@/shared/ui/button";
 import {DeleteButton} from "@/widgets/TransactionFormDrawer/ui/components/DeleteButton/DeleteButton";
 import {type TransactionFormState, transactionFormSchema} from "./model/schema";
@@ -57,12 +58,15 @@ const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionI
 
   return (
     <FormProvider {...form}>
-      <Drawer open={open} onOpenChange={onOpenChange} dismissible={false} repositionInputs={false}>
+      <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false} dismissible={false}>
         <DrawerContent
-          className="transition-all px-4 pb-4 mx-auto"
+          className={"overflow-hidden"}
           style={{minHeight: window.innerHeight - getStatusBarHeight()}}
+          hideBar
         >
-          <div className="mt-4">
+          <div className="p-4 relative overflow-hidden">
+            <GradientBlob colorFrom="#fff" colorTo="#fff" size={150} opacity={1} position="top" zIndex={-1} />
+
             <TransactionFormFields />
             {id && (
               <div className={"my-6"}>
@@ -71,7 +75,7 @@ const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionI
             )}
           </div>
 
-          <DrawerFooter className="px-0">
+          <DrawerFooter className="pb-8">
             <div className={"flex justify-between"}>
               <Button size={"lg"} variant={"outline"} onClick={handleSuccessButtonClick}>
                 Отмена
