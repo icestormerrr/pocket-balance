@@ -10,8 +10,8 @@ const navItems = [
   {label: "Операции", icon: Rows4, link: URLS.TransactionsPage.build()},
   {
     content: (
-      <div className="flex justify-center">
-        <CreateOperationButton key="central" className="mt-[-5px]" />
+      <div className="flex justify-center mt-[-5px]">
+        <CreateOperationButton key="central" />
       </div>
     ),
   },

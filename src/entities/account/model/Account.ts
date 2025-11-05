@@ -6,8 +6,4 @@ export type Account = {
   creationDatetime: string;
 };
 
-export const CURRENCY_OPTIONS: {label: string; value: string}[] = [
-  {label: "₽", value: "RUB"},
-  {label: "$", value: "USD"},
-  {label: "₸", value: "KZT"},
-];
+export const CURRENCY_OPTIONS: {label: string; value: string}[] = [{label: "₽", value: "RUB"}];

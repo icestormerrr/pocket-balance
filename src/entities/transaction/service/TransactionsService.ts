@@ -103,7 +103,7 @@ export class TransactionsService implements ITransactionsService {
     return summary;
   }
 
-  // TODO: добавить валют
+  // TODO: добавить поддержку валют
   async getCategoriesReport(filter: TransactionsFilter = {}): Promise<TransactionsGroupedByCategory[]> {
     const transactions = await this.getAll(filter);
     const categories = await this.categoriesService.getAll({});
