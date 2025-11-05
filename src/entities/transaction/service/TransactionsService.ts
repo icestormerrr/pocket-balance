@@ -15,7 +15,6 @@ import type {
   TransactionsFilter,
   TransactionsGroupedByCategory,
   TransactionsSummary,
-  TransactionsSummaryFilter,
   TransactionUpdatePayload,
 } from "./ITransactionsService";
 
@@ -85,7 +84,7 @@ export class TransactionsService implements ITransactionsService {
   }
 
   // TODO: добавить поддержку счетов и валют
-  async getSummary(filter: TransactionsSummaryFilter): Promise<TransactionsSummary> {
+  async getSummary(filter: TransactionsFilter): Promise<TransactionsSummary> {
     const transactions = await this.getAll(filter);
 
     const summary = transactions.reduce(

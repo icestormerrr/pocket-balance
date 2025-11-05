@@ -1,7 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 import type {Transaction} from "../model/Transaction";
-import type {TransactionsFilter, TransactionsSummaryFilter} from "../service/ITransactionsService";
+import type {TransactionsFilter} from "../service/ITransactionsService";
 import {transactionsService} from "../service/TransactionsService";
 
 export const useTransactions = (filter: TransactionsFilter) => {
@@ -26,9 +26,16 @@ export const useTransaction = (id?: string) => {
   });
 };
 
-export const useTransactionsSummary = (filter: TransactionsSummaryFilter) => {
+export const useTransactionsSummary = (filter: TransactionsFilter) => {
   return useQuery({
-    queryKey: ["transactionsSummary", filter.startDate, filter.endDate, filter.accountId],
+    queryKey: [
+      "transactionsSummary",
+      filter.startDate,
+      filter.endDate,
+      filter.categoryType,
+      filter.accountId,
+      filter.categoryId,
+    ],
     queryFn: () => transactionsService.getSummary(filter),
   });
 };

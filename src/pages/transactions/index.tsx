@@ -69,10 +69,12 @@ const TransactionsPage = () => {
     categoryId: categoryFilter ?? undefined,
     categoryType: (categoryTypeFilter as CategoryType) ?? undefined,
   });
-  const {data: summaryForPeriod} = useTransactionsSummary({
+  const {data: transactionsSummary} = useTransactionsSummary({
     startDate: dateFilter.startDate,
     endDate: dateFilter.endDate,
     accountId: accountFilter ?? undefined,
+    categoryId: categoryFilter ?? undefined,
+    categoryType: (categoryTypeFilter as CategoryType) ?? undefined,
   });
 
   const renderCategoryOption = (option: Option & {payload: TransactionsGroupedByCategory}) => {
@@ -106,7 +108,7 @@ const TransactionsPage = () => {
   return (
     <div className="p-4 space-y-4">
       <h1 className="flex justify-between items-center text-2xl font-bold mb-0">Операции</h1>
-      <div className="mb-0 -mx-4 p-4 flex gap-2 max-w-full overflow-x-auto no-scrollbar">
+      <div className="mb-0 -mx-4 p-4 flex gap-2 overflow-x-auto no-scrollbar">
         <Badge onClick={handleClickPeriodBadge}>
           Период <ChevronDown size={4} />{" "}
         </Badge>
@@ -181,7 +183,7 @@ const TransactionsPage = () => {
         )}
       </AnimatePresence>
 
-      <TransactionsStats summaryForPeriod={summaryForPeriod} />
+      <TransactionsStats transactionsSummary={transactionsSummary} />
       {transactions && <TransactionsList transactions={transactions} />}
     </div>
   );

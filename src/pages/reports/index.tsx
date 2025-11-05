@@ -28,11 +28,7 @@ const ReportsPage = () => {
         />
       </div>
 
-      <Card className="p-4 overflow-auto box-border" style={{height: contentHeight}}>
-        {REPORTS[activeReportKey].render()}
-      </Card>
-
-      <div style={{marginTop: GAP_HEIGHT}}>
+      <div style={{marginBottom: GAP_HEIGHT}}>
         <SelectMobile
           title={"Выберите отчёт"}
           placeholder={"Выберите отчёт"}
@@ -42,6 +38,10 @@ const ReportsPage = () => {
           hideSearch
         />
       </div>
+
+      <Card className="p-4 overflow-auto box-border" style={{height: contentHeight}}>
+        {REPORTS[activeReportKey].render()}
+      </Card>
     </div>
   );
 };

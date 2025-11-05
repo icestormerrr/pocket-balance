@@ -1,5 +1,6 @@
 import {type Transaction, TransactionCard, type TransactionExtended} from "@/entities/transaction";
 import {DateConverter} from "@/shared/lib/datetime";
+import {Card, CardTitle} from "@/shared/ui/card";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
 import {type FC, useCallback, useState} from "react";
 
@@ -51,22 +52,30 @@ const TransactionsList: FC<Props> = ({transactions}) => {
       />
 
       <div className="flex flex-col gap-3">
-        {transactions.map(transaction => {
-          const date = DateConverter.ISOToDate(transaction.date);
-          const day = date.getDate();
+        {transactions.length > 0 ? (
+          transactions.map(transaction => {
+            const date = DateConverter.ISOToDate(transaction.date);
+            const day = date.getDate();
 
-          const showDayHeader = day !== lastDay;
+            const showDayHeader = day !== lastDay;
 
-          lastDay = day;
+            lastDay = day;
 
-          return (
-            <div key={transaction.id}>
-              {showDayHeader && <div className="text-md font-semibold mt-3 mb-1 text-gray-600">{formatDay(date)}</div>}
+            return (
+              <div key={transaction.id}>
+                {showDayHeader && (
+                  <div className="text-md font-semibold mt-3 mb-1 text-gray-600">{formatDay(date)}</div>
+                )}
 
-              <TransactionCard transaction={transaction} onClick={handleTransactionClick} />
-            </div>
-          );
-        })}
+                <TransactionCard transaction={transaction} onClick={handleTransactionClick} />
+              </div>
+            );
+          })
+        ) : (
+          <Card>
+            <CardTitle className="text-bold text-center">Хм, похоже нет операций за этот период...</CardTitle>
+          </Card>
+        )}
       </div>
     </>
   );

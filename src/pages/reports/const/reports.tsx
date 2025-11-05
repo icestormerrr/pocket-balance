@@ -6,14 +6,13 @@ export type ReportKey = "categories" | "balance";
 
 export const REPORTS: Record<ReportKey, {label: string; render: () => JSX.Element}> = {
   categories: {
-    label: "По категориям",
+    label: "Отчёт по категориям",
     render: () => <CategoriesReport />,
   },
   balance: {
-    label: "Баланс",
+    label: "Отчёт по балансу",
     render: () => <BalanceReport />,
   },
 };
 
-// @ts-ignore
-export const REPORT_OPTIONS = Object.keys(REPORTS).map(key => ({label: REPORTS[key].label, value: key}));
+export const REPORT_OPTIONS = Object.keys(REPORTS).map(key => ({label: REPORTS[key as ReportKey].label, value: key}));
