@@ -1,4 +1,3 @@
-import {ChevronRight} from "lucide-react";
 import type {FC} from "react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
@@ -53,9 +52,6 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
         <Cell.Content>
           <span className="text-[var(--negative-accent)]">Удалить</span>
         </Cell.Content>
-        <Cell.RightContent>
-          <ChevronRight />
-        </Cell.RightContent>
       </Cell>
     </Card>
   );

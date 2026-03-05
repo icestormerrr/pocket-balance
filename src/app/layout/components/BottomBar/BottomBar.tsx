@@ -1,12 +1,12 @@
 import {BOTTOM_BAR_HEIGHT, cn} from "@/shared/lib/styling";
-import {Bolt, ChartCandlestick, Rows4, WalletCards} from "lucide-react";
+import {Bolt, ChartCandlestick, Landmark, Rows4} from "lucide-react";
 
 import {URLS} from "@/shared/const/urls";
 import {Link, useRouterState} from "@tanstack/react-router";
 import {CreateOperationButton} from "./components/CreateOperationButton";
 
 const navItems = [
-  {label: "Счета", icon: WalletCards, link: URLS.AccountsPage.build()},
+  {label: "Счета", icon: Landmark, link: URLS.AccountsPage.build()},
   {label: "Операции", icon: Rows4, link: URLS.TransactionsPage.build()},
   {
     content: (
