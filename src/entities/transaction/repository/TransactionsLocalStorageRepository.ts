@@ -1,6 +1,6 @@
-import {DateComparator, DateConverter} from "@/shared/lib/datetime";
+﻿import {DateComparator, DateConverter} from "@/shared/lib/datetime";
 import type {Transaction} from "../model/Transaction";
-import type {ITransactionsRepository} from "./ITransactionsRepository";
+import type {ITransactionsRepository, TransactionsRepositoryFilter} from "./ITransactionsRepository";
 
 const STORAGE_KEY = "transactions";
 
@@ -14,12 +14,20 @@ function save(transactions: Transaction[]) {
 }
 
 export class TransactionsLocalStorageRepository implements ITransactionsRepository {
-  // возможный неожиданный эффект: сортирует по датам
-  async getAll(filter: {startDate?: string; endDate?: string}): Promise<Transaction[]> {
+  // Возможный неочевидный эффект: сортирует по датам
+  async getAll(filter: TransactionsRepositoryFilter): Promise<Transaction[]> {
     const raw = load();
 
     return raw
       .filter(tx => {
+        if (filter.accountId && tx.accountId !== filter.accountId) {
+          return false;
+        }
+
+        if (filter.categoryIds && !filter.categoryIds.has(tx.categoryId)) {
+          return false;
+        }
+
         const date = DateConverter.ISOToDate(tx.date);
 
         if (filter.startDate && filter.endDate) {

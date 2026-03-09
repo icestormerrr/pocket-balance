@@ -5,6 +5,12 @@ import type {Transaction} from "../model/Transaction";
 export interface ITransactionsService {
   getAll(filter: TransactionsFilter): Promise<TransactionExtended[]>;
   getById(id: string): Promise<TransactionExtended | null>;
+  create(tx: TransactionCreatePayload): Promise<Transaction>;
+  update(id: string, tx: TransactionUpdatePayload): Promise<Transaction | null>;
+  delete(id: string): Promise<void>;
+}
+
+export interface IAnalyticService {
   getCategoriesReport(filter: TransactionsFilter): Promise<TransactionsGroupedByCategory[]>;
   getBalanceReport(opts: {
     granularity: "year" | "month" | "day";
@@ -13,9 +19,6 @@ export interface ITransactionsService {
   }): Promise<BalanceByPeriod[]>;
   getSummary(filter: TransactionsSummaryFilter): Promise<TransactionsSummary>;
   getUniqYears(): Promise<number[]>;
-  create(tx: TransactionCreatePayload): Promise<Transaction>;
-  update(id: string, tx: TransactionUpdatePayload): Promise<Transaction | null>;
-  delete(id: string): Promise<void>;
 }
 
 export interface TransactionsFilter {

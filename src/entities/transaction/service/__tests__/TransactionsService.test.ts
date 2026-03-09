@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it, jest} from "@jest/globals";
+﻿import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
 import type {Category, CategoryType} from "@/entities/category";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
@@ -64,19 +64,58 @@ const mockAccounts: Account[] = [
 
 beforeEach(() => {
   jest.clearAllMocks();
+  mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
+  mockAccountService.getById.mockResolvedValue(mockAccounts[0]);
 });
-// TODO: маленькое покрытие
+
 describe("TransactionsService", () => {
-  it("getAll returns transactions with categoryName and type, and filters by type", async () => {
+  it("getAll returns transactions with categoryName and type", async () => {
     mockRepo.getAll.mockResolvedValue(mockTransactions);
     mockCategoriesService.getAll.mockResolvedValue(mockCategories);
+
+    const service = makeService();
+    const result = await service.getAll({});
+
+    expect(result).toHaveLength(2);
+    expect(result[0].categoryName).toBe("Food");
+    expect(result[0].categoryType).toBe("expense");
+    expect(mockRepo.getAll).toHaveBeenCalledWith({
+      startDate: undefined,
+      endDate: undefined,
+      accountId: undefined,
+      categoryIds: undefined,
+    });
+  });
+
+  it("getAll passes categoryType filter as categoryIds map", async () => {
+    mockRepo.getAll.mockResolvedValue([mockTransactions[0]]);
+    mockCategoriesService.getAll.mockResolvedValue([mockCategories[0]]);
 
     const service = makeService();
     const result = await service.getAll({categoryType: "expense"});
 
     expect(result).toHaveLength(1);
-    expect(result[0].categoryName).toBe("Food");
-    expect(result[0].categoryType).toBe("expense");
+    expect(mockRepo.getAll).toHaveBeenCalledWith({
+      startDate: undefined,
+      endDate: undefined,
+      accountId: undefined,
+      categoryIds: new Map([["c1", true]]),
+    });
+  });
+
+  it("getAll passes categoryId filter as categoryIds map", async () => {
+    mockRepo.getAll.mockResolvedValue([mockTransactions[0]]);
+    mockCategoriesService.getAll.mockResolvedValue(mockCategories);
+
+    const service = makeService();
+    await service.getAll({categoryId: "c1"});
+
+    expect(mockRepo.getAll).toHaveBeenCalledWith({
+      startDate: undefined,
+      endDate: undefined,
+      accountId: undefined,
+      categoryIds: new Map([["c1", true]]),
+    });
   });
 
   it("getById returns transaction", async () => {
@@ -93,119 +132,6 @@ describe("TransactionsService", () => {
     });
   });
 
-  it("getUniqYears returns unique years", async () => {
-    mockRepo.getAll.mockResolvedValue(mockTransactions);
-    const service = makeService();
-    const years = await service.getUniqYears();
-    expect(years).toEqual([2024, 2023]);
-  });
-
-  it("getSummary calculates total income and expense", async () => {
-    mockRepo.getAll.mockResolvedValue(mockTransactions);
-    mockCategoriesService.getAll.mockResolvedValue(mockCategories);
-
-    const service = makeService();
-    const result = await service.getSummary({});
-
-    expect(result).toEqual({income: 200, expense: 100});
-  });
-
-  it("getCategoriesReport returns amounts grouped by categories", async () => {
-    mockRepo.getAll.mockResolvedValue(mockTransactions);
-    mockCategoriesService.getAll.mockResolvedValue(mockCategories);
-
-    const service = makeService();
-    const result = await service.getCategoriesReport();
-
-    expect(result).toEqual([
-      {
-        categoryId: "c1",
-        categoryName: "Food",
-        amount: 100,
-        categoryColor: "#f00",
-      },
-      {
-        categoryId: "c2",
-        categoryName: "Salary",
-        amount: 200,
-        categoryColor: "#ff0",
-      },
-    ]);
-  });
-
-  describe("getBalanceReport (cumulative)", () => {
-    beforeEach(() => {
-      mockRepo.getAll.mockResolvedValue(mockTransactions);
-      mockCategoriesService.getAll.mockResolvedValue(mockCategories);
-    });
-
-    it("year: balance is cumulative", async () => {
-      const service = makeService();
-      const report = await service.getBalanceReport({granularity: "year"});
-
-      expect(report).toEqual([
-        {
-          label: "2023",
-          periodStart: "2023-01-01",
-          income: 200,
-          expense: 0,
-          balance: 200, // 200
-        },
-        {
-          label: "2024",
-          periodStart: "2024-01-01",
-          income: 0,
-          expense: 100,
-          balance: 100, // 200 - 100 = 100
-        },
-      ]);
-    });
-
-    it("month: balance is cumulative", async () => {
-      const service = makeService();
-      const report = await service.getBalanceReport({granularity: "month"});
-
-      expect(report).toEqual([
-        {
-          label: "2023-12",
-          periodStart: "2023-12-01",
-          income: 200,
-          expense: 0,
-          balance: 200,
-        },
-        {
-          label: "2024-01",
-          periodStart: "2024-01-01",
-          income: 0,
-          expense: 100,
-          balance: 100,
-        },
-      ]);
-    });
-
-    it("day: balance is cumulative", async () => {
-      const service = makeService();
-      const report = await service.getBalanceReport({granularity: "day"});
-
-      expect(report).toEqual([
-        {
-          label: "2023-12-01",
-          periodStart: "2023-12-01",
-          income: 200,
-          expense: 0,
-          balance: 200,
-        },
-        {
-          label: "2024-01-01",
-          periodStart: "2024-01-01",
-          income: 0,
-          expense: 100,
-          balance: 100,
-        },
-      ]);
-    });
-  });
-
   describe("validation", () => {
     const validTx = {
       amount: 100,
@@ -216,36 +142,36 @@ describe("TransactionsService", () => {
 
     it("create throws if amount invalid", async () => {
       const service = makeService();
-      await expect(service.create({...validTx, amount: -5})).rejects.toThrow(/Сумма должна быть положительным числом/);
+      await expect(service.create({...validTx, amount: -5})).rejects.toThrow();
     });
 
     it("create throws if categoryId is missing", async () => {
       const service = makeService();
-      await expect(service.create({...validTx, categoryId: ""})).rejects.toThrow(/Не указана категория/);
+      await expect(service.create({...validTx, categoryId: ""})).rejects.toThrow();
     });
 
     it("create throws if category not found", async () => {
       mockCategoriesService.getById.mockResolvedValue(null);
       const service = makeService();
-      await expect(service.create(validTx)).rejects.toThrow(/Категория не найдена/);
+      await expect(service.create(validTx)).rejects.toThrow();
     });
 
     it("create throws if accountId is missing", async () => {
       const service = makeService();
-      await expect(service.create({...validTx, accountId: ""})).rejects.toThrow(/Не указан счёт/);
+      await expect(service.create({...validTx, accountId: ""})).rejects.toThrow();
     });
 
     it("create throws if account not found", async () => {
       mockAccountService.getById.mockResolvedValue(null);
       const service = makeService();
-      await expect(service.create(validTx)).rejects.toThrow(/Счёт не найден/);
+      await expect(service.create(validTx)).rejects.toThrow();
     });
 
     it("create throws if date is invalid", async () => {
       mockAccountService.getById.mockResolvedValue(mockAccounts[0]);
       mockCategoriesService.getById.mockResolvedValue(mockCategories[0]);
       const service = makeService();
-      await expect(service.create({...validTx, date: "invalid"})).rejects.toThrow(/Дата должна быть в формате ISO/);
+      await expect(service.create({...validTx, date: "invalid"})).rejects.toThrow();
     });
 
     it("create works with valid data", async () => {

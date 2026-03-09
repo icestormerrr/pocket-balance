@@ -1,6 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 import type {Transaction} from "../model/Transaction";
+import {analyticService} from "../service/AnalyticService";
 import type {TransactionsFilter} from "../service/ITransactionsService";
 import {transactionsService} from "../service/TransactionsService";
 
@@ -36,7 +37,7 @@ export const useTransactionsSummary = (filter: TransactionsFilter) => {
       filter.accountId,
       filter.categoryId,
     ],
-    queryFn: () => transactionsService.getSummary(filter),
+    queryFn: () => analyticService.getSummary(filter),
   });
 };
 
@@ -50,7 +51,7 @@ export const useCategoriesReport = (filter: TransactionsFilter) => {
       filter.accountId,
       filter.categoryId,
     ],
-    queryFn: () => transactionsService.getCategoriesReport(filter),
+    queryFn: () => analyticService.getCategoriesReport(filter),
     enabled: !!filter.categoryType,
   });
 };
@@ -66,14 +67,14 @@ export const useBalanceReport = ({
 }) => {
   return useQuery({
     queryKey: ["transactionsBalanceReport", startDate, endDate, granularity],
-    queryFn: () => transactionsService.getBalanceReport({startDate, endDate, granularity}),
+    queryFn: () => analyticService.getBalanceReport({startDate, endDate, granularity}),
   });
 };
 
 export const useTransactionsYears = () => {
   return useQuery({
     queryKey: ["transactionsYears"],
-    queryFn: () => transactionsService.getUniqYears(),
+    queryFn: () => analyticService.getUniqYears(),
   });
 };
 
