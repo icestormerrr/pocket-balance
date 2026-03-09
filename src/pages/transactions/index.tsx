@@ -22,6 +22,8 @@ import TransactionsList from "./ui/TransactionsList/TransactionsList";
 import {TransactionsStats} from "./ui/TransactionsStats/TransactionsStats";
 
 const TransactionsPage = () => {
+  const [excludeTransfersFilter, setExcludeTransfersFilter] = useState(true);
+
   const [showDateFilter, setShowDateFilter] = useState(false);
   const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>(() => {
     const {startDate, endDate} = DateCreator.createPeriod(new Date().getFullYear(), new Date().getMonth());
@@ -43,6 +45,7 @@ const TransactionsPage = () => {
     endDate: dateFilter.endDate,
     accountId: accountFilter ?? undefined,
     categoryType: (categoryTypeFilter as CategoryType) ?? undefined,
+    excludeTransfers: excludeTransfersFilter,
   });
   const categoriesOptions = useMemo(
     () =>
@@ -68,6 +71,7 @@ const TransactionsPage = () => {
     accountId: accountFilter ?? undefined,
     categoryId: categoryFilter ?? undefined,
     categoryType: (categoryTypeFilter as CategoryType) ?? undefined,
+    excludeTransfers: excludeTransfersFilter,
   });
   const {data: transactionsSummary} = useTransactionsSummary({
     startDate: dateFilter.startDate,
@@ -75,6 +79,7 @@ const TransactionsPage = () => {
     accountId: accountFilter ?? undefined,
     categoryId: categoryFilter ?? undefined,
     categoryType: (categoryTypeFilter as CategoryType) ?? undefined,
+    excludeTransfers: excludeTransfersFilter,
   });
 
   const renderCategoryOption = (option: Option & {payload: TransactionsGroupedByCategory}) => {
@@ -128,6 +133,13 @@ const TransactionsPage = () => {
           options={accountsOptions}
           title="Выберите счёт"
         />
+
+        <Badge
+          variant={excludeTransfersFilter ? "default" : "outline"}
+          onClick={() => setExcludeTransfersFilter(o => !o)}
+        >
+          Без переводов
+        </Badge>
 
         <SelectMobile
           value={categoryTypeFilter}

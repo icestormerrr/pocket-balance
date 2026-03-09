@@ -5,4 +5,8 @@ export type Transaction = {
   accountId: string;
   date: string;
   comment?: string;
+  transferId?: string;
 };
+
+export const TRANSFER_OUT_CATEGORY_ID = "transfer_out";
+export const TRANSFER_IN_CATEGORY_ID = "transfer_in";

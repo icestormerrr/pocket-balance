@@ -15,6 +15,9 @@ const mockRepo: jest.Mocked<ITransactionsRepository> = {
   create: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
+  createTransfer: jest.fn(),
+  deleteTransfer: jest.fn(),
+  updateTransfer: jest.fn(),
 };
 
 const mockCategoriesService: jest.Mocked<ICategoriesService> = {
@@ -32,7 +35,6 @@ const mockAccountService: jest.Mocked<IAccountsService> = {
   update: jest.fn(),
   delete: jest.fn(),
 };
-
 const makeService = () => new TransactionsService(mockRepo, mockCategoriesService, mockAccountService);
 
 const mockTransactions: Transaction[] = [
@@ -204,3 +206,4 @@ describe("TransactionsService", () => {
     expect(mockRepo.delete).toHaveBeenCalledWith("1");
   });
 });
+

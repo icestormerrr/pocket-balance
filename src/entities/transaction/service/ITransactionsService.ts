@@ -1,4 +1,4 @@
-import type {CategoryType} from "@/entities/category/model/Category";
+﻿import type {CategoryType} from "@/entities/category/model/Category";
 
 import type {Transaction} from "../model/Transaction";
 
@@ -8,17 +8,11 @@ export interface ITransactionsService {
   create(tx: TransactionCreatePayload): Promise<Transaction>;
   update(id: string, tx: TransactionUpdatePayload): Promise<Transaction | null>;
   delete(id: string): Promise<void>;
-}
 
-export interface IAnalyticService {
-  getCategoriesReport(filter: TransactionsFilter): Promise<TransactionsGroupedByCategory[]>;
-  getBalanceReport(opts: {
-    granularity: "year" | "month" | "day";
-    startDate?: string;
-    endDate?: string;
-  }): Promise<BalanceByPeriod[]>;
-  getSummary(filter: TransactionsSummaryFilter): Promise<TransactionsSummary>;
-  getUniqYears(): Promise<number[]>;
+  getTransferById(transferId: string): Promise<TransferExtended | null>;
+  createTransfer(payload: TransferPayload): Promise<[Transaction, Transaction]>;
+  updateTransfer(transferId: string, payload: TransferPayload): Promise<void>;
+  deleteTransfer(transferId: string): Promise<void>;
 }
 
 export interface TransactionsFilter {
@@ -27,6 +21,7 @@ export interface TransactionsFilter {
   categoryType?: CategoryType;
   categoryId?: string;
   accountId?: string;
+  excludeTransfers?: boolean;
 }
 
 export interface TransactionExtended extends Transaction {
@@ -36,33 +31,18 @@ export interface TransactionExtended extends Transaction {
   accountName?: string;
 }
 
-export interface TransactionsGroupedByCategory {
-  categoryId: string;
-  categoryName: string;
-  categoryColor?: string;
-  categoryShortName?: string;
-  amount: number;
-}
-
-export interface BalanceByPeriod {
-  label: string;
-  periodStart: string;
-  income: number;
-  expense: number;
-  balance: number;
-}
-
-export interface TransactionsSummaryFilter {
-  startDate?: string;
-  endDate?: string;
-  accountId?: string;
-}
-
-export interface TransactionsSummary {
-  income: number;
-  expense: number;
-}
-
 export type TransactionCreatePayload = Omit<Transaction, "id">;
 
 export type TransactionUpdatePayload = Partial<Omit<Transaction, "id">>;
+
+export type TransferPayload = {
+  fromAccountId: string;
+  toAccountId: string;
+  amount: number;
+  date: string;
+};
+
+export type TransferExtended = TransferPayload & {
+  transferId: string;
+};
+

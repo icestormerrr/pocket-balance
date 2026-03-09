@@ -3,7 +3,7 @@ import type {ICategoriesService} from "@/entities/category/service/ICategoriesSe
 
 import {accountsService} from "@/entities/account/service/AccountsService";
 import type {IAccountsService} from "@/entities/account/service/IAccountsService";
-import type {Transaction} from "../model/Transaction";
+import {type Transaction, TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID} from "../model/Transaction";
 import type {ITransactionsRepository} from "../repository/ITransactionsRepository";
 import {TransactionsLocalStorageRepository} from "../repository/TransactionsLocalStorageRepository";
 import type {
@@ -12,6 +12,8 @@ import type {
   TransactionExtended,
   TransactionsFilter,
   TransactionUpdatePayload,
+  TransferExtended,
+  TransferPayload,
 } from "./ITransactionsService";
 
 export class TransactionsService implements ITransactionsService {
@@ -53,9 +55,18 @@ export class TransactionsService implements ITransactionsService {
       endDate: filter.endDate,
       accountId: filter.accountId,
       categoryIds: categoryIds ? new Map(categoryIds.map(id => [id, true])) : undefined,
+      withoutTransactions: filter.excludeTransfers,
     });
 
     return transactions.map(tx => {
+      if (tx.transferId) {
+        return {
+          ...tx,
+          categoryName: tx.categoryId === TRANSFER_IN_CATEGORY_ID ? "Входящий перевод" : "Исходящий перевод",
+          categoryType: tx.categoryId === TRANSFER_IN_CATEGORY_ID ? "income" : "expense",
+          categoryShortName: "💸",
+        };
+      }
       const category = categoriesMap.get(tx.categoryId);
 
       return {
@@ -74,7 +85,43 @@ export class TransactionsService implements ITransactionsService {
 
     const category = await this.categoriesService.getById(tx.categoryId);
 
+    if (tx.transferId) {
+      return {
+        ...tx,
+        categoryName: tx.categoryId === TRANSFER_IN_CATEGORY_ID ? "Входящий перевод" : "Исходящий перевод",
+        categoryType: tx.categoryId === TRANSFER_IN_CATEGORY_ID ? "income" : "expense",
+        categoryShortName: "💸",
+      };
+    }
+
     return {...tx, categoryType: category?.type, categoryName: category?.name ?? "Неизвестная категория"};
+  }
+
+  async getTransferById(transferId: string): Promise<TransferExtended | null> {
+    const transferTxs = await this.repository.getAll({transferId});
+
+    if (transferTxs.length === 0) {
+      return null;
+    }
+
+    if (transferTxs.length !== 2) {
+      throw new Error("Transfer corrupted");
+    }
+
+    const fromTx = transferTxs.find(tx => tx.categoryId === TRANSFER_OUT_CATEGORY_ID);
+    const toTx = transferTxs.find(tx => tx.categoryId === TRANSFER_IN_CATEGORY_ID);
+
+    if (!fromTx || !toTx) {
+      throw new Error("Transfer corrupted");
+    }
+
+    return {
+      transferId,
+      fromAccountId: fromTx.accountId,
+      toAccountId: toTx.accountId,
+      amount: fromTx.amount,
+      date: fromTx.date,
+    };
   }
 
   // TODO: дописать проверку на лишние поля
@@ -123,7 +170,70 @@ export class TransactionsService implements ITransactionsService {
   }
 
   async delete(id: string): Promise<void> {
+    const tx = await this.repository.getById(id);
+
+    if (tx?.transferId) {
+      throw new Error("Нельзя удалить транзакцию перевода напрямую");
+    }
     return this.repository.delete(id);
+  }
+
+  private async validateTransfer(fromAccountId: string, toAccountId: string, amount: number, date: string) {
+    const errors: string[] = [];
+
+    if (!fromAccountId || !toAccountId) {
+      errors.push("Не указаны счета");
+    }
+
+    if (fromAccountId === toAccountId) {
+      errors.push("Счета должны отличаться");
+    }
+
+    if (amount <= 0) {
+      errors.push("Сумма должна быть положительной");
+    }
+
+    if (!date || isNaN(Date.parse(date))) {
+      errors.push("Некорректная дата");
+    }
+
+    const from = await this.accountService.getById(fromAccountId);
+    const to = await this.accountService.getById(toAccountId);
+
+    if (!from) errors.push("Счет отправителя не найден");
+    if (!to) errors.push("Счет получателя не найден");
+
+    if (errors.length) {
+      throw new Error(errors.join(" "));
+    }
+  }
+
+  async createTransfer(payload: TransferPayload) {
+    await this.validateTransfer(payload.fromAccountId, payload.toAccountId, payload.amount, payload.date);
+
+    return this.repository.createTransfer(
+      {
+        accountId: payload.fromAccountId,
+        categoryId: TRANSFER_OUT_CATEGORY_ID,
+        amount: payload.amount,
+        date: payload.date,
+      },
+      {
+        accountId: payload.toAccountId,
+        categoryId: TRANSFER_IN_CATEGORY_ID,
+        amount: payload.amount,
+        date: payload.date,
+      }
+    );
+  }
+  async updateTransfer(transferId: string, payload: TransferPayload) {
+    await this.validateTransfer(payload.fromAccountId, payload.toAccountId, payload.amount, payload.date);
+
+    await this.repository.updateTransfer(transferId, payload);
+  }
+
+  async deleteTransfer(transferId: string) {
+    await this.repository.deleteTransfer(transferId);
   }
 }
 

@@ -2,6 +2,7 @@ import {type Transaction, TransactionCard, type TransactionExtended} from "@/ent
 import {DateConverter} from "@/shared/lib/datetime";
 import {Card, CardTitle} from "@/shared/ui/card";
 import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
+import TransferFormDrawer from "@/widgets/TransferFormDrawer";
 import {AnimatePresence, motion} from "framer-motion";
 import {type FC, useCallback, useState} from "react";
 
@@ -29,17 +30,24 @@ function formatDay(date: Date): string {
 }
 
 const TransactionsList: FC<Props> = ({transactions}) => {
-  const [open, setOpen] = useState(false);
+  const [isCommonTransactionOpen, setIsCommonTransactionOpen] = useState(false);
+  const [isTransferOpen, setIsTransferOpen] = useState(false);
+
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction>();
 
   const handleTransactionClick = useCallback((transaction: Transaction) => {
-    setOpen(true);
+    if (transaction.transferId) {
+      setIsTransferOpen(true);
+    } else {
+      setIsCommonTransactionOpen(true);
+    }
     setSelectedTransaction(transaction);
   }, []);
 
   const handleCloseTransactionFormDrawer = useCallback(() => {
-    setOpen(false);
+    setIsCommonTransactionOpen(false);
     setSelectedTransaction(undefined);
+    setIsTransferOpen(false);
   }, []);
 
   let lastDay = -1;
@@ -51,9 +59,15 @@ const TransactionsList: FC<Props> = ({transactions}) => {
   return (
     <>
       <TransactionFormDrawer
-        open={open}
+        open={isCommonTransactionOpen}
         onOpenChange={handleCloseTransactionFormDrawer}
         transactionId={selectedTransaction?.id}
+      />
+
+      <TransferFormDrawer
+        open={isTransferOpen}
+        onOpenChange={setIsTransferOpen}
+        transferId={selectedTransaction?.transferId}
       />
 
       <motion.div

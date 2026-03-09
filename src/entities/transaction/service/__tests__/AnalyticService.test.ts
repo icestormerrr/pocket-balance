@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it, jest} from "@jest/globals";
+﻿import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
 import type {Category, CategoryType} from "@/entities/category";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
@@ -18,6 +18,9 @@ const mockRepo: jest.Mocked<ITransactionsRepository> = {
   create: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
+  createTransfer: jest.fn(),
+  deleteTransfer: jest.fn(),
+  updateTransfer: jest.fn(),
 };
 
 const mockCategoriesService: jest.Mocked<ICategoriesService> = {
@@ -194,4 +197,5 @@ describe("AnalyticService", () => {
     });
   });
 });
+
 

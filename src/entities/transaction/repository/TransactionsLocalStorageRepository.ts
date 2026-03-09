@@ -1,6 +1,6 @@
 ﻿import {DateComparator, DateConverter} from "@/shared/lib/datetime";
-import type {Transaction} from "../model/Transaction";
-import type {ITransactionsRepository, TransactionsRepositoryFilter} from "./ITransactionsRepository";
+import {type Transaction, TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID} from "../model/Transaction";
+import type {ITransactionsRepository, TransactionsRepositoryFilter, TransferPayload} from "./ITransactionsRepository";
 
 const STORAGE_KEY = "transactions";
 
@@ -20,11 +20,19 @@ export class TransactionsLocalStorageRepository implements ITransactionsReposito
 
     return raw
       .filter(tx => {
+        if (filter.transferId && tx.transferId !== filter.transferId) {
+          return false;
+        }
+
         if (filter.accountId && tx.accountId !== filter.accountId) {
           return false;
         }
 
         if (filter.categoryIds && !filter.categoryIds.has(tx.categoryId)) {
+          return false;
+        }
+
+        if (filter.withoutTransactions && !!tx.transferId) {
           return false;
         }
 
@@ -80,4 +88,77 @@ export class TransactionsLocalStorageRepository implements ITransactionsReposito
     const transactions = load().filter(tx => tx.id !== id);
     save(transactions);
   }
+
+  async createTransfer(
+    from: Omit<Transaction, "id">,
+    to: Omit<Transaction, "id">
+  ): Promise<[Transaction, Transaction]> {
+    const transactions = load();
+
+    const transferId = crypto.randomUUID();
+
+    const fromTx: Transaction = {
+      ...from,
+      id: crypto.randomUUID(),
+      transferId,
+    };
+
+    const toTx: Transaction = {
+      ...to,
+      id: crypto.randomUUID(),
+      transferId,
+    };
+
+    transactions.push(fromTx);
+    transactions.push(toTx);
+
+    save(transactions);
+
+    return [fromTx, toTx];
+  }
+
+  async deleteTransfer(transferId: string): Promise<void> {
+    const transactions = load();
+
+    const filtered = transactions.filter(tx => tx.transferId !== transferId);
+
+    save(filtered);
+  }
+
+  async updateTransfer(transferId: string, payload: TransferPayload): Promise<void> {
+    const transactions = load();
+
+    const transferTxs = transactions.filter(tx => tx.transferId === transferId);
+
+    if (transferTxs.length !== 2) {
+      throw new Error("Transfer corrupted");
+    }
+
+    // удаляем старые
+    const filtered = transactions.filter(tx => tx.transferId !== transferId);
+
+    // создаём новые
+    const newFromTx: Transaction = {
+      id: crypto.randomUUID(),
+      accountId: payload.fromAccountId,
+      categoryId: TRANSFER_OUT_CATEGORY_ID,
+      amount: payload.amount,
+      date: payload.date,
+      transferId,
+    };
+
+    const newToTx: Transaction = {
+      id: crypto.randomUUID(),
+      accountId: payload.toAccountId,
+      categoryId: TRANSFER_IN_CATEGORY_ID,
+      amount: payload.amount,
+      date: payload.date,
+      transferId,
+    };
+
+    filtered.push(newFromTx, newToTx);
+
+    save(filtered);
+  }
 }
+

@@ -3,14 +3,14 @@ import type {ICategoriesService} from "@/entities/category/service/ICategoriesSe
 import dayjs from "dayjs";
 import type {ITransactionsRepository} from "../repository/ITransactionsRepository";
 import {TransactionsLocalStorageRepository} from "../repository/TransactionsLocalStorageRepository";
+import type {ITransactionsService, TransactionsFilter} from "./ITransactionsService";
+
 import type {
   BalanceByPeriod,
   IAnalyticService,
-  ITransactionsService,
-  TransactionsFilter,
   TransactionsGroupedByCategory,
   TransactionsSummary,
-} from "./ITransactionsService";
+} from "./IAnalyticService";
 import {transactionsService} from "./TransactionsService";
 
 export class AnalyticService implements IAnalyticService {
@@ -67,7 +67,7 @@ export class AnalyticService implements IAnalyticService {
       const category = categories.find(c => c.id === categoryId);
       return {
         categoryId: category?.id ?? "",
-        categoryName: category?.name ?? "����������� ���������",
+        categoryName: category?.name ?? "Неизвестная категория",
         amount,
         categoryColor: category?.color,
         categoryShortName: category?.shortName,
@@ -85,7 +85,6 @@ export class AnalyticService implements IAnalyticService {
       throw new Error('granularity must be "year" | "month" | "day"');
     }
 
-    // ���� ������ ���������� � ��������� ���������
     const txs = await this.transactionService.getAll({startDate, endDate});
 
     type Bucket = {income: number; expense: number; periodStart: string; label: string};
