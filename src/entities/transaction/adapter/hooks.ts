@@ -1,7 +1,8 @@
-﻿import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 import type {Transaction} from "../model/Transaction";
 import {analyticService} from "../service/AnalyticService";
+import type {RequiredPeriodComparisonFilter} from "../service/IAnalyticService";
 import type {TransactionsFilter, TransferPayload} from "../service/ITransactionsService";
 import {transactionsService} from "../service/TransactionsService";
 
@@ -11,7 +12,10 @@ const invalidateTransactionQueries = (queryClient: ReturnType<typeof useQueryCli
   queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsSummary")});
   queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsYears")});
   queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsCategoriesReport")});
-  queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsBalanceReport")});
+  queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsCashflowReport")});
+  queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsExpenseInsightsReport")});
+  queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsPeriodComparisonReport")});
+  queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transactionsAccountFlowReport")});
   queryClient.invalidateQueries({predicate: query => query.queryKey.includes("transfer")});
 };
 
@@ -77,18 +81,42 @@ export const useCategoriesReport = (filter: TransactionsFilter) => {
   });
 };
 
-export const useBalanceReport = ({
+export const useCashflowReport = ({
   startDate,
   endDate,
+  accountId,
   granularity,
 }: {
   startDate?: string;
   endDate?: string;
-  granularity: "year" | "month" | "day";
+  accountId?: string;
+  granularity: "month" | "day";
 }) => {
   return useQuery({
-    queryKey: ["transactionsBalanceReport", startDate, endDate, granularity],
-    queryFn: () => analyticService.getBalanceReport({startDate, endDate, granularity}),
+    queryKey: ["transactionsCashflowReport", startDate, endDate, accountId, granularity],
+    queryFn: () => analyticService.getCashflowReport({startDate, endDate, accountId, granularity}),
+  });
+};
+
+export const useExpenseInsightsReport = (filter: TransactionsFilter) => {
+  return useQuery({
+    queryKey: ["transactionsExpenseInsightsReport", filter.startDate, filter.endDate, filter.accountId],
+    queryFn: () => analyticService.getExpenseInsightsReport(filter),
+  });
+};
+
+export const usePeriodComparisonReport = (filter: RequiredPeriodComparisonFilter) => {
+  return useQuery({
+    queryKey: ["transactionsPeriodComparisonReport", filter.startDate, filter.endDate, filter.accountId],
+    queryFn: () => analyticService.getPeriodComparisonReport(filter),
+    enabled: !!filter.startDate && !!filter.endDate,
+  });
+};
+
+export const useAccountFlowReport = ({startDate, endDate}: {startDate?: string; endDate?: string}) => {
+  return useQuery({
+    queryKey: ["transactionsAccountFlowReport", startDate, endDate],
+    queryFn: () => analyticService.getAccountFlowReport({startDate, endDate}),
   });
 };
 
@@ -159,4 +187,3 @@ export const useDeleteTransaction = () => {
     },
   });
 };
-

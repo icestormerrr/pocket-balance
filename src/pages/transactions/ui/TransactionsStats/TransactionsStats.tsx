@@ -22,7 +22,7 @@ export const TransactionsStats: FC<Props> = memo(({transactionsSummary}) => {
             exit={{opacity: 0, scale: 0.95}}
             transition={{duration: 0.25}}
           >
-            <Card className="py-2">
+            <Card className="py-2 rounded-2xl">
               <CardContent className="p-4 flex flex-col items-start">
                 <span className="text-sm text-muted-foreground">Доходы</span>
                 <div className={cn("text-xl font-semibold break-all text-[var(--positive-accent)]")}>
@@ -42,7 +42,7 @@ export const TransactionsStats: FC<Props> = memo(({transactionsSummary}) => {
             exit={{opacity: 0, scale: 0.95}}
             transition={{duration: 0.25}}
           >
-            <Card className="py-2">
+            <Card className="py-2 rounded-2xl">
               <CardContent className="p-4 flex flex-col items-start">
                 <span className="text-sm text-muted-foreground">Расходы</span>
                 <div className="text-xl font-semibold break-all text-[var(--negative-accent)]">

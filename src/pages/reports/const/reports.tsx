@@ -1,18 +1,10 @@
-import type {JSX} from "react";
-import {BalanceReport} from "../ui/BalanceReport/BalanceReport";
-import {CategoriesReport} from "../ui/CategoriesReport/CategoriesReport";
+export type ReportKey = "cashflow" | "expense_insights" | "period_comparison" | "account_flow";
 
-export type ReportKey = "categories" | "balance";
+export const REPORTS: {key: ReportKey; label: string}[] = [
+  {key: "cashflow", label: "Денежный поток"},
+  {key: "expense_insights", label: "Разбор расходов"},
+  {key: "period_comparison", label: "Сравнение периодов"},
+  {key: "account_flow", label: "Активность счетов"},
+];
 
-export const REPORTS: Record<ReportKey, {label: string; render: () => JSX.Element}> = {
-  categories: {
-    label: "Отчёт по категориям",
-    render: () => <CategoriesReport />,
-  },
-  balance: {
-    label: "Отчёт по балансу",
-    render: () => <BalanceReport />,
-  },
-};
-
-export const REPORT_OPTIONS = Object.keys(REPORTS).map(key => ({label: REPORTS[key as ReportKey].label, value: key}));
+export const REPORT_OPTIONS = REPORTS.map(report => ({label: report.label, value: report.key}));

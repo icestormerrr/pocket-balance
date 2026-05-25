@@ -1,13 +1,14 @@
-﻿import TransactionsDateFilters, {
-  type TransactionDateFilterType,
-} from "@/entities/transaction/ui/TransactionsDateFilters";
+import TransactionsDateFilters, {type TransactionDateFilterType} from "@/entities/transaction/ui/TransactionsDateFilters";
 import {
-  useBalanceReport,
+  useAccountFlowReport,
+  useCashflowReport,
   useCategoriesReport,
   useCreateTransaction,
   useCreateTransfer,
   useDeleteTransaction,
   useDeleteTransfer,
+  useExpenseInsightsReport,
+  usePeriodComparisonReport,
   useTransaction,
   useTransactions,
   useTransactionsSummary,
@@ -17,19 +18,30 @@ import {
   useUpdateTransfer,
 } from "./adapter/hooks";
 import type {Transaction} from "./model/Transaction";
-import type {TransactionsGroupedByCategory, TransactionsSummary} from "./service/IAnalyticService";
+import type {
+  AccountFlowItem,
+  CashflowPoint,
+  ExpenseInsightItem,
+  PeriodComparisonReport,
+  RequiredPeriodComparisonFilter,
+  TransactionsGroupedByCategory,
+  TransactionsSummary,
+} from "./service/IAnalyticService";
 import type {TransactionExtended, TransactionsFilter, TransferExtended} from "./service/ITransactionsService";
 import {TransactionCard} from "./ui/TransactionCard/TransactionCard";
 
 export {
   TransactionCard,
   TransactionsDateFilters,
-  useBalanceReport,
+  useAccountFlowReport,
+  useCashflowReport,
   useCategoriesReport,
   useCreateTransaction,
   useCreateTransfer,
   useDeleteTransaction,
   useDeleteTransfer,
+  useExpenseInsightsReport,
+  usePeriodComparisonReport,
   useTransaction,
   useTransactions,
   useTransactionsSummary,
@@ -38,13 +50,18 @@ export {
   useUpdateTransaction,
   useUpdateTransfer,
 };
+
 export type {
+  AccountFlowItem,
+  CashflowPoint,
+  ExpenseInsightItem,
+  PeriodComparisonReport,
+  RequiredPeriodComparisonFilter,
   Transaction,
   TransactionDateFilterType,
   TransactionExtended,
   TransactionsFilter,
-  TransferExtended,
   TransactionsGroupedByCategory,
   TransactionsSummary,
+  TransferExtended,
 };
-
