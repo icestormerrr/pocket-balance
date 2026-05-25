@@ -9,7 +9,15 @@ import {Button} from "@/shared/ui/button";
 import {Card} from "@/shared/ui/card";
 import {Cell} from "@/shared/ui/cell";
 import {DatePickerMobile} from "@/shared/ui/date-picker";
-import {Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/shared/ui/drawer";
 import {FormControl, FormField, FormItem} from "@/shared/ui/form";
 import {Input} from "@/shared/ui/input";
 import {SelectMobile} from "@/shared/ui/select";
@@ -191,16 +199,32 @@ export const TransactionFormFields = () => {
                 </div>
               </DrawerTrigger>
 
-              <DrawerContent className="px-4 pb-4 min-h-[80vh]">
-                <DrawerHeader className="px-0 py-4">
-                  <DrawerTitle>Введите описание</DrawerTitle>
+              <DrawerContent className="mx-auto min-h-[72vh] max-w-lg">
+                <DrawerHeader className="px-5 pb-3 pt-5">
+                  <DrawerTitle>Комментарий к операции</DrawerTitle>
+                  <p className="text-muted-foreground text-sm">
+                    Короткая заметка поможет быстрее найти операцию позже.
+                  </p>
                 </DrawerHeader>
 
-                <Textarea className="max-h-[250px]" autoFocus {...field} />
+                <div className="px-5 pb-4">
+                  <Card className="rounded-[1.5rem] border-border/70 bg-muted/20 p-3 shadow-none">
+                    <Textarea
+                      className="min-h-[220px] max-h-[320px] resize-none rounded-[1.25rem] border-0 bg-transparent px-2 py-2 text-sm shadow-none focus-visible:ring-0"
+                      placeholder="Например: ужин с друзьями, зарплата за май или покупка билетов"
+                      autoFocus
+                      {...field}
+                    />
+                  </Card>
+                </div>
 
-                <DrawerClose className="flex justify-end">
-                  <Button className="mt-4 w-25">Готово</Button>
-                </DrawerClose>
+                <DrawerFooter detached>
+                  <DrawerClose asChild>
+                    <Button size="lg" className="h-12 w-full rounded-2xl">
+                      Готово
+                    </Button>
+                  </DrawerClose>
+                </DrawerFooter>
               </DrawerContent>
             </Drawer>
           )}

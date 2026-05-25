@@ -1,10 +1,12 @@
+import {type ReactNode, useMemo} from "react";
+import {CalendarIcon} from "lucide-react";
+
 import {DateConverter} from "@/shared/lib/datetime";
 import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Calendar} from "@/shared/ui/calendar";
-import {Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
-import {CalendarIcon} from "lucide-react";
-import {type ReactNode, useMemo} from "react";
+import {Card} from "@/shared/ui/card";
+import {Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 
 type Props = {
   title?: string;
@@ -51,8 +53,8 @@ export function DatePickerMobile({
           children
         ) : (
           <Button
-            variant={"outline"}
-            className={cn(`justify-start text-left font-normal`, !value && "text-muted-foreground", className)}
+            variant="outline"
+            className={cn("justify-start rounded-2xl text-left font-normal", !value && "text-muted-foreground", className)}
           >
             <CalendarIcon />
             {dateLabel}
@@ -60,16 +62,26 @@ export function DatePickerMobile({
         )}
       </DrawerTrigger>
 
-      <DrawerContent className="px-4 pb-4 min-h-[80vh]">
-        <DrawerHeader className="px-0 py-4">
+      <DrawerContent className="mx-auto min-h-[78vh] max-w-lg">
+        <DrawerHeader className="px-5 pb-3 pt-5">
           <DrawerTitle>{title}</DrawerTitle>
+          <p className="text-muted-foreground text-sm">{dateLabel}</p>
         </DrawerHeader>
-        {/* @ts-expect-error необходимо сужение типов в зависимости от mode */}
-        <Calendar mode={mode} selected={value} onSelect={onChange} className="rounded-lg border w-full" />
 
-        <DrawerClose className="flex justify-end">
-          <Button className="mt-4 w-25">Готово</Button>
-        </DrawerClose>
+        <div className="px-5 pb-4">
+          <Card className="rounded-[1.75rem] border-border/70 bg-muted/20 p-3 shadow-none">
+            {/* @ts-expect-error narrowing by mode is enough for runtime */}
+            <Calendar mode={mode} selected={value} onSelect={onChange} className="w-full rounded-[1.25rem] border-0" />
+          </Card>
+        </div>
+
+        <DrawerFooter detached>
+          <DrawerClose asChild>
+            <Button size="lg" className="h-12 w-full rounded-2xl">
+              Готово
+            </Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

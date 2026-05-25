@@ -1,3 +1,4 @@
+import type {FC} from "react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
@@ -5,7 +6,6 @@ import {useCreateTransaction} from "@/entities/transaction";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
-import type {FC} from "react";
 import type {TransactionFormState} from "../../../model/schema";
 
 type Props = {
@@ -54,7 +54,12 @@ export const CreateButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Button size="lg" onClick={handleCreateButtonClick} disabled={!formState.isValid}>
+    <Button
+      size="lg"
+      onClick={handleCreateButtonClick}
+      disabled={!formState.isValid}
+      className="h-12 flex-1 rounded-2xl"
+    >
       Создать
     </Button>
   );

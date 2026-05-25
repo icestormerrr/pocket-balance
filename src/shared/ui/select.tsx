@@ -1,9 +1,11 @@
+import {type ReactNode, useEffect, useMemo, useState} from "react";
+import {Check, ChevronsUpDown} from "lucide-react";
+
 import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
+import {Card} from "@/shared/ui/card";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {Input} from "@/shared/ui/input";
-import {ChevronsUpDown} from "lucide-react";
-import {type ReactNode, useEffect, useMemo, useState} from "react";
 
 export type Option = {
   label: string;
@@ -52,9 +54,13 @@ export const SelectMobile = ({
   const defaultRenderOption = (option: Option) => (
     <Button
       variant="ghost"
-      className={cn("justify-start h-12 w-full", value === option.value && "bg-muted text-primary hover:bg-muted")}
+      className={cn(
+        "h-14 w-full justify-between rounded-2xl px-4 text-left hover:bg-accent/70",
+        value === option.value && "bg-accent text-foreground hover:bg-accent"
+      )}
     >
-      {option.label}
+      <span className="truncate">{option.label}</span>
+      {value === option.value && <Check className="text-primary" />}
     </Button>
   );
 
@@ -65,20 +71,26 @@ export const SelectMobile = ({
           ? renderField({className, value, placeholder, options})
           : renderDefaultField({className, value, placeholder, options})}
       </DrawerTrigger>
-      <DrawerContent className="max-w-lg mx-auto max-h-[80vh]">
-        <DrawerHeader className="px-4 pt-6">
+
+      <DrawerContent className="mx-auto max-h-[82vh] max-w-lg">
+        <DrawerHeader className="px-5 pb-3 pt-5">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
 
-        <div className="px-4 pb-4">
+        <div className="px-5 pb-5">
           {!hideSearch && (
-            <Input placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} className="mb-4" />
+            <Input
+              placeholder="Поиск..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="mb-4 h-11 rounded-2xl border-border/70 bg-muted/40 px-4 shadow-none"
+            />
           )}
 
-          <div className="max-h-[60vh] overflow-auto min-h-[250px] rounded-md border">
-            <div className="flex flex-col gap-1 p-2">
+          <Card className="min-h-[250px] max-h-[58vh] overflow-auto rounded-[1.5rem] border-border/70 bg-muted/20 p-2 shadow-none">
+            <div className="flex flex-col gap-1">
               {filteredOptions.length === 0 ? (
-                <div className="text-muted-foreground text-sm text-center py-6">Ничего не найдено</div>
+                <div className="text-muted-foreground py-10 text-center text-sm">Ничего не найдено</div>
               ) : (
                 filteredOptions.map(opt => (
                   <div onClick={() => handleOptionClick(opt)} className="w-full" key={opt.value}>
@@ -87,7 +99,7 @@ export const SelectMobile = ({
                 ))
               )}
             </div>
-          </div>
+          </Card>
         </div>
       </DrawerContent>
     </Drawer>
@@ -103,8 +115,8 @@ type FieldProps = {
 
 function renderDefaultField({className, value, placeholder, options}: FieldProps): ReactNode {
   return (
-    <Button variant="outline" role="combobox" className={cn("justify-between w-full", className)}>
-      {value ? options.find(opt => opt.value === value)?.label : placeholder}
+    <Button variant="outline" role="combobox" className={cn("w-full justify-between rounded-2xl", className)}>
+      <span className="truncate">{value ? options.find(opt => opt.value === value)?.label : placeholder}</span>
       <ChevronsUpDown className="opacity-50" />
     </Button>
   );

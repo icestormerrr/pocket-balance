@@ -75,9 +75,14 @@ const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionI
             )}
           </div>
 
-          <DrawerFooter className="pb-8">
-            <div className={"flex justify-between"}>
-              <Button size={"lg"} variant={"outline"} onClick={handleSuccessButtonClick}>
+          <DrawerFooter detached>
+            <div className="flex gap-3">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleSuccessButtonClick}
+                className="flex-1 h-12 rounded-2xl"
+              >
                 Отмена
               </Button>
               {id ? (
