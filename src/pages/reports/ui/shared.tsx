@@ -4,7 +4,7 @@ import {Badge} from "@/shared/ui/badge";
 import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 
 export function formatCurrency(value: number) {
-  return `${value.toLocaleString("ru-RU").replace(/,/g, " ")} ₽`;
+  return `${new Intl.NumberFormat("ru-RU", {maximumFractionDigits: 2}).format(value)} ₽`;
 }
 
 export function formatPercent(value: number | null, digits = 1) {
