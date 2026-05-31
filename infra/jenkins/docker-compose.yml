@@ -1,14 +1,17 @@
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    build:
+      context: .
+      dockerfile: infra/jenkins/Dockerfile
     container_name: pocket-balance-jenkins
+    user: "0:0"
     restart: unless-stopped
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - C:/Games/pocket-balance:/workspace/pocket-balance
+      - C:/Games/pocket-balance:/var/jenkins_home/workspace/pocket-balance-ci
 
 volumes:
   jenkins_home:
