@@ -8,7 +8,7 @@ import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
   // Exclude build output, coverage reports, native projects, and skill resources.
-  globalIgnores(['dist', 'dev-dist', 'dist-ssr', 'coverage', 'android', 'ios', 'skills']),
+  globalIgnores(['dist', 'dev-dist', 'dist-ssr', 'coverage', 'android', 'ios', '.agents']),
   // JavaScript files: core ESLint checks and Node.js globals.
   {
     files: ['**/*.{js,mjs,cjs}'],
