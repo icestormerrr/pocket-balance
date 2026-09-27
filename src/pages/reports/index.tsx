@@ -12,10 +12,19 @@ import {CashflowReport} from "./ui/CashflowReport/CashflowReport";
 import {ExpenseInsightsReport} from "./ui/ExpenseInsightsReport/ExpenseInsightsReport";
 import {PeriodComparisonReport} from "./ui/PeriodComparisonReport/PeriodComparisonReport";
 
-const ReportsPage = () => {
-  const [activeReportKey, setActiveReportKey] = useState<ReportKey>("cashflow");
+export type ReportsPageProps = {
+  initialActiveReportKey?: ReportKey;
+  initialDateFilter?: TransactionDateFilterType;
+};
+
+const ReportsPage = ({initialActiveReportKey = "cashflow", initialDateFilter}: ReportsPageProps) => {
+  const [activeReportKey, setActiveReportKey] = useState<ReportKey>(initialActiveReportKey);
   const [accountId, setAccountId] = useState<string | null>(null);
   const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>(() => {
+    if (initialDateFilter) {
+      return initialDateFilter;
+    }
+
     const {startDate, endDate} = DateCreator.createPeriod(new Date().getFullYear(), new Date().getMonth());
     return {startDate: DateConverter.dateToISO(startDate), endDate: DateConverter.dateToISO(endDate)};
   });

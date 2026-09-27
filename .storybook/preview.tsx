@@ -18,7 +18,7 @@ const withAppProviders = (Story: () => ReactNode) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light">
+      <ThemeProvider defaultTheme="dark">
         <div className="mx-auto min-h-screen w-full max-w-md bg-background">
           <Story />
         </div>

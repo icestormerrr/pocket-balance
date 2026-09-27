@@ -66,15 +66,19 @@ const fixture = {
   ],
 };
 
+const loadFixture = (transactions = fixture.transactions) => {
+  localStorage.setItem("accounts", JSON.stringify(fixture.accounts));
+  localStorage.setItem("categories", JSON.stringify(fixture.categories));
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem("ui-theme", "dark");
+};
+
 const meta = {
   title: "Pages/Transactions",
   component: TransactionsPage,
   loaders: [
     async () => {
-      localStorage.setItem("accounts", JSON.stringify(fixture.accounts));
-      localStorage.setItem("categories", JSON.stringify(fixture.categories));
-      localStorage.setItem("transactions", JSON.stringify(fixture.transactions));
-      localStorage.setItem("ui-theme", "dark");
+      loadFixture();
     },
   ],
   args: {
@@ -90,3 +94,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Empty: Story = {
+  loaders: [
+    async () => {
+      loadFixture([]);
+    },
+  ],
+};
