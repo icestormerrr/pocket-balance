@@ -10,7 +10,13 @@
     "preview": "vite preview --host",
     "dev:android": "npx cap sync && npx cap run android",
     "dev:ios": "npx cap sync && npx cap run ios",
-    "test:unit": "jest"
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test:unit": "jest",
+    "test:integration": "playwright test --grep @integration",
+    "test:e2e": "playwright test --grep @e2e",
+    "test:visual": "playwright test --grep @visual",
+    "test:visual:update": "playwright test --grep @visual --update-snapshots"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
@@ -87,6 +93,12 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.3",
-    "vite-plugin-pwa": "^1.0.1"
+    "vite-plugin-pwa": "^1.0.1",
+    "storybook": "^10.6.0",
+    "@storybook/react-vite": "^10.6.0",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "eslint-plugin-storybook": "^10.6.0",
+    "@playwright/test": "^1.57.0"
   }
 }

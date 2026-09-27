@@ -21,11 +21,19 @@ import {CATEGORY_TYPE_OPTIONS, type CategoryType} from "@/entities/category";
 import TransactionsList from "./ui/TransactionsList/TransactionsList";
 import {TransactionsStats} from "./ui/TransactionsStats/TransactionsStats";
 
-const TransactionsPage = () => {
+export type TransactionsPageProps = {
+  initialDateFilter?: TransactionDateFilterType;
+};
+
+const TransactionsPage = ({initialDateFilter}: TransactionsPageProps) => {
   const [excludeTransfersFilter, setExcludeTransfersFilter] = useState(true);
 
   const [showDateFilter, setShowDateFilter] = useState(false);
   const [dateFilter, setDateFilter] = useState<TransactionDateFilterType>(() => {
+    if (initialDateFilter) {
+      return initialDateFilter;
+    }
+
     const {startDate, endDate} = DateCreator.createPeriod(new Date().getFullYear(), new Date().getMonth());
     return {startDate: DateConverter.dateToISO(startDate), endDate: DateConverter.dateToISO(endDate)};
   });
