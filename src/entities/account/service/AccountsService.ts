@@ -19,21 +19,22 @@ export class AccountsService implements IAccountsService {
     return this.repository.getById(id);
   }
 
-  // дописать проверку на лишние поля
-  validateAccount(data: unknown) {
+  // TODO: дописать проверку на лишние поля
+  validateAccount(data: unknown, allowPartial = false) {
     if (typeof data !== "object" || data === null) {
       throw new Error("Некорректный счет");
     }
+    const account = data as Partial<Account>;
 
-    if (!("name" in data) || typeof data.name !== "string" || data.name.trim().length === 0) {
+    if ((!allowPartial || "name" in account) && (typeof account.name !== "string" || account.name.trim().length === 0)) {
       throw new Error("Название счета не может быть пустым");
     }
 
-    if (!("startAmount" in data) || typeof data.startAmount !== "number" || data.startAmount < 0) {
+    if ((!allowPartial || "startAmount" in account) && (typeof account.startAmount !== "number" || !Number.isFinite(account.startAmount) || account.startAmount < 0)) {
       throw new Error("Начальная сумма не может быть пустой");
     }
 
-    if (!("currencyCode" in data) || typeof data.currencyCode !== "string" || data.currencyCode.trim().length === 0) {
+    if ((!allowPartial || "currencyCode" in account) && (typeof account.currencyCode !== "string" || account.currencyCode.trim().length === 0)) {
       throw new Error("Валюта не может быть пустой");
     }
   }
@@ -47,7 +48,7 @@ export class AccountsService implements IAccountsService {
   }
 
   async update(id: string, category: AccountUpdatePayload): Promise<Account | null> {
-    this.validateAccount(category);
+    this.validateAccount(category, true);
     return this.repository.update(id, category);
   }
 

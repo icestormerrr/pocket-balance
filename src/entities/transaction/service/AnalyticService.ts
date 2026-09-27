@@ -64,7 +64,7 @@ export class AnalyticService implements IAnalyticService {
     return Object.entries(amountsByCategories).map(([categoryId, amount]) => {
       const category = categories.find(c => c.id === categoryId);
       return {
-        categoryId: category?.id ?? "",
+        categoryId,
         categoryName: category?.name ?? "Неизвестная категория",
         amount,
         categoryColor: category?.color,
@@ -142,7 +142,7 @@ export class AnalyticService implements IAnalyticService {
           amount: group.amount,
           share: totalAmount > 0 ? group.amount / totalAmount : 0,
           transactionsCount: group.transactionsCount,
-          averageAmount: group.transactionsCount > 0 ? group.amount / group.transactionsCount : 0,
+          averageAmount: group.amount / group.transactionsCount,
         };
       })
       .sort((a, b) => b.amount - a.amount);

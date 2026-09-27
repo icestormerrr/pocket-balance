@@ -25,28 +25,29 @@ export class CategoriesService implements ICategoriesService {
   }
 
   // дописать проверку на лишние поля
-  validateCategory(data: unknown) {
+  validateCategory(data: unknown, allowPartial = false) {
     if (typeof data !== "object" || data === null) {
       throw new Error("Некорректная категория");
     }
+    const category = data as Partial<Category>;
 
-    if (!("name" in data) || typeof data.name !== "string" || data.name.trim().length === 0) {
+    if ((!allowPartial || "name" in category) && (typeof category.name !== "string" || category.name.trim().length === 0)) {
       throw new Error("Название категории не может быть пустым");
     }
 
-    if (!("shortName" in data) || typeof data.shortName !== "string" || data.name.trim().length === 0) {
+    if ((!allowPartial || "shortName" in category) && (typeof category.shortName !== "string" || category.shortName.trim().length === 0)) {
       throw new Error("Аббревиатура/иконка категории не может быть пустой");
     }
 
-    if (data.shortName.length > 3) {
+    if (typeof category.shortName === "string" && category.shortName.length > 3) {
       throw new Error("Аббревиатура/иконка категории не может быть длиннее нескольких символов");
     }
 
-    if (!("type" in data) || (data.type !== "expense" && data.type !== "income")) {
+    if ((!allowPartial || "type" in category) && (category.type !== "expense" && category.type !== "income")) {
       throw new Error("Тип категории должен быть 'income' или 'expense'");
     }
 
-    if (!("color" in data) || typeof data.color !== "string" || !/^#[0-9A-F]{6}$/i.test(data.color)) {
+    if ((!allowPartial || "color" in category) && (typeof category.color !== "string" || !/^#[0-9A-F]{6}$/i.test(category.color))) {
       throw new Error("Цвет должен быть в формате HEX, например #FFAA00");
     }
   }
@@ -60,7 +61,7 @@ export class CategoriesService implements ICategoriesService {
   }
 
   async update(id: string, category: CategoryUpdatePayload): Promise<Category | null> {
-    this.validateCategory(category);
+    this.validateCategory(category, true);
     return this.repository.update(id, category);
   }
 
