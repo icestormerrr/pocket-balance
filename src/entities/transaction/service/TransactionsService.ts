@@ -124,11 +124,30 @@ export class TransactionsService implements ITransactionsService {
     };
   }
 
-  // TODO: дописать проверку на лишние поля
+  private isValidDate(value: unknown): value is string {
+    if (typeof value !== "string") return false;
+
+    const match = /^(\d{4})-(\d{2})-(\d{2})(?:T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2}))?$/.exec(value);
+    if (!match || !Number.isFinite(Date.parse(value))) return false;
+
+    const [, year, month, day] = match;
+    const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+
+    return (
+      date.getUTCFullYear() === Number(year) &&
+      date.getUTCMonth() === Number(month) - 1 &&
+      date.getUTCDate() === Number(day)
+    );
+  }
+
   private async validateTransaction(tx: TransactionUpdatePayload): Promise<void> {
     const errors: string[] = [];
+    const allowedFields = new Set(["amount", "categoryId", "accountId", "date", "comment", "transferId"]);
 
-    if (tx.amount === undefined || typeof tx.amount !== "number" || tx.amount <= 0) {
+    if (Object.keys(tx).some(field => !allowedFields.has(field))) {
+      errors.push("Операция содержит недопустимые поля");
+    }
+    if (typeof tx.amount !== "number" || !Number.isFinite(tx.amount) || tx.amount <= 0) {
       errors.push("Сумма должна быть положительным числом");
     }
 
@@ -150,8 +169,16 @@ export class TransactionsService implements ITransactionsService {
       }
     }
 
-    if (!tx.date || isNaN(Date.parse(tx.date))) {
+    if (!this.isValidDate(tx.date)) {
       errors.push("Дата должна быть в формате ISO и быть валидной");
+    }
+
+    if (tx.comment !== undefined && (typeof tx.comment !== "string" || tx.comment.length > 200)) {
+      errors.push("Комментарий должен быть строкой длиной до 200 символов");
+    }
+
+    if (tx.transferId !== undefined) {
+      errors.push("Нельзя создавать или изменять перевод как обычную операцию");
     }
 
     if (errors.length > 0) {
@@ -189,11 +216,11 @@ export class TransactionsService implements ITransactionsService {
       errors.push("Счета должны отличаться");
     }
 
-    if (amount <= 0) {
+    if (typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0) {
       errors.push("Сумма должна быть положительной");
     }
 
-    if (!date || isNaN(Date.parse(date))) {
+    if (!this.isValidDate(date)) {
       errors.push("Некорректная дата");
     }
 

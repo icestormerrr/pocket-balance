@@ -6,7 +6,7 @@ import {useUpdateTransaction} from "@/entities/transaction";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
-import type {TransactionFormState} from "../../../model/schema";
+import type {TransactionFormState} from "../../../utils/schema";
 
 type Props = {
   onSuccess: () => void;
@@ -14,10 +14,9 @@ type Props = {
 
 export const UpdateButton: FC<Props> = ({onSuccess}) => {
   const {mutate: updateTransaction} = useUpdateTransaction();
-  const {getValues, formState} = useFormContext<TransactionFormState>();
+  const {handleSubmit} = useFormContext<TransactionFormState>();
 
-  const handleUpdateButtonClick = () => {
-    const formValues = getValues();
+  const handleUpdate = (formValues: TransactionFormState) => {
     if (!formValues.id) return;
 
     updateTransaction(
@@ -57,14 +56,16 @@ export const UpdateButton: FC<Props> = ({onSuccess}) => {
     );
   };
 
+  const handleInvalidUpdate = () => {
+    requestAnimationFrame(() => {
+      document.querySelector("[data-invalid='true']")?.scrollIntoView({behavior: "smooth", block: "center"});
+    });
+  };
+  const handleUpdateButtonClick = handleSubmit(handleUpdate, handleInvalidUpdate);
+
   return (
-    <Button
-      size="lg"
-      onClick={handleUpdateButtonClick}
-      disabled={!formState.isValid}
-      className="h-12 flex-1 rounded-2xl"
-    >
-      Сохранить
+    <Button size="lg" onClick={() => void handleUpdateButtonClick()} className="h-12 w-full rounded-2xl">
+      Сохранить изменения
     </Button>
   );
 };

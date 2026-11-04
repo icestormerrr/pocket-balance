@@ -1,18 +1,19 @@
 import {useTransaction} from "@/entities/transaction";
-import {Drawer, DrawerContent, DrawerFooter} from "@/shared/ui/drawer";
+import {X} from "lucide-react";
+
+import {Drawer, DrawerContent, DrawerFooter, DrawerTitle} from "@/shared/ui/drawer";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
-import {DateConverter} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
-import {GradientBlob} from "@/shared/ui/background";
 import {Button} from "@/shared/ui/button";
 import {DeleteButton} from "@/widgets/TransactionFormDrawer/ui/components/DeleteButton/DeleteButton";
-import {type TransactionFormState, transactionFormSchema} from "./model/schema";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
 import {TransactionFormFields} from "./ui/components/TransactionFormFields/TransactionFormFields";
 import {UpdateButton} from "./ui/components/UpdateButton/UpdateButton";
+import {getCreationDefaults} from "./utils/creationPreferences";
+import {type TransactionFormState, transactionFormSchema} from "./utils/schema";
 
 type Props = {
   open: boolean;
@@ -20,37 +21,37 @@ type Props = {
   transactionId?: string;
 };
 
-const defaultValues: TransactionFormState = {
-  date: DateConverter.dateToISO(new Date()),
+const getDefaultValues = (): TransactionFormState => ({
+  ...getCreationDefaults(),
   categoryType: "expense",
   categoryId: "",
   id: "",
   amount: 0,
   comment: "",
-  accountId: "",
-};
+});
 
 const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionId}) => {
   const {refetch} = useTransaction(transactionId);
 
   const form = useForm<TransactionFormState>({
     resolver: zodResolver(transactionFormSchema),
-    mode: "onChange",
-    defaultValues,
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    defaultValues: getDefaultValues(),
   });
   const id = form.watch("id");
 
   useEffect(() => {
     if (!open) return;
 
-    refetch().then(query => {
+    void refetch().then(query => {
       if (query.data) {
         form.reset(query.data);
       } else {
-        form.reset(defaultValues);
+        form.reset(getDefaultValues());
       }
     });
-  }, [open]);
+  }, [form, open, refetch]);
 
   const handleSuccessButtonClick = useCallback(() => {
     onOpenChange(false);
@@ -60,37 +61,44 @@ const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionI
     <FormProvider {...form}>
       <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false} dismissible={false}>
         <DrawerContent
-          className={"overflow-hidden"}
+          className="mx-auto max-w-lg overflow-hidden rounded-t-[2rem]"
           style={{minHeight: window.innerHeight - getStatusBarHeight()}}
           hideBar
         >
-          <div className="p-4 relative overflow-hidden">
-            <GradientBlob colorFrom="#fff" colorTo="#fff" size={150} opacity={1} position="top" zIndex={-1} />
-
-            <TransactionFormFields />
-            {id && (
-              <div className={"my-6"}>
-                <DeleteButton onSuccess={handleSuccessButtonClick} />
+          <DrawerTitle className="sr-only">{id ? "Редактировать операцию" : "Новая операция"}</DrawerTitle>
+          <div className="no-scrollbar relative min-h-0 flex-1 overflow-auto">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-[38rem] [mask-image:linear-gradient(to_bottom,black_0%,black_62%,transparent_100%)] blur-2xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 16% -12%, oklch(0.42 0.02 240 / 32%), transparent 64%), radial-gradient(ellipse at 86% 5%, oklch(0.5 0.025 230 / 16%), transparent 68%)",
+              }}
+            />
+            <div className="relative z-10 flex flex-col gap-5 px-5 pt-5 pb-4">
+              <div className="flex justify-end">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  onClick={handleSuccessButtonClick}
+                  aria-label="Закрыть"
+                >
+                  <X />
+                </Button>
               </div>
-            )}
+
+              <TransactionFormFields />
+              {id && <DeleteButton onSuccess={handleSuccessButtonClick} />}
+            </div>
           </div>
 
           <DrawerFooter detached>
-            <div className="flex gap-3">
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleSuccessButtonClick}
-                className="flex-1 h-12 rounded-2xl"
-              >
-                Отмена
-              </Button>
-              {id ? (
-                <UpdateButton onSuccess={handleSuccessButtonClick} />
-              ) : (
-                <CreateButton onSuccess={handleSuccessButtonClick} />
-              )}
-            </div>
+            {id ? (
+              <UpdateButton onSuccess={handleSuccessButtonClick} />
+            ) : (
+              <CreateButton onSuccess={handleSuccessButtonClick} />
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

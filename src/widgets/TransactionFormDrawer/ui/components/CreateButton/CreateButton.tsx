@@ -6,7 +6,8 @@ import {useCreateTransaction} from "@/entities/transaction";
 import {getStatusBarHeight} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 
-import type {TransactionFormState} from "../../../model/schema";
+import {saveCreationDefaults, saveRecentCategory} from "../../../utils/creationPreferences";
+import type {TransactionFormState} from "../../../utils/schema";
 
 type Props = {
   onSuccess: () => void;
@@ -14,11 +15,10 @@ type Props = {
 
 export const CreateButton: FC<Props> = ({onSuccess}) => {
   const {mutate: createTransaction} = useCreateTransaction();
-  const {getValues, formState} = useFormContext<TransactionFormState>();
+  const {handleSubmit, watch} = useFormContext<TransactionFormState>();
+  const categoryType = watch("categoryType");
 
-  const handleCreateButtonClick = () => {
-    const formValues = getValues();
-
+  const handleCreate = (formValues: TransactionFormState) => {
     createTransaction(
       {
         amount: formValues.amount,
@@ -29,6 +29,8 @@ export const CreateButton: FC<Props> = ({onSuccess}) => {
       },
       {
         onSuccess: () => {
+          saveCreationDefaults({accountId: formValues.accountId, date: formValues.date});
+          saveRecentCategory(formValues.categoryType, formValues.categoryId);
           onSuccess();
           toast("Операция успешно создана", {
             action: {
@@ -53,14 +55,16 @@ export const CreateButton: FC<Props> = ({onSuccess}) => {
     );
   };
 
+  const handleInvalidCreate = () => {
+    requestAnimationFrame(() => {
+      document.querySelector("[data-invalid='true']")?.scrollIntoView({behavior: "smooth", block: "center"});
+    });
+  };
+  const handleCreateButtonClick = handleSubmit(handleCreate, handleInvalidCreate);
+
   return (
-    <Button
-      size="lg"
-      onClick={handleCreateButtonClick}
-      disabled={!formState.isValid}
-      className="h-12 flex-1 rounded-2xl"
-    >
-      Создать
+    <Button size="lg" onClick={() => void handleCreateButtonClick()} className="h-12 w-full rounded-2xl">
+      Добавить {categoryType === "expense" ? "расход" : "доход"}
     </Button>
   );
 };

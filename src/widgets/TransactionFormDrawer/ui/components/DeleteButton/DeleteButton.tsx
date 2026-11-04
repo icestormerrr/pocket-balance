@@ -1,13 +1,13 @@
+import {Trash2} from "lucide-react";
 import type {FC} from "react";
 import {useFormContext} from "react-hook-form";
 import {toast} from "sonner";
 
 import {useDeleteTransaction} from "@/entities/transaction";
 import {getStatusBarHeight} from "@/shared/lib/styling";
-import {Card} from "@/shared/ui/card";
-import {Cell} from "@/shared/ui/cell";
+import {Button} from "@/shared/ui/button";
 
-import type {TransactionFormState} from "../../../model/schema";
+import type {TransactionFormState} from "../../../utils/schema";
 
 type Props = {
   onSuccess: () => void;
@@ -47,12 +47,14 @@ export const DeleteButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Card onClick={handleDeleteButtonClick} className="p-4">
-      <Cell>
-        <Cell.Content>
-          <span className="text-[var(--negative-accent)]">Удалить</span>
-        </Cell.Content>
-      </Cell>
-    </Card>
+    <Button
+      type="button"
+      variant="outline"
+      onClick={handleDeleteButtonClick}
+      className="h-12 w-full rounded-2xl border-destructive/45 text-destructive hover:bg-destructive/10 hover:text-destructive"
+    >
+      <Trash2 data-icon="inline-start" />
+      Удалить операцию
+    </Button>
   );
 };

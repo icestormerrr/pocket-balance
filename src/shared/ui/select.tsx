@@ -1,9 +1,8 @@
-import {type ReactNode, useEffect, useMemo, useState} from "react";
-import {Check, ChevronsUpDown} from "lucide-react";
+import {ChevronsUpDown} from "lucide-react";
+import {type ReactNode, useMemo, useState} from "react";
 
 import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
-import {Card} from "@/shared/ui/card";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/shared/ui/drawer";
 import {Input} from "@/shared/ui/input";
 
@@ -42,10 +41,6 @@ export const SelectMobile = ({
     return options.filter(opt => opt.label.toLowerCase().includes(search.toLowerCase()));
   }, [options, search]);
 
-  useEffect(() => {
-    if (!open) setSearch("");
-  }, [open]);
-
   const handleOptionClick = (option: Option) => {
     onChange(option.value !== value ? option.value : null, option);
     setOpen(false);
@@ -53,27 +48,30 @@ export const SelectMobile = ({
 
   const defaultRenderOption = (option: Option) => (
     <Button
-      variant="ghost"
-      className={cn(
-        "h-14 w-full justify-between rounded-2xl px-4 text-left hover:bg-accent/70",
-        value === option.value && "bg-accent text-foreground hover:bg-accent"
-      )}
+      variant={value === option.value ? "secondary" : "outline"}
+      className="h-14 w-full justify-start rounded-2xl px-4 text-left"
     >
       <span className="truncate">{option.label}</span>
-      {value === option.value && <Check className="text-primary" />}
     </Button>
   );
 
   return (
-    <Drawer open={open} onOpenChange={setOpen} repositionInputs={false}>
+    <Drawer
+      open={open}
+      onOpenChange={nextOpen => {
+        setOpen(nextOpen);
+        if (!nextOpen) setSearch("");
+      }}
+      repositionInputs={false}
+    >
       <DrawerTrigger asChild>
         {renderField
           ? renderField({className, value, placeholder, options})
           : renderDefaultField({className, value, placeholder, options})}
       </DrawerTrigger>
 
-      <DrawerContent className="mx-auto max-h-[82vh] max-w-lg">
-        <DrawerHeader className="px-5 pb-3 pt-5">
+      <DrawerContent className="mx-auto max-h-[82vh] max-w-lg overflow-hidden">
+        <DrawerHeader className="px-5 pt-5 pb-3">
           <DrawerTitle>{title}</DrawerTitle>
         </DrawerHeader>
 
@@ -87,10 +85,10 @@ export const SelectMobile = ({
             />
           )}
 
-          <Card className="min-h-[250px] max-h-[58vh] overflow-auto rounded-[1.5rem] border-border/70 bg-muted/20 p-2 shadow-none">
-            <div className="flex flex-col gap-1">
+          <div className="no-scrollbar max-h-[58vh] min-h-[250px] overflow-auto">
+            <div className="flex flex-col gap-2">
               {filteredOptions.length === 0 ? (
-                <div className="text-muted-foreground py-10 text-center text-sm">Ничего не найдено</div>
+                <div className="py-10 text-center text-sm text-muted-foreground">Ничего не найдено</div>
               ) : (
                 filteredOptions.map(opt => (
                   <div onClick={() => handleOptionClick(opt)} className="w-full" key={opt.value}>
@@ -99,7 +97,7 @@ export const SelectMobile = ({
                 ))
               )}
             </div>
-          </Card>
+          </div>
         </div>
       </DrawerContent>
     </Drawer>

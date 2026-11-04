@@ -7,8 +7,8 @@ import type {ICategoriesService} from "@/entities/category/service/ICategoriesSe
 
 import {TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID, type Transaction} from "../../model/Transaction";
 import type {ITransactionsRepository} from "../../repository/ITransactionsRepository";
-import {TransactionsService} from "../TransactionsService";
 import type {TransferPayload} from "../ITransactionsService";
+import {TransactionsService} from "../TransactionsService";
 
 type RepositoryMock = jest.Mocked<ITransactionsRepository>;
 type CategoriesServiceMock = jest.Mocked<Pick<ICategoriesService, "getAll" | "getById">>;
@@ -33,59 +33,116 @@ const validTransaction = {amount: 100, categoryId: "food", accountId: "cash", da
 const validTransfer: TransferPayload = {fromAccountId: "cash", toAccountId: "card", amount: 300, date: "2024-01-03"};
 
 const createRepositoryMock = (): RepositoryMock => ({
-  getAll: jest.fn(), getById: jest.fn(), create: jest.fn(), update: jest.fn(), delete: jest.fn(),
-  createTransfer: jest.fn(), deleteTransfer: jest.fn(), updateTransfer: jest.fn(),
+  getAll: jest.fn(),
+  getById: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn(),
+  createTransfer: jest.fn(),
+  deleteTransfer: jest.fn(),
+  updateTransfer: jest.fn(),
 });
 
 const createDependencies = () => {
   const repository = createRepositoryMock();
   const categoriesService: CategoriesServiceMock = {
     getAll: jest.fn<ICategoriesService["getAll"]>().mockResolvedValue(categories),
-    getById: jest.fn<ICategoriesService["getById"]>(categoryId => Promise.resolve(categories.find(category => category.id === categoryId) ?? null)),
+    getById: jest.fn<ICategoriesService["getById"]>(categoryId =>
+      Promise.resolve(categories.find(category => category.id === categoryId) ?? null)
+    ),
   };
   const accountsService: AccountsServiceMock = {
-    getById: jest.fn<IAccountsService["getById"]>(accountId => Promise.resolve(accounts.find(account => account.id === accountId) ?? null)),
+    getById: jest.fn<IAccountsService["getById"]>(accountId =>
+      Promise.resolve(accounts.find(account => account.id === accountId) ?? null)
+    ),
   };
 
   return {
-    repository, categoriesService, accountsService,
-    service: new TransactionsService(repository, categoriesService as unknown as ICategoriesService, accountsService as unknown as IAccountsService),
+    repository,
+    categoriesService,
+    accountsService,
+    service: new TransactionsService(
+      repository,
+      categoriesService as unknown as ICategoriesService,
+      accountsService as unknown as IAccountsService
+    ),
   };
 };
 
 describe("TransactionsService", () => {
   let dependencies: ReturnType<typeof createDependencies>;
 
-  beforeEach(() => { dependencies = createDependencies(); });
+  beforeEach(() => {
+    dependencies = createDependencies();
+  });
 
   describe("getAll", () => {
     it("enriches regular, transfer and unknown-category transactions and forwards all filters", async () => {
-      const transfer: Transaction = {...transactions[0], id: "transaction-3", categoryId: TRANSFER_IN_CATEGORY_ID, accountId: "card", transferId: "transfer-1"};
-      const outgoingTransfer: Transaction = {...transactions[0], id: "transaction-5", categoryId: TRANSFER_OUT_CATEGORY_ID, transferId: "transfer-1"};
+      const transfer: Transaction = {
+        ...transactions[0],
+        id: "transaction-3",
+        categoryId: TRANSFER_IN_CATEGORY_ID,
+        accountId: "card",
+        transferId: "transfer-1",
+      };
+      const outgoingTransfer: Transaction = {
+        ...transactions[0],
+        id: "transaction-5",
+        categoryId: TRANSFER_OUT_CATEGORY_ID,
+        transferId: "transfer-1",
+      };
       const unknownCategory = {...transactions[0], id: "transaction-4", categoryId: "removed-category"};
       dependencies.repository.getAll.mockResolvedValue([transactions[0], transfer, outgoingTransfer, unknownCategory]);
 
-      const result = await dependencies.service.getAll({startDate: "2024-01-01", endDate: "2024-01-31", accountId: "cash", excludeTransfers: true});
+      const result = await dependencies.service.getAll({
+        startDate: "2024-01-01",
+        endDate: "2024-01-31",
+        accountId: "cash",
+        excludeTransfers: true,
+      });
 
-      expect(dependencies.repository.getAll).toHaveBeenCalledWith({startDate: "2024-01-01", endDate: "2024-01-31", accountId: "cash", categoryIds: undefined, withoutTransactions: true});
+      expect(dependencies.repository.getAll).toHaveBeenCalledWith({
+        startDate: "2024-01-01",
+        endDate: "2024-01-31",
+        accountId: "cash",
+        categoryIds: undefined,
+        withoutTransactions: true,
+      });
       expect(result).toEqual([
         {...transactions[0], categoryName: "Food", categoryType: "expense", categoryShortName: "Fo"},
         {...transfer, categoryName: "Входящий перевод", categoryType: "income", categoryShortName: "💸"},
         {...outgoingTransfer, categoryName: "Исходящий перевод", categoryType: "expense", categoryShortName: "💸"},
-        {...unknownCategory, categoryName: "Неизвестная категория", categoryType: undefined, categoryShortName: undefined},
+        {
+          ...unknownCategory,
+          categoryName: "Неизвестная категория",
+          categoryType: undefined,
+          categoryShortName: undefined,
+        },
       ]);
     });
 
     it("intersects category type and category id filters before querying the repository", async () => {
       dependencies.repository.getAll.mockResolvedValue([transactions[0]]);
       await dependencies.service.getAll({categoryType: "expense", categoryId: "food"});
-      expect(dependencies.repository.getAll).toHaveBeenCalledWith({startDate: undefined, endDate: undefined, accountId: undefined, categoryIds: new Map([["food", true]]), withoutTransactions: undefined});
+      expect(dependencies.repository.getAll).toHaveBeenCalledWith({
+        startDate: undefined,
+        endDate: undefined,
+        accountId: undefined,
+        categoryIds: new Map([["food", true]]),
+        withoutTransactions: undefined,
+      });
     });
 
     it("forwards a category id without a category type", async () => {
       dependencies.repository.getAll.mockResolvedValue([transactions[0]]);
       await dependencies.service.getAll({categoryId: "food"});
-      expect(dependencies.repository.getAll).toHaveBeenCalledWith({startDate: undefined, endDate: undefined, accountId: undefined, categoryIds: new Map([["food", true]]), withoutTransactions: undefined});
+      expect(dependencies.repository.getAll).toHaveBeenCalledWith({
+        startDate: undefined,
+        endDate: undefined,
+        accountId: undefined,
+        categoryIds: new Map([["food", true]]),
+        withoutTransactions: undefined,
+      });
     });
 
     it("returns an empty list without querying the repository when filters cannot match a category", async () => {
@@ -103,24 +160,47 @@ describe("TransactionsService", () => {
 
     it("enriches a regular transaction and falls back for a missing category", async () => {
       dependencies.repository.getById.mockResolvedValue({...transactions[0], categoryId: "removed-category"});
-      await expect(dependencies.service.getById("transaction-1")).resolves.toEqual({...transactions[0], categoryId: "removed-category", categoryName: "Неизвестная категория", categoryType: undefined});
+      await expect(dependencies.service.getById("transaction-1")).resolves.toEqual({
+        ...transactions[0],
+        categoryId: "removed-category",
+        categoryName: "Неизвестная категория",
+        categoryType: undefined,
+      });
     });
 
     it("enriches a regular transaction with its category", async () => {
       dependencies.repository.getById.mockResolvedValue(transactions[0]);
-      await expect(dependencies.service.getById("transaction-1")).resolves.toEqual({...transactions[0], categoryName: "Food", categoryType: "expense"});
+      await expect(dependencies.service.getById("transaction-1")).resolves.toEqual({
+        ...transactions[0],
+        categoryName: "Food",
+        categoryType: "expense",
+      });
     });
 
     it("enriches a transfer with its system category", async () => {
-      const transfer: Transaction = {...transactions[0], categoryId: TRANSFER_OUT_CATEGORY_ID, transferId: "transfer-1"};
+      const transfer: Transaction = {
+        ...transactions[0],
+        categoryId: TRANSFER_OUT_CATEGORY_ID,
+        transferId: "transfer-1",
+      };
       dependencies.repository.getById.mockResolvedValue(transfer);
-      await expect(dependencies.service.getById(transfer.id)).resolves.toEqual({...transfer, categoryName: "Исходящий перевод", categoryType: "expense", categoryShortName: "💸"});
+      await expect(dependencies.service.getById(transfer.id)).resolves.toEqual({
+        ...transfer,
+        categoryName: "Исходящий перевод",
+        categoryType: "expense",
+        categoryShortName: "💸",
+      });
     });
 
     it("recognizes an incoming transfer", async () => {
       const transfer: Transaction = {...transactions[0], categoryId: TRANSFER_IN_CATEGORY_ID, transferId: "transfer-1"};
       dependencies.repository.getById.mockResolvedValue(transfer);
-      await expect(dependencies.service.getById(transfer.id)).resolves.toEqual({...transfer, categoryName: "Входящий перевод", categoryType: "income", categoryShortName: "💸"});
+      await expect(dependencies.service.getById(transfer.id)).resolves.toEqual({
+        ...transfer,
+        categoryName: "Входящий перевод",
+        categoryType: "income",
+        categoryShortName: "💸",
+      });
     });
   });
 
@@ -137,27 +217,64 @@ describe("TransactionsService", () => {
     });
 
     it("throws when two transactions do not have opposite transfer categories", async () => {
-      dependencies.repository.getAll.mockResolvedValue([{...transactions[0], transferId: "transfer-1"}, {...transactions[1], transferId: "transfer-1"}]);
+      dependencies.repository.getAll.mockResolvedValue([
+        {...transactions[0], transferId: "transfer-1"},
+        {...transactions[1], transferId: "transfer-1"},
+      ]);
       await expect(dependencies.service.getTransferById("transfer-1")).rejects.toThrow("Transfer corrupted");
     });
 
     it("returns transfer details from the paired transactions", async () => {
       dependencies.repository.getAll.mockResolvedValue([
         {...transactions[0], categoryId: TRANSFER_OUT_CATEGORY_ID, transferId: "transfer-1"},
-        {...transactions[1], categoryId: TRANSFER_IN_CATEGORY_ID, transferId: "transfer-1", amount: 100, date: "2024-01-01"},
+        {
+          ...transactions[1],
+          categoryId: TRANSFER_IN_CATEGORY_ID,
+          transferId: "transfer-1",
+          amount: 100,
+          date: "2024-01-01",
+        },
       ]);
-      await expect(dependencies.service.getTransferById("transfer-1")).resolves.toEqual({transferId: "transfer-1", fromAccountId: "cash", toAccountId: "card", amount: 100, date: "2024-01-01"});
+      await expect(dependencies.service.getTransferById("transfer-1")).resolves.toEqual({
+        transferId: "transfer-1",
+        fromAccountId: "cash",
+        toAccountId: "card",
+        amount: 100,
+        date: "2024-01-01",
+      });
     });
   });
 
   describe("create and update", () => {
     it("reports every invalid transaction field and does not persist it", async () => {
-      await expect(dependencies.service.create({amount: 0, categoryId: "", accountId: "", date: "invalid"})).rejects.toThrow("Сумма должна быть положительным числом Не указана категория Не указан счёт Дата должна быть в формате ISO и быть валидной");
+      await expect(
+        dependencies.service.create({amount: 0, categoryId: "", accountId: "", date: "invalid"})
+      ).rejects.toThrow(
+        "Сумма должна быть положительным числом Не указана категория Не указан счёт Дата должна быть в формате ISO и быть валидной"
+      );
       expect(dependencies.repository.create).not.toHaveBeenCalled();
     });
 
     it("rejects missing referenced category and account", async () => {
-      await expect(dependencies.service.create({...validTransaction, categoryId: "missing-category", accountId: "missing-account"})).rejects.toThrow("Категория не найдена Счёт не найден");
+      await expect(
+        dependencies.service.create({...validTransaction, categoryId: "missing-category", accountId: "missing-account"})
+      ).rejects.toThrow("Категория не найдена Счёт не найден");
+    });
+
+    it("rejects non-finite amounts, invalid calendar dates and bypass-only transaction fields", async () => {
+      const invalidPayload = {
+        ...validTransaction,
+        amount: Number.NaN,
+        date: "2024-02-30",
+        comment: "x".repeat(201),
+        transferId: "bypass-transfer",
+        unexpected: true,
+      };
+
+      await expect(dependencies.service.create(invalidPayload as unknown as Omit<Transaction, "id">)).rejects.toThrow(
+        "Операция содержит недопустимые поля Сумма должна быть положительным числом Дата должна быть в формате ISO и быть валидной Комментарий должен быть строкой длиной до 200 символов Нельзя создавать или изменять перевод как обычную операцию"
+      );
+      expect(dependencies.repository.create).not.toHaveBeenCalled();
     });
 
     it("creates a validated transaction with the original payload", async () => {
@@ -170,7 +287,10 @@ describe("TransactionsService", () => {
     it("updates a validated partial transaction with its id", async () => {
       const payload = {amount: 120, categoryId: "food", accountId: "cash", date: "2024-01-02", comment: "updated"};
       dependencies.repository.update.mockResolvedValue({...transactions[0], comment: "updated"});
-      await expect(dependencies.service.update("transaction-1", payload)).resolves.toEqual({...transactions[0], comment: "updated"});
+      await expect(dependencies.service.update("transaction-1", payload)).resolves.toEqual({
+        ...transactions[0],
+        comment: "updated",
+      });
       expect(dependencies.repository.update).toHaveBeenCalledWith("transaction-1", payload);
     });
   });
@@ -190,25 +310,52 @@ describe("TransactionsService", () => {
 
     it("rejects deleting one side of a transfer", async () => {
       dependencies.repository.getById.mockResolvedValue({...transactions[0], transferId: "transfer-1"});
-      await expect(dependencies.service.delete("transaction-1")).rejects.toThrow("Нельзя удалить транзакцию перевода напрямую");
+      await expect(dependencies.service.delete("transaction-1")).rejects.toThrow(
+        "Нельзя удалить транзакцию перевода напрямую"
+      );
       expect(dependencies.repository.delete).not.toHaveBeenCalled();
     });
   });
 
   describe("transfer mutations", () => {
     it("reports all invalid transfer fields and does not create a transfer", async () => {
-      await expect(dependencies.service.createTransfer({fromAccountId: "", toAccountId: "", amount: 0, date: "invalid"})).rejects.toThrow("Не указаны счета Счета должны отличаться Сумма должна быть положительной Некорректная дата Счет отправителя не найден Счет получателя не найден");
+      await expect(
+        dependencies.service.createTransfer({fromAccountId: "", toAccountId: "", amount: 0, date: "invalid"})
+      ).rejects.toThrow(
+        "Не указаны счета Счета должны отличаться Сумма должна быть положительной Некорректная дата Счет отправителя не найден Счет получателя не найден"
+      );
       expect(dependencies.repository.createTransfer).not.toHaveBeenCalled();
     });
 
     it("rejects a transfer when an account does not exist", async () => {
-      await expect(dependencies.service.createTransfer({...validTransfer, toAccountId: "missing-account"})).rejects.toThrow("Счет получателя не найден");
+      await expect(
+        dependencies.service.createTransfer({...validTransfer, toAccountId: "missing-account"})
+      ).rejects.toThrow("Счет получателя не найден");
+    });
+
+    it("rejects non-finite transfer amounts and invalid calendar dates", async () => {
+      await expect(
+        dependencies.service.createTransfer({...validTransfer, amount: Number.POSITIVE_INFINITY, date: "2024-02-30"})
+      ).rejects.toThrow("Сумма должна быть положительной Некорректная дата");
+      expect(dependencies.repository.createTransfer).not.toHaveBeenCalled();
     });
 
     it("creates paired transactions with transfer system categories", async () => {
       const created: [Transaction, Transaction] = [
-        {...transactions[0], transferId: "transfer-1", categoryId: TRANSFER_OUT_CATEGORY_ID, amount: 300, date: "2024-01-03"},
-        {...transactions[1], transferId: "transfer-1", categoryId: TRANSFER_IN_CATEGORY_ID, amount: 300, date: "2024-01-03"},
+        {
+          ...transactions[0],
+          transferId: "transfer-1",
+          categoryId: TRANSFER_OUT_CATEGORY_ID,
+          amount: 300,
+          date: "2024-01-03",
+        },
+        {
+          ...transactions[1],
+          transferId: "transfer-1",
+          categoryId: TRANSFER_IN_CATEGORY_ID,
+          amount: 300,
+          date: "2024-01-03",
+        },
       ];
       dependencies.repository.createTransfer.mockResolvedValue(created);
       await expect(dependencies.service.createTransfer(validTransfer)).resolves.toEqual(created);
