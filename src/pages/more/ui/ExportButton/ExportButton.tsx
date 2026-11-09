@@ -8,6 +8,7 @@ export const ExportButton = () => {
   return (
     <Button
       variant="outline"
+      size="lg"
       className={"w-full"}
       onClick={() => exportLocalStorageData(["categories", "transactions", "accounts"])}
     >

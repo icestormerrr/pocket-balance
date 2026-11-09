@@ -6,7 +6,7 @@ import {Button} from "@/shared/ui/button";
 export const CategoriesLink = () => {
   return (
     <Link to={"/categories"} className="w-full">
-      <Button variant="outline" className="w-full">
+      <Button variant="outline" className="w-full" size="lg">
         Категории <List />
       </Button>
     </Link>

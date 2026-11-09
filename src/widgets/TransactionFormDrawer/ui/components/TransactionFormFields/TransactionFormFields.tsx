@@ -9,11 +9,10 @@ import {cn} from "@/shared/lib/styling";
 import {Button} from "@/shared/ui/button";
 import {Card} from "@/shared/ui/card";
 import {DatePickerMobile} from "@/shared/ui/date-picker";
+import {DetailRow} from "@/shared/ui/detail-row";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -23,6 +22,7 @@ import {Input} from "@/shared/ui/input";
 import {SelectMobile} from "@/shared/ui/select";
 import {Textarea} from "@/shared/ui/textarea";
 import {ToggleGroup, ToggleGroupItem} from "@/shared/ui/toggle-group";
+import {ValueEditorDrawer} from "@/shared/ui/value-editor-drawer";
 
 import {getRecentCategoryIds} from "../../../utils/creationPreferences";
 import type {TransactionFormState} from "../../../utils/schema";
@@ -302,53 +302,30 @@ export const TransactionFormFields = () => {
         <FormField
           control={control}
           name="comment"
-          render={({field}) => (
+          render={({field, fieldState}) => (
             <FormItem className="gap-1">
-              <Drawer repositionInputs={false}>
-                <DrawerTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="h-auto w-full justify-between rounded-[1.1rem] px-3 py-3 text-left"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="flex size-10 items-center justify-center rounded-xl bg-muted" aria-hidden>
-                        <MessageSquare />
-                      </span>
-                      <span className="flex flex-col gap-0.5">
-                        <span className="text-sm font-medium">Комментарий</span>
-                        <span className="max-w-56 truncate text-xs text-muted-foreground">
-                          {comment || "Добавить заметку"}
-                        </span>
-                      </span>
-                    </span>
-                    <ChevronRight className="text-muted-foreground" />
-                  </Button>
-                </DrawerTrigger>
-                <DrawerContent className="mx-auto max-w-lg">
-                  <DrawerHeader>
-                    <DrawerTitle>Комментарий</DrawerTitle>
-                  </DrawerHeader>
-                  <div className="px-5 pb-4">
-                    <Textarea
-                      className="min-h-40 resize-none rounded-2xl"
-                      placeholder="Например, продукты на неделю"
-                      autoFocus
-                      {...field}
-                      onChange={event => {
-                        clearFieldError("comment");
-                        field.onChange(event);
-                      }}
-                    />
-                  </div>
-                  <DrawerFooter detached>
-                    <DrawerClose asChild>
-                      <Button size="lg" className="h-12 w-full rounded-2xl">
-                        Готово
-                      </Button>
-                    </DrawerClose>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
+              <ValueEditorDrawer
+                title="Комментарий"
+                trigger={
+                  <DetailRow
+                    icon={<MessageSquare />}
+                    label="Комментарий"
+                    value={comment || "Добавить заметку"}
+                    className={cn(fieldState.error && "text-destructive")}
+                  />
+                }
+              >
+                <Textarea
+                  className="min-h-40 resize-none rounded-2xl"
+                  placeholder="Например, продукты на неделю"
+                  autoFocus
+                  {...field}
+                  onChange={event => {
+                    clearFieldError("comment");
+                    field.onChange(event);
+                  }}
+                />
+              </ValueEditorDrawer>
               <FormMessage className="px-3" />
             </FormItem>
           )}

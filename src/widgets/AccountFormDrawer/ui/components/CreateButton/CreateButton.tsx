@@ -52,8 +52,13 @@ export const CreateButton: FC<Props> = ({onSuccess}) => {
   };
 
   return (
-    <Button size="lg" onClick={handleCreateButtonClick} disabled={!formState.isValid}>
-      Создать
+    <Button
+      size="lg"
+      className="h-12 w-full rounded-2xl"
+      onClick={handleCreateButtonClick}
+      disabled={!formState.isValid}
+    >
+      Создать счёт
     </Button>
   );
 };

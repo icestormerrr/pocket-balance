@@ -32,7 +32,7 @@ export const ImportButton = () => {
 
   return (
     <>
-      <Button variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
+      <Button variant="outline" size="lg" className="w-full" onClick={() => fileInputRef.current?.click()}>
         Импортировать <Import />
       </Button>
       {/* Скрытый input для импорта */}
