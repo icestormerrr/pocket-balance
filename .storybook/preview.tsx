@@ -3,7 +3,8 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import type {ReactNode} from "react";
 
 import "../src/app/styles/globals.css";
-import {ThemeProvider} from "../src/shared/lib/theme";
+import {AppServicesProvider} from "../src/app/AppServicesProvider";
+import {ThemeProvider} from "../src/ui/shared/lib/theme";
 
 const MOBILE_VIEWPORT = {
   name: "Mobile",
@@ -18,11 +19,13 @@ const withAppProviders = (Story: () => ReactNode) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark">
-        <div className="mx-auto min-h-screen w-full max-w-md bg-background">
-          <Story />
-        </div>
-      </ThemeProvider>
+      <AppServicesProvider>
+        <ThemeProvider defaultTheme="dark">
+          <div className="mx-auto min-h-screen w-full max-w-md bg-background">
+            <Story />
+          </div>
+        </ThemeProvider>
+      </AppServicesProvider>
     </QueryClientProvider>
   );
 };

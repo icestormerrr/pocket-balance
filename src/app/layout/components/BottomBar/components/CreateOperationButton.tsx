@@ -1,12 +1,12 @@
 ﻿import {ArrowRightLeft, CirclePlus, ReceiptText} from "lucide-react";
 import {type FC, useCallback, useState} from "react";
 
-import {Button} from "@/shared/ui/button";
-import {Card} from "@/shared/ui/card";
-import {Cell} from "@/shared/ui/cell";
-import {Drawer, DrawerContent, DrawerHeader, DrawerTitle} from "@/shared/ui/drawer";
-import TransactionFormDrawer from "@/widgets/TransactionFormDrawer";
-import TransferFormDrawer from "@/widgets/TransferFormDrawer";
+import {Button} from "@/ui/shared/ui/button";
+import {Card} from "@/ui/shared/ui/card";
+import {Cell} from "@/ui/shared/ui/cell";
+import {Drawer, DrawerContent, DrawerHeader, DrawerTitle} from "@/ui/shared/ui/drawer";
+import TransactionFormDrawer from "@/ui/widgets/TransactionFormDrawer";
+import TransferFormDrawer from "@/ui/widgets/TransferFormDrawer";
 
 export function CreateOperationButton() {
   const [openActionSheet, setOpenActionSheet] = useState(false);

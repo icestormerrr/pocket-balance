@@ -1,12 +1,12 @@
 import {createRootRoute, createRoute, createRouter} from "@tanstack/react-router";
 
-import CategoriesPage from "@/pages/categories";
-import MorePage from "@/pages/more";
-import ReportsPage from "@/pages/reports";
-import TransactionsPage from "@/pages/transactions";
+import CategoriesPage from "@/ui/pages/categories";
+import MorePage from "@/ui/pages/more";
+import ReportsPage from "@/ui/pages/reports";
+import TransactionsPage from "@/ui/pages/transactions";
 
 import {RootLayout} from "@/app/layout/RootLayout";
-import AccountsPage from "@/pages/accounts";
+import AccountsPage from "@/ui/pages/accounts";
 
 const rootRoute = createRootRoute({
   component: RootLayout,

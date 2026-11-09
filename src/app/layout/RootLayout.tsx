@@ -1,8 +1,8 @@
 import "@ionic/react/css/core.css";
 import {Outlet} from "@tanstack/react-router";
 
-import {getStatusBarHeight} from "@/shared/lib/styling";
-import {Toaster} from "@/shared/ui/sonner";
+import {getStatusBarHeight} from "@/ui/shared/lib/styling";
+import {Toaster} from "@/ui/shared/ui/sonner";
 
 import {BottomBar} from "./components/BottomBar/BottomBar";
 import {GradientBlobs} from "./components/GradientBlobs/GradientBlobs";
