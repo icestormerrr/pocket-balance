@@ -4,7 +4,7 @@ import {Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis} from "recharts";
 import {useCashflowReport, type TransactionDateFilterType} from "@/entities/transaction";
 import {Card, CardContent} from "@/shared/ui/card";
 import {type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent} from "@/shared/ui/chart";
-import {SegmentInput} from "@/shared/ui/tabs";
+import {SegmentInput} from "@/shared/ui/segment-input";
 
 import {EmptyReportState, MetricCard, ReportSectionHeader, formatCurrency} from "../shared";
 

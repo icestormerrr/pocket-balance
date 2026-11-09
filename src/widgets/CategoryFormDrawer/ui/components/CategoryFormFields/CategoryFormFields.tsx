@@ -3,7 +3,7 @@ import {useFormContext} from "react-hook-form";
 import {CATEGORY_TYPE_OPTIONS} from "@/entities/category";
 import {FormField, FormMessage} from "@/shared/ui/form";
 import {Input} from "@/shared/ui/input";
-import {SegmentInput} from "@/shared/ui/tabs";
+import {SegmentInput} from "@/shared/ui/segment-input";
 
 import {Button} from "@/shared/ui/button";
 import {Card} from "@/shared/ui/card";

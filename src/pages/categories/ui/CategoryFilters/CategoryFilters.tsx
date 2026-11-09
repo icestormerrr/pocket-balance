@@ -1,7 +1,7 @@
 import type {FC} from "react";
 
 import {type CategoriesFilter, CATEGORY_TYPE_OPTIONS, type CategoryType} from "@/entities/category";
-import {BadgeGroup} from "@/shared/ui/badge";
+import {BadgeGroup} from "@/shared/ui/badge-group";
 
 type Props = {
   filter: CategoriesFilter;

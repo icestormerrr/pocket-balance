@@ -1,5 +1,5 @@
 import {type Theme, THEME_OPTIONS, useTheme} from "@/shared/lib/theme";
-import {SegmentInput} from "@/shared/ui/tabs";
+import {SegmentInput} from "@/shared/ui/segment-input";
 
 export const ThemeToggle = () => {
   const {theme, setTheme} = useTheme();

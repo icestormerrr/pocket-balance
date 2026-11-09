@@ -1,6 +1,6 @@
 import {useTransactionsYears} from "@/entities/transaction";
 import {DateConverter, DateCreator, months} from "@/shared/lib/datetime";
-import {BadgeGroup} from "@/shared/ui/badge";
+import {BadgeGroup} from "@/shared/ui/badge-group";
 import {AnimatePresence, motion} from "framer-motion";
 import {useMemo} from "react";
 

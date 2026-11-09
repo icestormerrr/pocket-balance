@@ -5,7 +5,7 @@ import {FormProvider, useForm} from "react-hook-form";
 import {useTransfer} from "@/entities/transaction";
 import {DateConverter} from "@/shared/lib/datetime";
 import {getStatusBarHeight} from "@/shared/lib/styling";
-import {GradientBlob} from "@/shared/ui/background";
+import {GradientBlob} from "@/shared/ui/gradient-blob";
 import {Button} from "@/shared/ui/button";
 import {Drawer, DrawerContent, DrawerFooter} from "@/shared/ui/drawer";
 
