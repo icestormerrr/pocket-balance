@@ -1,4 +1,4 @@
-import type {Account} from "../model/Account";
+import type {Account} from "../domain/Account";
 import type {IAccountsRepository} from "./IAccountsRepository";
 
 const STORAGE_KEY = "accounts";

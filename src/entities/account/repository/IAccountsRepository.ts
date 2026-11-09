@@ -1,4 +1,4 @@
-import type {Account} from "../model/Account";
+import type {Account} from "../domain/Account";
 
 export interface IAccountsRepository {
   getAll(filter: object): Promise<Account[]>;

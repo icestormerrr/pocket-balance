@@ -32,7 +32,7 @@ export const SelectMobile = ({
   renderField,
   renderOption,
   className,
-  hideSearch,
+  hideSearch = true,
 }: SelectMobileProps) => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);

@@ -3,7 +3,7 @@ import type {ICategoriesService} from "@/entities/category/service/ICategoriesSe
 
 import {accountsService} from "@/entities/account/service/AccountsService";
 import type {IAccountsService} from "@/entities/account/service/IAccountsService";
-import {type Transaction, TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID} from "../model/Transaction";
+import {type Transaction, TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID} from "../domain/Transaction";
 import type {ITransactionsRepository} from "../repository/ITransactionsRepository";
 import {TransactionsLocalStorageRepository} from "../repository/TransactionsLocalStorageRepository";
 import type {

@@ -1,6 +1,6 @@
-﻿import type {CategoryType} from "@/entities/category/model/Category";
+﻿import type {CategoryType} from "@/entities/category/domain/Category";
 
-import type {Transaction} from "../model/Transaction";
+import type {Transaction} from "../domain/Transaction";
 
 export interface ITransactionsService {
   getAll(filter: TransactionsFilter): Promise<TransactionExtended[]>;

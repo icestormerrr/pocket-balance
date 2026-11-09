@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import type {Account} from "../model/Account";
+import type {Account} from "../domain/Account";
 import {accountsService} from "../service/AccountsService";
 import type {AccountsFilter} from "../service/IAccountsService";
 

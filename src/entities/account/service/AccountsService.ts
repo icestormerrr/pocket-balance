@@ -1,5 +1,5 @@
 import {DateConverter} from "@/shared/lib/datetime";
-import type {Account} from "../model/Account";
+import type {Account} from "../domain/Account";
 import {AccountLocalStorageRepository} from "../repository/AccountLocalStorageRepository";
 import type {IAccountsRepository} from "../repository/IAccountsRepository";
 import type {AccountCreatePayload, AccountsFilter, AccountUpdatePayload, IAccountsService} from "./IAccountsService";

@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import type {Category} from "../model/Category";
+import type {Category} from "../domain/Category";
 import {categoriesService} from "../service/CategoriesService";
 import type {CategoriesFilter} from "../service/ICategoriesService";
 

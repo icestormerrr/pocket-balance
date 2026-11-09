@@ -4,8 +4,8 @@ export {getCreateCategoryMutationKey, useCreateCategory} from "./adapter/useCrea
 export {getDeleteCategoryMutationKey, useDeleteCategory} from "./adapter/useDeleteCategory";
 export {getUpdateCategoryMutationKey, useUpdateCategory} from "./adapter/useUpdateCategory";
 
-import type {Category, CategoryType} from "./model/Category";
-import {CATEGORY_TYPE_OPTIONS} from "./model/Category";
+import type {Category, CategoryType} from "./domain/Category";
+import {CATEGORY_TYPE_OPTIONS} from "./domain/Category";
 import type {CategoriesFilter, CategoryCreatePayload, CategoryUpdatePayload} from "./service/ICategoriesService";
 
 export {CATEGORY_TYPE_OPTIONS};

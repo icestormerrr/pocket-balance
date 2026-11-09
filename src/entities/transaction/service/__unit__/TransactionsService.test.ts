@@ -5,7 +5,7 @@ import type {IAccountsService} from "@/entities/account/service/IAccountsService
 import type {Category, CategoryType} from "@/entities/category";
 import type {ICategoriesService} from "@/entities/category/service/ICategoriesService";
 
-import {TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID, type Transaction} from "../../model/Transaction";
+import {TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID, type Transaction} from "../../domain/Transaction";
 import type {ITransactionsRepository} from "../../repository/ITransactionsRepository";
 import type {TransferPayload} from "../ITransactionsService";
 import {TransactionsService} from "../TransactionsService";

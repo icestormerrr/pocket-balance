@@ -18,7 +18,7 @@ export {getUpdateTransferMutationKey, useUpdateTransfer} from "./adapter/useUpda
 import TransactionsDateFilters, {
   type TransactionDateFilterType,
 } from "@/entities/transaction/ui/TransactionsDateFilters";
-import type {Transaction} from "./model/Transaction";
+import type {Transaction} from "./domain/Transaction";
 import type {
   AccountFlowItem,
   CashflowPoint,

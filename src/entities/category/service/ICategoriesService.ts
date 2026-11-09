@@ -1,4 +1,4 @@
-import type {Category, CategoryType} from "../model/Category";
+import type {Category, CategoryType} from "../domain/Category";
 
 export interface ICategoriesService {
   getAll(filter: CategoriesFilter): Promise<Category[]>;

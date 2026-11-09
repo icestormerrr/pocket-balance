@@ -1,5 +1,5 @@
 import {DateConverter} from "@/shared/lib/datetime";
-import type {Category} from "../model/Category";
+import type {Category} from "../domain/Category";
 import {CategoryLocalStorageRepository} from "../repository/CategoryLocalStorageRepository";
 import type {ICategoriesRepository} from "../repository/ICategoriesRepository";
 import type {

@@ -1,6 +1,6 @@
 import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
-import type {Category, CategoryType} from "../../model/Category";
+import type {Category, CategoryType} from "../../domain/Category";
 import type {ICategoriesRepository} from "../../repository/ICategoriesRepository";
 import {CategoriesService} from "../CategoriesService";
 

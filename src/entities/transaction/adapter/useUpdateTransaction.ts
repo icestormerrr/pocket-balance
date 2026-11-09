@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import type {Transaction} from "../model/Transaction";
+import type {Transaction} from "../domain/Transaction";
 import {transactionsService} from "../service/TransactionsService";
 import {invalidateTransactionQueries} from "./invalidateTransactionQueries";
 

@@ -4,8 +4,8 @@ export {getCreateAccountMutationKey, useCreateAccount} from "./adapter/useCreate
 export {getDeleteAccountMutationKey, useDeleteAccount} from "./adapter/useDeleteAccount";
 export {getUpdateAccountMutationKey, useUpdateAccount} from "./adapter/useUpdateAccount";
 
-import type {Account} from "./model/Account";
-import {CURRENCY_OPTIONS} from "./model/Account";
+import type {Account} from "./domain/Account";
+import {CURRENCY_OPTIONS} from "./domain/Account";
 
 import type {AccountCreatePayload, AccountsFilter, AccountUpdatePayload} from "./service/IAccountsService";
 

@@ -1,6 +1,6 @@
 import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
-import type {Account} from "../../model/Account";
+import type {Account} from "../../domain/Account";
 import type {IAccountsRepository} from "../../repository/IAccountsRepository";
 import {AccountsService} from "../AccountsService";
 

@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import type {Category} from "../model/Category";
+import type {Category} from "../domain/Category";
 import {categoriesService} from "../service/CategoriesService";
 
 export const getCreateCategoryMutationKey = () => ["createCategory"] as const;

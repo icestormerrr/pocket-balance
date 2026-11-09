@@ -1,5 +1,5 @@
 ﻿import {DateComparator, DateConverter} from "@/shared/lib/datetime";
-import {type Transaction, TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID} from "../model/Transaction";
+import {type Transaction, TRANSFER_IN_CATEGORY_ID, TRANSFER_OUT_CATEGORY_ID} from "../domain/Transaction";
 import type {ITransactionsRepository, TransactionsRepositoryFilter, TransferPayload} from "./ITransactionsRepository";
 
 const STORAGE_KEY = "transactions";

@@ -1,4 +1,4 @@
-﻿import type {Transaction} from "../model/Transaction";
+﻿import type {Transaction} from "../domain/Transaction";
 
 export interface TransactionsRepositoryFilter {
   startDate?: string;

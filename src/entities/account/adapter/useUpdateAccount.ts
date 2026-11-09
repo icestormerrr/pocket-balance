@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import type {Account} from "../model/Account";
+import type {Account} from "../domain/Account";
 import {accountsService} from "../service/AccountsService";
 
 export const getUpdateAccountMutationKey = () => ["updateAccount"] as const;
