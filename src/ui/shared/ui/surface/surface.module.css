@@ -1,0 +1,35 @@
+.glass {
+  --surface-glass-background: oklch(0.985 0.002 260 / 58%);
+  --surface-glass-edge: oklch(1 0 0 / 95%);
+  --surface-glass-shadow: oklch(0.25 0.015 260 / 20%);
+  --surface-glass-highlight: oklch(1 0 0);
+  --surface-glass-blur: 16px;
+  --surface-glass-reflection: linear-gradient(
+    145deg,
+    oklch(1 0 0 / 90%),
+    oklch(1 0 0 / 12%) 38%,
+    oklch(0.95 0.003 260 / 20%) 76%,
+    oklch(1 0 0 / 70%)
+  );
+  --surface-glass-inner-shadow:
+    inset 0 -1px 2px oklch(0.5 0.012 260 / 12%), inset 0 0 0 1px oklch(0.65 0.008 260 / 12%);
+  border: 1px solid var(--surface-glass-edge);
+  background: var(--surface-glass-background);
+  background-image: var(--surface-glass-reflection);
+  box-shadow:
+    0 8px 28px var(--surface-glass-shadow),
+    inset 0 1px 1px var(--surface-glass-highlight),
+    var(--surface-glass-inner-shadow);
+  -webkit-backdrop-filter: blur(var(--surface-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--surface-glass-blur)) saturate(160%);
+}
+
+:global(.dark) .glass {
+  --surface-glass-background: oklch(0.24 0.006 286 / 78%);
+  --surface-glass-edge: oklch(1 0 0 / 16%);
+  --surface-glass-shadow: oklch(0 0 0 / 32%);
+  --surface-glass-highlight: var(--surface-glass-edge);
+  --surface-glass-blur: 24px;
+  --surface-glass-reflection: none;
+  --surface-glass-inner-shadow: inset 0 0 0 transparent;
+}

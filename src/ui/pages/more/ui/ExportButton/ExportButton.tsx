@@ -9,7 +9,7 @@ export const ExportButton = () => {
     <Button
       variant="outline"
       size="lg"
-      className={"w-full"}
+      className={"w-full rounded-lg"}
       onClick={() => exportLocalStorageData(["categories", "transactions", "accounts"])}
     >
       Экспортировать <Share />

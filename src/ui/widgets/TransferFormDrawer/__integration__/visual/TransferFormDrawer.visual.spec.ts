@@ -6,5 +6,7 @@ for (const state of ["create", "edit"]) {
     await expect(page.getByRole("button", {name: "Отмена"})).toBeVisible();
     await page.waitForTimeout(400);
     await expect(page.locator("#storybook-root")).toHaveScreenshot(`transfer-form-${state}-mobile.png`);
+    await page.getByRole("button", {name: "Закрыть", exact: true}).click();
+    await expect(page.getByRole("dialog")).not.toBeVisible();
   });
 }

@@ -1,49 +1,37 @@
-import {BOTTOM_BAR_HEIGHT, cn} from "@/ui/shared/lib/styling";
+import {Link, useRouterState} from "@tanstack/react-router";
 import {Bolt, ChartCandlestick, Landmark, Rows4} from "lucide-react";
 
 import {URLS} from "@/ui/shared/const/urls";
-import {Link, useRouterState} from "@tanstack/react-router";
+import {SegmentItem, SegmentList} from "@/ui/shared/ui/segment-input";
+import classNames from "./bottom-bar.module.css";
 import {CreateOperationButton} from "./components/CreateOperationButton";
 
 const navItems = [
   {label: "Счета", icon: Landmark, link: URLS.AccountsPage.build()},
   {label: "Операции", icon: Rows4, link: URLS.TransactionsPage.build()},
-  {
-    content: (
-      <div className="flex justify-center mt-[-5px]">
-        <CreateOperationButton key="central" />
-      </div>
-    ),
-  },
   {label: "Отчёты", icon: ChartCandlestick, link: URLS.ReportsPage.build()},
   {label: "Ещё", icon: Bolt, link: URLS.MorePage.build()},
 ];
 
 export function BottomBar() {
-  const location = useRouterState({select: s => s.location});
-  const pathname = location.pathname;
+  const pathname = useRouterState({select: s => s.location.pathname});
+  const activePathname = pathname === URLS.MainPage.path ? URLS.TransactionsPage.path : pathname;
 
   return (
-    <nav
-      className="fixed bottom-0 inset-x-0 z-50 flex items-end justify-center bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-6"
-      style={{height: BOTTOM_BAR_HEIGHT}}
-    >
-      <div className={`w-full max-w-md mx-auto grid grid-cols-5 px-4`}>
-        {navItems.map(({label, icon: Icon, link, content}, idx) =>
-          content ? (
-            content
-          ) : (
-            <Link
-              key={idx}
-              to={link ?? "/"}
-              className={cn("flex flex-col items-center justify-center text-xs", pathname !== link && "text-zinc-400")}
-            >
-              {Icon && <Icon className="w-5 h-5" />}
-              <span className="mt-1">{label}</span>
+    <nav aria-label="Основная навигация" className={classNames.bottomBar}>
+      <SegmentList size="lg" className={classNames.items}>
+        {navItems.map(({label, icon: Icon, link}) => (
+          <SegmentItem key={link} active={activePathname === link} asChild>
+            <Link to={link} aria-current={activePathname === link ? "page" : undefined}>
+              <span className={classNames.content}>
+                <Icon aria-hidden="true" strokeWidth={1.8} />
+                <span>{label}</span>
+              </span>
             </Link>
-          )
-        )}
-      </div>
+          </SegmentItem>
+        ))}
+      </SegmentList>
+      <CreateOperationButton />
     </nav>
   );
 }

@@ -1,12 +1,14 @@
-﻿import {ArrowRightLeft, CirclePlus, ReceiptText} from "lucide-react";
+import {ArrowRightLeft, Plus, ReceiptText} from "lucide-react";
 import {type FC, useCallback, useState} from "react";
 
-import {Button} from "@/ui/shared/ui/button";
 import {Card} from "@/ui/shared/ui/card";
 import {Cell} from "@/ui/shared/ui/cell";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle} from "@/ui/shared/ui/drawer";
+import {Surface} from "@/ui/shared/ui/surface";
 import TransactionFormDrawer from "@/ui/widgets/TransactionFormDrawer";
 import TransferFormDrawer from "@/ui/widgets/TransferFormDrawer";
+
+import classNames from "../bottom-bar.module.css";
 
 export function CreateOperationButton() {
   const [openActionSheet, setOpenActionSheet] = useState(false);
@@ -25,9 +27,18 @@ export function CreateOperationButton() {
 
   return (
     <>
-      <Button variant="outline" size={"icon"} className="w-11 h-11" onClick={() => setOpenActionSheet(true)}>
-        <CirclePlus />
-      </Button>
+      <Surface variant="glass" asChild>
+        <button
+          type="button"
+          className={classNames.create}
+          aria-label="Создать операцию"
+          aria-haspopup="dialog"
+          aria-expanded={openActionSheet}
+          onClick={() => setOpenActionSheet(true)}
+        >
+          <Plus aria-hidden="true" strokeWidth={1.8} />
+        </button>
+      </Surface>
 
       <CreateActionDrawer
         open={openActionSheet}
@@ -52,7 +63,7 @@ type CreateActionDrawerProps = {
 const CreateActionDrawer: FC<CreateActionDrawerProps> = ({open, onOpenChange, onOperationClick, onTransferClick}) => {
   return (
     <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
-      <DrawerContent className="px-4 pb-6 min-h-[35vh]">
+      <DrawerContent className="min-h-[35vh] px-4 pb-6">
         <DrawerHeader className="px-0">
           <DrawerTitle>Что создать?</DrawerTitle>
         </DrawerHeader>
@@ -86,4 +97,3 @@ const CreateActionDrawer: FC<CreateActionDrawerProps> = ({open, onOpenChange, on
     </Drawer>
   );
 };
-

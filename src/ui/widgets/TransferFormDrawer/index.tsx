@@ -2,12 +2,13 @@
 import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
-import {useTransfer} from "@/ui/entities/transaction";
 import {DateConverter} from "@/shared/lib/datetime";
+import {useTransfer} from "@/ui/entities/transaction";
 import {getStatusBarHeight} from "@/ui/shared/lib/styling";
-import {GradientBlob} from "@/ui/shared/ui/gradient-blob";
 import {Button} from "@/ui/shared/ui/button";
 import {Drawer, DrawerContent, DrawerFooter} from "@/ui/shared/ui/drawer";
+import {DrawerCloseButton} from "@/ui/shared/ui/drawer-close-button";
+import {GradientBlob} from "@/ui/shared/ui/gradient-blob";
 
 import {transferFormSchema, type TransferFormState} from "./model/schema";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
@@ -70,9 +71,12 @@ const TransferFormDrawer: FC<Props> = memo(({open, onOpenChange, transferId}) =>
           style={{minHeight: window.innerHeight - getStatusBarHeight()}}
           hideBar
         >
-          <div className="p-4 relative overflow-hidden">
+          <div className="relative min-h-0 flex-1 overflow-auto p-4">
             <GradientBlob colorFrom="#fff" colorTo="#fff" size={150} opacity={1} position="top" zIndex={-1} />
 
+            <div className="mb-5">
+              <DrawerCloseButton onClick={handleClose} />
+            </div>
             <TransferFormFields />
             {formTransferId && (
               <div className={"my-6"}>
@@ -99,4 +103,3 @@ const TransferFormDrawer: FC<Props> = memo(({open, onOpenChange, transferId}) =>
 TransferFormDrawer.displayName = "TransferFormDrawer";
 
 export default TransferFormDrawer;
-

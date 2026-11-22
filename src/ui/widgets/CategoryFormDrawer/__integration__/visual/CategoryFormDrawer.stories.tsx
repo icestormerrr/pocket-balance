@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from "@storybook/react-vite";
+import {useState} from "react";
 
 import CategoryFormDrawer from "../..";
 
@@ -19,6 +20,10 @@ const loadCategories = async () => {
 const meta = {
   title: "Widgets/CategoryFormDrawer",
   component: CategoryFormDrawer,
+  render: function Render(args) {
+    const [open, setOpen] = useState(args.open);
+    return <CategoryFormDrawer {...args} open={open} onOpenChange={setOpen} />;
+  },
   args: {open: true, onOpenChange: () => undefined, categoryId: undefined},
   loaders: [loadCategories],
 } satisfies Meta<typeof CategoryFormDrawer>;

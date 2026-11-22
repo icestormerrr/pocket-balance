@@ -1,4 +1,5 @@
 import type {Meta, StoryObj} from "@storybook/react-vite";
+import {useState} from "react";
 
 import AccountFormDrawer from "../..";
 
@@ -18,6 +19,10 @@ const loadAccounts = async () => {
 const meta = {
   title: "Widgets/AccountFormDrawer",
   component: AccountFormDrawer,
+  render: function Render(args) {
+    const [open, setOpen] = useState(args.open);
+    return <AccountFormDrawer {...args} open={open} onOpenChange={setOpen} />;
+  },
   args: {open: true, onOpenChange: () => undefined},
   loaders: [loadAccounts],
 } satisfies Meta<typeof AccountFormDrawer>;

@@ -93,6 +93,10 @@ function TransactionFormHarness({transactionId}: {transactionId?: string}) {
 const meta = {
   title: "Widgets/TransactionFormDrawer",
   component: TransactionFormDrawer,
+  render: function Render(args) {
+    const [open, setOpen] = useState(args.open);
+    return <TransactionFormDrawer {...args} open={open} onOpenChange={setOpen} />;
+  },
   args: {open: true, onOpenChange: () => undefined},
   loaders: [loadFixture],
 } satisfies Meta<typeof TransactionFormDrawer>;

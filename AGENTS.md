@@ -17,6 +17,7 @@
 
 ## Main recommendations
 
+- Do not customize UI kit components with local styles. Use their supported props, such as `variant`, `size`, and `radius`. If these props are insufficient for the required customization, inform the user. Custom styles are allowed for composing elements and positioning them on the screen.
 - Design public function interfaces to be clean and self-explanatory: their signatures should make the function's purpose and required data clear. If a signature has too many parameters, reconsider the abstraction or group related parameters into an object.
 - Prefer good composition: split large code blocks into small, meaningful parts that can be understood independently. Keep state as close as possible to where it is used.
 - Extract business logic, including derived-state calculations, into pure functions or methods and cover them with unit tests. Components should remain simple and focus on UI composition.

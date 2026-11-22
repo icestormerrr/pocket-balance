@@ -8,8 +8,9 @@ for (const theme of ["dark", "light"] as const) {
 
     await expect(page.locator("html")).toHaveClass(new RegExp(theme));
     await expect(page.getByTestId("surface-comparison")).toBeVisible();
-    await expect(page.getByText("transparent", {exact: true})).toBeVisible();
-    await expect(page.getByText("raised", {exact: true})).toBeVisible();
+    for (const variant of ["default", "muted", "glass"]) {
+      await expect(page.getByText(variant, {exact: true})).toBeVisible();
+    }
     await page.evaluate(() => document.fonts.ready);
 
     await expect(page.locator("#storybook-root")).toHaveScreenshot(`surface-properties-${theme}-mobile.png`);

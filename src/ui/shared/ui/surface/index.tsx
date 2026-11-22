@@ -1,22 +1,16 @@
+import {Slot} from "@radix-ui/react-slot";
 import {cva, type VariantProps} from "class-variance-authority";
 import * as React from "react";
 
 import {cn} from "@/ui/shared/lib/styling";
+import classNames from "./surface.module.css";
 
 const surfaceVariants = cva("text-foreground", {
   variants: {
-    tone: {
-      base: "bg-background",
-      muted: "bg-muted",
-      transparent: "bg-transparent",
-    },
-    border: {
-      none: "border-0",
-      subtle: "border border-border/70",
-    },
-    elevation: {
-      flat: "shadow-none",
-      raised: "shadow-lg shadow-black/30",
+    variant: {
+      default: "border-0 bg-background shadow-none",
+      muted: "border border-border/70 bg-muted shadow-none",
+      glass: classNames.glass,
     },
     radius: {
       s: "rounded-[var(--radius-s)]",
@@ -34,23 +28,21 @@ const surfaceVariants = cva("text-foreground", {
     },
   },
   defaultVariants: {
-    tone: "base",
-    border: "none",
-    elevation: "flat",
+    variant: "default",
     radius: "m",
     padding: "none",
   },
 });
 
-type SurfaceProps = React.ComponentProps<"div"> & VariantProps<typeof surfaceVariants>;
+type SurfaceProps = React.ComponentProps<"div"> &
+  VariantProps<typeof surfaceVariants> & {
+    asChild?: boolean;
+  };
 
-function Surface({className, tone, border, elevation, radius, padding, ...props}: SurfaceProps) {
+function Surface({className, variant, radius, padding, asChild = false, ...props}: SurfaceProps) {
+  const Component = asChild ? Slot : "div";
   return (
-    <div
-      data-slot="surface"
-      className={cn(surfaceVariants({tone, border, elevation, radius, padding}), className)}
-      {...props}
-    />
+    <Component data-slot="surface" className={cn(surfaceVariants({variant, radius, padding}), className)} {...props} />
   );
 }
 

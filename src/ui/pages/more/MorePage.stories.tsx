@@ -1,20 +1,15 @@
 import type {Meta, StoryObj} from "@storybook/react-vite";
+import {createMemoryHistory, createRootRoute, createRoute, createRouter, RouterProvider} from "@tanstack/react-router";
 import type {ReactNode} from "react";
-import {
-  createMemoryHistory,
-  createRootRoute,
-  createRoute,
-  createRouter,
-  RouterProvider,
-} from "@tanstack/react-router";
 
 import {ThemeProvider} from "@/ui/shared/lib/theme";
 
 import MorePage from ".";
 
-const setDarkTheme = () => {
-  localStorage.setItem("ui-theme", "dark");
+const setTheme = (theme: "dark" | "light") => {
+  localStorage.setItem("ui-theme", theme);
   localStorage.removeItem("storybook-more-theme");
+  return {};
 };
 
 const withRouter = (Story: () => ReactNode) => {
@@ -35,19 +30,19 @@ const withRouter = (Story: () => ReactNode) => {
 const meta = {
   title: "Pages/More",
   component: MorePage,
-  loaders: [async () => setDarkTheme()],
-  decorators: [
-    withRouter,
-  ],
+  decorators: [withRouter],
 } satisfies Meta<typeof MorePage>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {loaders: [() => setTheme("dark")]};
+
+export const LightTheme: Story = {loaders: [() => setTheme("light")]};
 
 export const SystemTheme: Story = {
+  loaders: [() => setTheme("dark")],
   decorators: [
     Story => (
       <ThemeProvider defaultTheme="system" storageKey="storybook-more-theme">

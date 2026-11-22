@@ -1,0 +1,64 @@
+.bottomBar {
+  --create-hover-background: oklch(0.25 0.005 286 / 10%);
+  --create-hover-foreground: #111;
+  position: fixed;
+  z-index: 40;
+  inset-inline: 0;
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 448px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  pointer-events: none;
+}
+
+.items {
+  flex: 1;
+  min-width: 0;
+  pointer-events: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+}
+
+.create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 64px;
+  height: 64px;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+@media (hover: hover) {
+  .create:hover {
+    background: var(--create-hover-background);
+    color: var(--create-hover-foreground);
+  }
+}
+
+.create:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+:global(.dark) .bottomBar {
+  --create-hover-background: oklch(1 0 0 / 10%);
+  --create-hover-foreground: #fff;
+}
+
+.create svg {
+  width: 28px;
+  height: 28px;
+}

@@ -6,18 +6,19 @@ import {Toaster} from "@/ui/shared/ui/sonner";
 
 import {BottomBar} from "./components/BottomBar/BottomBar";
 import {GradientBlobs} from "./components/GradientBlobs/GradientBlobs";
+import classNames from "./root-layout.module.css";
 
 export const RootLayout = () => {
   const statusBar = getStatusBarHeight();
 
   return (
-    <div className="pb-20 box-border relative max-w-md mx-auto" style={{paddingTop: statusBar}}>
+    <div
+      className="relative mx-auto box-border max-w-md"
+      style={{paddingTop: statusBar, paddingBottom: "calc(80px + env(safe-area-inset-bottom, 0px))"}}
+    >
       <GradientBlobs />
 
-      <div
-        style={{height: statusBar}}
-        className="fixed top-0 w-full bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-1"
-      />
+      <div aria-hidden="true" style={{height: statusBar + 32}} className={classNames.statusBarFade} />
 
       <Outlet />
 

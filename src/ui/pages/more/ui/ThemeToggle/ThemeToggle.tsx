@@ -8,5 +8,13 @@ export const ThemeToggle = () => {
     setTheme(newTheme as Theme);
   };
 
-  return <SegmentInput value={theme} onChange={handleThemeChange} options={THEME_OPTIONS} />;
+  return (
+    <SegmentInput
+      size="md"
+      aria-label="Тема оформления"
+      value={theme}
+      onChange={handleThemeChange}
+      options={THEME_OPTIONS}
+    />
+  );
 };

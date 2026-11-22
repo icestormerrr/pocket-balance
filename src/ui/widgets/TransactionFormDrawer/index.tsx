@@ -1,5 +1,4 @@
 import {useTransaction} from "@/ui/entities/transaction";
-import {X} from "lucide-react";
 
 import {Drawer, DrawerContent, DrawerFooter, DrawerTitle} from "@/ui/shared/ui/drawer";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -7,7 +6,7 @@ import {type FC, memo, useCallback, useEffect} from "react";
 import {FormProvider, useForm} from "react-hook-form";
 
 import {getStatusBarHeight} from "@/ui/shared/lib/styling";
-import {Button} from "@/ui/shared/ui/button";
+import {DrawerCloseButton} from "@/ui/shared/ui/drawer-close-button";
 import {DeleteButton} from "@/ui/widgets/TransactionFormDrawer/ui/components/DeleteButton/DeleteButton";
 import {CreateButton} from "./ui/components/CreateButton/CreateButton";
 import {TransactionFormFields} from "./ui/components/TransactionFormFields/TransactionFormFields";
@@ -76,17 +75,7 @@ const TransactionFormDrawer: FC<Props> = memo(({open, onOpenChange, transactionI
               }}
             />
             <div className="relative z-10 flex flex-col gap-5 px-5 pt-5 pb-4">
-              <div className="flex justify-end">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                  onClick={handleSuccessButtonClick}
-                  aria-label="Закрыть"
-                >
-                  <X />
-                </Button>
-              </div>
+              <DrawerCloseButton onClick={handleSuccessButtonClick} />
 
               <TransactionFormFields />
               {id && <DeleteButton onSuccess={handleSuccessButtonClick} />}
