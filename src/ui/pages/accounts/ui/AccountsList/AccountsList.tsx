@@ -94,7 +94,7 @@ export const AccountsList = memo(({accounts}: Props) => {
         </AnimatePresence>
 
         <motion.div layout initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{duration: 0.3}}>
-          <Button size="lg" className="w-full mt-4" onClick={handleCreateButtonClick}>
+          <Button size="lg" className="w-full mt-4 rounded-lg" onClick={handleCreateButtonClick}>
             Добавить счёт
           </Button>
         </motion.div>
